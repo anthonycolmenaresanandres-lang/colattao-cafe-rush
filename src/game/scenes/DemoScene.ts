@@ -58,7 +58,8 @@ export class DemoScene extends Phaser.Scene {
 
     if (this.textures.exists(ASSET_KEYS.bg)) {
       this.add.image(width / 2, height / 2, ASSET_KEYS.bg).setDisplaySize(width, height);
-      this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.25);
+      this.add.rectangle(width / 2, height / 2, width, height, 0x2a1208, 0.16);
+      this.add.rectangle(width / 2, 96, width, 160, 0xfff3d6, 0.16);
       return;
     }
 
@@ -79,82 +80,83 @@ export class DemoScene extends Phaser.Scene {
   private buildHud() {
     const { width } = this.scale;
 
-    this.add.rectangle(98, 84, 160, 52, 0xfff7ed, 0.9).setStrokeStyle(2, 0xea580c, 0.35);
+    this.add.rectangle(97, 72, 138, 38, 0xfff3d6, 0.82).setStrokeStyle(1, 0xd99028, 0.22);
     this.add
-      .rectangle(width - 98, 84, 160, 52, 0xfff7ed, 0.9)
-      .setStrokeStyle(2, 0xea580c, 0.35);
+      .rectangle(width - 97, 72, 138, 38, 0xfff3d6, 0.82)
+      .setStrokeStyle(1, 0xd99028, 0.22);
 
     this.scoreText = this.add
-      .text(98, 84, "Score: 0", {
+      .text(97, 72, "Score 0", {
         fontFamily: "Arial",
-        fontSize: "24px",
-        color: "#9a3412",
+        fontSize: "17px",
+        color: "#4B2412",
       })
       .setOrigin(0.5);
 
     this.timerText = this.add
-      .text(width - 98, 84, "Time: 20", {
+      .text(width - 97, 72, "Time 20", {
         fontFamily: "Arial",
-        fontSize: "24px",
-        color: "#9a3412",
+        fontSize: "17px",
+        color: "#4B2412",
       })
       .setOrigin(0.5);
 
     this.statusText = this.add
-      .text(width / 2, 124, "Catch Colombian cafe treats. Avoid chain coffee.", {
+      .text(width / 2, 110, "Catch Colombian café treats. Avoid chain coffee.", {
         fontFamily: "Arial",
-        fontSize: "18px",
-        color: "#fff7ed",
-        stroke: "#4a2308",
-        strokeThickness: 4,
+        fontSize: "15px",
+        color: "#FFF3D6",
+        stroke: "#2A1208",
+        strokeThickness: 2,
         align: "center",
       })
       .setOrigin(0.5);
 
     if (this.textures.exists(ASSET_KEYS.logo)) {
-      this.add.image(width - 52, 34, ASSET_KEYS.logo).setDisplaySize(84, 34).setAlpha(0.92);
+      this.add.image(width - 44, 30, ASSET_KEYS.logo).setDisplaySize(68, 28).setAlpha(0.8);
     }
   }
 
   private showStartScreen() {
     const { width, height } = this.scale;
 
-    const panel = this.add.rectangle(width / 2, height / 2, width - 34, 322, 0x3b1d12, 0.9);
-    panel.setStrokeStyle(3, 0xfde68a);
+    const panel = this.add.rectangle(width / 2, height / 2, width - 46, 292, 0xfff3d6, 0.74);
+    panel.setStrokeStyle(1, 0xd99028, 0.24);
+    this.add.rectangle(width / 2, height / 2, width - 50, 296, 0xffffff, 0.07);
 
     const title = this.add
-      .text(width / 2, height / 2 - 64, "Colattao Cafe Rush", {
+      .text(width / 2, height / 2 - 56, "Colattao Café Rush", {
         fontFamily: "Arial",
-        fontSize: "36px",
-        color: "#fff7ed",
+        fontSize: "33px",
+        color: "#4B2412",
         align: "center",
       })
       .setOrigin(0.5);
 
     const subtitle = this.add
-      .text(width / 2, height / 2 - 8, "Catch Colombian cafe treats. Avoid chain coffee.", {
+      .text(width / 2, height / 2 - 4, "Catch Colombian café treats. Avoid chain coffee.", {
         fontFamily: "Arial",
-        fontSize: "20px",
-        color: "#fed7aa",
+        fontSize: "17px",
+        color: "#4B2412",
         align: "center",
         wordWrap: { width: width - 90 },
       })
       .setOrigin(0.5);
 
     const logo = this.textures.exists(ASSET_KEYS.logo)
-      ? this.add.image(width / 2, height / 2 - 128, ASSET_KEYS.logo).setDisplaySize(210, 88)
+      ? this.add.image(width / 2, height / 2 - 112, ASSET_KEYS.logo).setDisplaySize(182, 74).setAlpha(0.92)
       : undefined;
 
     const startButton = this.add
-      .rectangle(width / 2, height / 2 + 112, 200, 62, 0xf59e0b)
-      .setStrokeStyle(3, 0xfffbeb)
+      .rectangle(width / 2, height / 2 + 100, 168, 46, 0xf5c46b)
+      .setStrokeStyle(1, 0x4b2412, 0.36)
       .setInteractive({ useHandCursor: true });
 
     const startLabel = this.add
-      .text(width / 2, height / 2 + 112, "Start", {
+      .text(width / 2, height / 2 + 100, "Start", {
         fontFamily: "Arial",
-        fontSize: "30px",
-        color: "#4a2308",
+        fontSize: "24px",
+        color: "#4B2412",
       })
       .setOrigin(0.5);
 
@@ -197,7 +199,7 @@ export class DemoScene extends Phaser.Scene {
         }
 
         this.timeLeft -= 1;
-        this.timerText?.setText(`Time: ${this.timeLeft}`);
+        this.timerText?.setText(`Time ${this.timeLeft}`);
         if (this.timeLeft <= 0) {
           this.endGame(false);
         }
@@ -267,7 +269,7 @@ export class DemoScene extends Phaser.Scene {
       }
 
       this.score += 10;
-      this.scoreText?.setText(`Score: ${this.score}`);
+      this.scoreText?.setText(`Score ${this.score}`);
       this.showFloatingFeedback(item.x, item.y, "+10", "#14532d");
 
       if (this.score >= this.scoreTarget) {

@@ -26,15 +26,8 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center gap-4 bg-amber-100 px-4 py-5 text-amber-950">
-      <h1 className="text-center text-2xl font-semibold">Colattao Cafe Crush</h1>
+    <main className="mx-auto flex min-h-screen w-full max-w-[460px] flex-col items-center justify-center bg-gradient-to-b from-amber-100 via-amber-50 to-orange-100 px-1 py-1 text-amber-950 sm:px-2 sm:py-2">
       <GameCanvas />
-      <section className="w-full rounded-xl border border-amber-900/20 bg-amber-50 p-3 text-sm">
-        <h2 className="mb-2 text-base font-semibold">Latest GAME_WON payload</h2>
-        <p className="break-all font-mono">
-          {lastWin ? JSON.stringify(lastWin) : "No GAME_WON event yet. Tap the Phaser button."}
-        </p>
-      </section>
       {showReward && lastWin ? (
         <VisualFlashPass payload={lastWin} onPlayAgain={handlePlayAgain} />
       ) : null}
