@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import type { GameWonPayload } from "@/types/game";
@@ -32,7 +32,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
   const [blocked, setBlocked] = useState(false);
   const [claimed, setClaimed] = useState(false);
   const [shareStatus, setShareStatus] = useState<string | null>(null);
-  const shareText = "I just won my Colattao Cafe Rush pass ☕🇨🇴 Play at Colattao and try to beat me!";
+  const [randomSeed] = useState(() => Math.floor(Math.random() * 10000));
 
   useEffect(() => {
     const tick = () => {
@@ -60,6 +60,20 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
     [clockNow],
   );
 
+  const winCode = useMemo(() => {
+    const now = new Date();
+    const mm = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    const datePart = `${mm}${dd}`;
+
+    const mix = payload.wonAt + payload.score * 97 + randomSeed * 31 + now.getFullYear();
+    const codePart = String(Math.abs(mix % 10000)).padStart(4, "0");
+
+    return `COL-${datePart}-${codePart}`;
+  }, [payload.score, payload.wonAt, randomSeed]);
+
+  const shareText = `I just won Colattao Café Rush ☕🇨🇴 Win Code: ${winCode}. Play here: https://colattao-cafe-rush.vercel.app/`;
+
   const onClaim = () => {
     const status = getCooldownStatus();
     if (status.blocked) {
@@ -77,19 +91,34 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
   const onShare = async () => {
     try {
       if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
-        await navigator.share({ text: shareText });
+        await navigator.share({
+          title: "Colattao Café Rush",
+          text: shareText,
+          url: "https://colattao-cafe-rush.vercel.app/",
+        });
         setShareStatus("Shared. Show your shared post or repost screen for a bonus surprise.");
         return;
       }
 
       if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(shareText);
-        setShareStatus("Text copied. Post it, tag Colattao, and show the barista.");
+        setShareStatus("Share text copied. Post it, tag Colattao, and show the barista.");
         return;
       }
 
       setShareStatus("Share unavailable on this device. Copy and post your win manually.");
     } catch {
+      if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(shareText);
+          setShareStatus("Share text copied. Post it, tag Colattao, and show the barista.");
+          return;
+        } catch {
+          setShareStatus("Share canceled or unavailable. You can still post your win manually.");
+          return;
+        }
+      }
+
       setShareStatus("Share canceled or unavailable. You can still post your win manually.");
     }
   };
@@ -117,6 +146,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
         <div className="mt-4 space-y-1 rounded-xl bg-black/35 p-3 text-sm">
           <p>score: <span className="font-mono">{payload.score}</span></p>
           <p>wonAt: <span className="font-mono">{wonAtLabel}</span></p>
+          <p>Win Code: <span className="font-mono">{winCode}</span></p>
         </div>
         <p className="mt-3 rounded-lg bg-black/25 p-2 text-center text-xs font-semibold">
           {rewardConfig.verificationText}
