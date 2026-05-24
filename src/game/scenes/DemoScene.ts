@@ -125,20 +125,21 @@ export class DemoScene extends Phaser.Scene {
     this.statusBackdrop?.setVisible(false);
 
     const topZone = height / 1.618;
-    const titleY = topZone * 0.56;
-    const subtitleY = topZone * 0.72;
-    const ctaY = topZone + (height - topZone) * 0.52;
+    const logoY = topZone * 0.33;
+    const rushY = topZone * 0.57;
+    const subtitleY = topZone * 0.71;
+    const ctaY = topZone + (height - topZone) * 0.38;
 
     // Light local readability veil only behind text/logo, not a full UI card.
-    const topVeil = this.add.ellipse(width / 2, topZone * 0.58, width * 0.92, topZone * 0.86, 0x2a1208, 0.17);
+    const topVeil = this.add.ellipse(width / 2, topZone * 0.56, width * 0.94, topZone * 0.88, 0x2a1208, 0.17);
 
-    const logoStrip = this.add.rectangle(width / 2, topZone * 0.34, width * 0.64, 58, 0x2a1208, 0.18);
+    const logoStrip = this.add.rectangle(width / 2, logoY, width * 0.72, 64, 0x2a1208, 0.18);
     logoStrip.setStrokeStyle(1, 0xf5c46b, 0.2);
 
-    const title = this.add
-      .text(width / 2, titleY, "Colattao Café Rush", {
+    const rushTitle = this.add
+      .text(width / 2, rushY, "Café Rush", {
         fontFamily: "Arial",
-        fontSize: "32px",
+        fontSize: "34px",
         color: "#FFF3D6",
         stroke: "#2A1208",
         strokeThickness: 4,
@@ -160,10 +161,10 @@ export class DemoScene extends Phaser.Scene {
 
     let logo: Phaser.GameObjects.Image | undefined;
     if (this.textures.exists(ASSET_KEYS.logo)) {
-      logo = this.add.image(width / 2, topZone * 0.34, ASSET_KEYS.logo).setAlpha(0.95);
+      logo = this.add.image(width / 2, logoY, ASSET_KEYS.logo).setAlpha(0.96);
       const frame = this.textures.getFrame(ASSET_KEYS.logo, "__BASE");
       if (frame) {
-        const targetWidth = 196;
+        const targetWidth = 244;
         const ratio = frame.height / frame.width;
         logo.setDisplaySize(targetWidth, targetWidth * ratio);
       }
@@ -195,7 +196,7 @@ export class DemoScene extends Phaser.Scene {
     startButton.on("pointerdown", () => {
       topVeil.destroy();
       logoStrip.destroy();
-      title.destroy();
+      rushTitle.destroy();
       subtitle.destroy();
       logo?.destroy();
       startButton.destroy();
