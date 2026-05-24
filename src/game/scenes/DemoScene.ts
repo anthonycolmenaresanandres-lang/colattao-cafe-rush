@@ -24,6 +24,7 @@ export class DemoScene extends Phaser.Scene {
   private spawnTimer?: Phaser.Time.TimerEvent;
   private countdownTimer?: Phaser.Time.TimerEvent;
   private offRestart?: () => void;
+  private statusBackdrop?: Phaser.GameObjects.Rectangle;
 
   constructor() {
     super("DemoScene");
@@ -101,6 +102,8 @@ export class DemoScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
 
+    this.statusBackdrop = this.add.rectangle(width / 2, 112, width - 48, 26, 0x2a1208, 0.28);
+
     this.statusText = this.add
       .text(width / 2, 110, "Catch Colombian café treats. Avoid chain coffee.", {
         fontFamily: "Arial",
@@ -119,33 +122,42 @@ export class DemoScene extends Phaser.Scene {
 
   private showStartScreen() {
     const { width, height } = this.scale;
-
-    const panel = this.add.rectangle(width / 2, height / 2, width - 46, 292, 0xfff3d6, 0.74);
-    panel.setStrokeStyle(1, 0xd99028, 0.24);
-    this.add.rectangle(width / 2, height / 2, width - 50, 296, 0xffffff, 0.07);
+    this.statusText?.setVisible(false);
+    this.statusBackdrop?.setVisible(false);
 
     const title = this.add
-      .text(width / 2, height / 2 - 56, "Colattao Café Rush", {
+      .text(width / 2, height / 2 - 58, "Colattao Café Rush", {
         fontFamily: "Arial",
         fontSize: "33px",
-        color: "#4B2412",
+        color: "#FFF3D6",
+        stroke: "#2A1208",
+        strokeThickness: 4,
         align: "center",
       })
       .setOrigin(0.5);
 
     const subtitle = this.add
-      .text(width / 2, height / 2 - 4, "Catch Colombian café treats. Avoid chain coffee.", {
+      .text(width / 2, height / 2 - 2, "Catch Colombian café treats. Avoid chain coffee.", {
         fontFamily: "Arial",
         fontSize: "17px",
-        color: "#4B2412",
+        color: "#FFF3D6",
+        stroke: "#2A1208",
+        strokeThickness: 3,
         align: "center",
         wordWrap: { width: width - 90 },
       })
       .setOrigin(0.5);
 
-    const logo = this.textures.exists(ASSET_KEYS.logo)
-      ? this.add.image(width / 2, height / 2 - 112, ASSET_KEYS.logo).setDisplaySize(182, 74).setAlpha(0.92)
-      : undefined;
+    let logo: Phaser.GameObjects.Image | undefined;
+    if (this.textures.exists(ASSET_KEYS.logo)) {
+      logo = this.add.image(width / 2, height / 2 - 116, ASSET_KEYS.logo).setAlpha(0.94);
+      const frame = this.textures.getFrame(ASSET_KEYS.logo, "__BASE");
+      if (frame) {
+        const targetWidth = 198;
+        const ratio = frame.height / frame.width;
+        logo.setDisplaySize(targetWidth, targetWidth * ratio);
+      }
+    }
 
     const startButton = this.add
       .rectangle(width / 2, height / 2 + 100, 168, 46, 0xf5c46b)
@@ -171,12 +183,13 @@ export class DemoScene extends Phaser.Scene {
     });
 
     startButton.on("pointerdown", () => {
-      panel.destroy();
       title.destroy();
       subtitle.destroy();
       logo?.destroy();
       startButton.destroy();
       startLabel.destroy();
+      this.statusText?.setVisible(true);
+      this.statusBackdrop?.setVisible(true);
       this.startRound();
     });
   }

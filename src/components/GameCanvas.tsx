@@ -48,8 +48,8 @@ export default function GameCanvas() {
   }, []);
 
   return (
-    <div className="game-shell w-full max-w-[430px] p-1 sm:p-2">
-      <div ref={hostRef} className="mx-auto aspect-[9/16] w-full overflow-hidden rounded-[22px]" />
+    <div className="game-shell w-full max-w-[460px] p-0.5 sm:p-1">
+      <div ref={hostRef} className="mx-auto aspect-[9/16] w-full overflow-hidden rounded-[20px]" />
     </div>
   );
 }

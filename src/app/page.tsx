@@ -26,7 +26,10 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-[460px] flex-col items-center justify-center bg-gradient-to-b from-amber-100 via-amber-50 to-orange-100 px-1 py-1 text-amber-950 sm:px-2 sm:py-2">
+    <main className="mx-auto flex min-h-dvh w-full max-w-[470px] flex-col items-center justify-center gap-2 bg-colattao-page px-0.5 py-0.5 text-amber-50 sm:px-1 sm:py-1">
+      <p className="select-none text-center text-sm font-semibold tracking-[0.2em] text-amber-100/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]">
+        Colattao Coffee House
+      </p>
       <GameCanvas />
       {showReward && lastWin ? (
         <VisualFlashPass payload={lastWin} onPlayAgain={handlePlayAgain} />
