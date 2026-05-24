@@ -60,7 +60,6 @@ export class DemoScene extends Phaser.Scene {
     if (this.textures.exists(ASSET_KEYS.bg)) {
       this.add.image(width / 2, height / 2, ASSET_KEYS.bg).setDisplaySize(width, height);
       this.add.rectangle(width / 2, height / 2, width, height, 0x2a1208, 0.16);
-      this.add.rectangle(width / 2, 96, width, 160, 0xfff3d6, 0.16);
       return;
     }
 
@@ -81,33 +80,33 @@ export class DemoScene extends Phaser.Scene {
   private buildHud() {
     const { width } = this.scale;
 
-    this.add.rectangle(97, 72, 138, 38, 0xfff3d6, 0.82).setStrokeStyle(1, 0xd99028, 0.22);
+    this.add.rectangle(97, 74, 132, 34, 0xfff3d6, 0.84).setStrokeStyle(1, 0xd99028, 0.2);
     this.add
-      .rectangle(width - 97, 72, 138, 38, 0xfff3d6, 0.82)
-      .setStrokeStyle(1, 0xd99028, 0.22);
+      .rectangle(width - 97, 74, 132, 34, 0xfff3d6, 0.84)
+      .setStrokeStyle(1, 0xd99028, 0.2);
 
     this.scoreText = this.add
-      .text(97, 72, "Score 0", {
+      .text(97, 74, "Score 0", {
         fontFamily: "Arial",
-        fontSize: "17px",
+        fontSize: "16px",
         color: "#4B2412",
       })
       .setOrigin(0.5);
 
     this.timerText = this.add
-      .text(width - 97, 72, "Time 20", {
+      .text(width - 97, 74, "Time 20", {
         fontFamily: "Arial",
-        fontSize: "17px",
+        fontSize: "16px",
         color: "#4B2412",
       })
       .setOrigin(0.5);
 
-    this.statusBackdrop = this.add.rectangle(width / 2, 112, width - 48, 26, 0x2a1208, 0.28);
+    this.statusBackdrop = this.add.rectangle(width / 2, 118, width - 66, 24, 0x2a1208, 0.23);
 
     this.statusText = this.add
-      .text(width / 2, 110, "Catch Colombian café treats. Avoid chain coffee.", {
+      .text(width / 2, 116, "Catch Colombian café treats. Avoid chain coffee.", {
         fontFamily: "Arial",
-        fontSize: "15px",
+        fontSize: "14px",
         color: "#FFF3D6",
         stroke: "#2A1208",
         strokeThickness: 2,
@@ -116,7 +115,7 @@ export class DemoScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     if (this.textures.exists(ASSET_KEYS.logo)) {
-      this.add.image(width - 44, 30, ASSET_KEYS.logo).setDisplaySize(68, 28).setAlpha(0.8);
+      this.add.image(width - 42, 30, ASSET_KEYS.logo).setDisplaySize(64, 26).setAlpha(0.78);
     }
   }
 
@@ -125,10 +124,21 @@ export class DemoScene extends Phaser.Scene {
     this.statusText?.setVisible(false);
     this.statusBackdrop?.setVisible(false);
 
+    const topZone = height / 1.618;
+    const titleY = topZone * 0.56;
+    const subtitleY = topZone * 0.72;
+    const ctaY = topZone + (height - topZone) * 0.52;
+
+    // Light local readability veil only behind text/logo, not a full UI card.
+    const topVeil = this.add.ellipse(width / 2, topZone * 0.58, width * 0.92, topZone * 0.86, 0x2a1208, 0.17);
+
+    const logoStrip = this.add.rectangle(width / 2, topZone * 0.34, width * 0.64, 58, 0x2a1208, 0.18);
+    logoStrip.setStrokeStyle(1, 0xf5c46b, 0.2);
+
     const title = this.add
-      .text(width / 2, height / 2 - 58, "Colattao Café Rush", {
+      .text(width / 2, titleY, "Colattao Café Rush", {
         fontFamily: "Arial",
-        fontSize: "33px",
+        fontSize: "32px",
         color: "#FFF3D6",
         stroke: "#2A1208",
         strokeThickness: 4,
@@ -137,9 +147,9 @@ export class DemoScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     const subtitle = this.add
-      .text(width / 2, height / 2 - 2, "Catch Colombian café treats. Avoid chain coffee.", {
+      .text(width / 2, subtitleY, "Catch Colombian café treats. Avoid chain coffee.", {
         fontFamily: "Arial",
-        fontSize: "17px",
+        fontSize: "16px",
         color: "#FFF3D6",
         stroke: "#2A1208",
         strokeThickness: 3,
@@ -150,24 +160,24 @@ export class DemoScene extends Phaser.Scene {
 
     let logo: Phaser.GameObjects.Image | undefined;
     if (this.textures.exists(ASSET_KEYS.logo)) {
-      logo = this.add.image(width / 2, height / 2 - 116, ASSET_KEYS.logo).setAlpha(0.94);
+      logo = this.add.image(width / 2, topZone * 0.34, ASSET_KEYS.logo).setAlpha(0.95);
       const frame = this.textures.getFrame(ASSET_KEYS.logo, "__BASE");
       if (frame) {
-        const targetWidth = 198;
+        const targetWidth = 196;
         const ratio = frame.height / frame.width;
         logo.setDisplaySize(targetWidth, targetWidth * ratio);
       }
     }
 
     const startButton = this.add
-      .rectangle(width / 2, height / 2 + 100, 168, 46, 0xf5c46b)
+      .rectangle(width / 2, ctaY, 166, 44, 0xf5c46b)
       .setStrokeStyle(1, 0x4b2412, 0.36)
       .setInteractive({ useHandCursor: true });
 
     const startLabel = this.add
-      .text(width / 2, height / 2 + 100, "Start", {
+      .text(width / 2, ctaY, "Start", {
         fontFamily: "Arial",
-        fontSize: "24px",
+        fontSize: "23px",
         color: "#4B2412",
       })
       .setOrigin(0.5);
@@ -183,6 +193,8 @@ export class DemoScene extends Phaser.Scene {
     });
 
     startButton.on("pointerdown", () => {
+      topVeil.destroy();
+      logoStrip.destroy();
       title.destroy();
       subtitle.destroy();
       logo?.destroy();
