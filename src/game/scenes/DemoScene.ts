@@ -15,9 +15,10 @@ const ASSET_KEYS = {
 export class DemoScene extends Phaser.Scene {
   private score = 0;
   private timeLeft = 20;
-  private readonly scoreTarget = 100;
+  private readonly scoreTarget = 120;
   private gameEnded = false;
   private roundStarted = false;
+  private spawnDelayMs = 620;
   private scoreText?: Phaser.GameObjects.Text;
   private timerText?: Phaser.GameObjects.Text;
   private statusText?: Phaser.GameObjects.Text;
@@ -73,6 +74,7 @@ export class DemoScene extends Phaser.Scene {
     this.timeLeft = 20;
     this.gameEnded = false;
     this.roundStarted = false;
+    this.spawnDelayMs = 620;
     this.spawnTimer?.remove(false);
     this.countdownTimer?.remove(false);
   }
@@ -104,7 +106,7 @@ export class DemoScene extends Phaser.Scene {
     this.statusBackdrop = this.add.rectangle(width / 2, 118, width - 66, 24, 0x2a1208, 0.23);
 
     this.statusText = this.add
-      .text(width / 2, 116, "Catch Colombian café treats. Avoid chain coffee.", {
+      .text(width / 2, 116, "Catch Colombian treats. Dodge chain coffee.", {
         fontFamily: "Arial",
         fontSize: "14px",
         color: "#FFF3D6",
@@ -130,11 +132,7 @@ export class DemoScene extends Phaser.Scene {
     const subtitleY = topZone * 0.71;
     const ctaY = topZone + (height - topZone) * 0.38;
 
-    // Light local readability veil only behind text/logo, not a full UI card.
     const topVeil = this.add.ellipse(width / 2, topZone * 0.56, width * 0.94, topZone * 0.88, 0x2a1208, 0.17);
-
-    const logoStrip = this.add.rectangle(width / 2, logoY, width * 0.72, 64, 0x2a1208, 0.18);
-    logoStrip.setStrokeStyle(1, 0xf5c46b, 0.2);
 
     const rushTitle = this.add
       .text(width / 2, rushY, "Café Rush", {
@@ -148,7 +146,7 @@ export class DemoScene extends Phaser.Scene {
       .setOrigin(0.5);
 
     const subtitle = this.add
-      .text(width / 2, subtitleY, "Catch Colombian café treats. Avoid chain coffee.", {
+      .text(width / 2, subtitleY, "Catch Colombian treats. Dodge chain coffee.", {
         fontFamily: "Arial",
         fontSize: "16px",
         color: "#FFF3D6",
@@ -195,7 +193,6 @@ export class DemoScene extends Phaser.Scene {
 
     startButton.on("pointerdown", () => {
       topVeil.destroy();
-      logoStrip.destroy();
       rushTitle.destroy();
       subtitle.destroy();
       logo?.destroy();
@@ -209,12 +206,7 @@ export class DemoScene extends Phaser.Scene {
 
   private startRound() {
     this.roundStarted = true;
-
-    this.spawnTimer = this.time.addEvent({
-      delay: 600,
-      loop: true,
-      callback: () => this.spawnItem(),
-    });
+    this.configureSpawnTimer();
 
     this.countdownTimer = this.time.addEvent({
       delay: 1000,
@@ -226,10 +218,23 @@ export class DemoScene extends Phaser.Scene {
 
         this.timeLeft -= 1;
         this.timerText?.setText(`Time ${this.timeLeft}`);
+        if (this.timeLeft > 0 && this.timeLeft % 5 === 0) {
+          this.spawnDelayMs = Math.max(470, this.spawnDelayMs - 35);
+          this.configureSpawnTimer();
+        }
         if (this.timeLeft <= 0) {
           this.endGame(false);
         }
       },
+    });
+  }
+
+  private configureSpawnTimer() {
+    this.spawnTimer?.remove(false);
+    this.spawnTimer = this.time.addEvent({
+      delay: this.spawnDelayMs,
+      loop: true,
+      callback: () => this.spawnItem(),
     });
   }
 
@@ -240,7 +245,11 @@ export class DemoScene extends Phaser.Scene {
 
     const { width, height } = this.scale;
     const x = Phaser.Math.Between(52, width - 52);
-    const fallDuration = Phaser.Math.Between(2200, 3400);
+    const elapsed = 20 - this.timeLeft;
+    const fallBonus = Math.min(520, Math.floor(elapsed / 5) * 120);
+    const minDuration = Math.max(1500, 2200 - fallBonus);
+    const maxDuration = Math.max(2300, 3400 - fallBonus);
+    const fallDuration = Phaser.Math.Between(minDuration, maxDuration);
     const isBad = Math.random() < 0.22;
     const kind: FallingKind = isBad ? "bad" : "good";
 
@@ -290,7 +299,8 @@ export class DemoScene extends Phaser.Scene {
       item.destroy();
 
       if (kind === "bad") {
-        this.endGame(false, "Chain coffee? Not here.");
+        this.showFloatingFeedback(item.x, item.y, "Not Colattao behavior.", "#7f1d1d");
+        this.endGame(false, "Chain coffee got you. Abuela would be disappointed.");
         return;
       }
 
