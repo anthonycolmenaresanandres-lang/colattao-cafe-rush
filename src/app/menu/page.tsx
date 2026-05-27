@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import MenuCategorySection from "@/components/MenuCategory";
@@ -8,6 +9,17 @@ export const metadata = {
     "Digital menu for Colattao Coffee House – Virginia Beach, VA",
 };
 
+// ── Decorative game-asset accents per category ──
+const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined> = {
+  espresso: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
+  favorites: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
+  matcha: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced matcha" },
+  tea: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced drink" },
+  cocina: { src: "/assets/colattao/items/croissant.png", alt: "Pastry" },
+  spring: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
+  pastries: { src: "/assets/colattao/items/croissant.png", alt: "Croissant" },
+};
+
 export default function MenuPage() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]">
@@ -15,25 +27,26 @@ export default function MenuPage() {
           Header — premium brand band, sticky on scroll
           ────────────────────────────────────────────────────── */}
       <header
-        className="sticky top-0 z-20 px-5 pb-4 pt-6 text-center"
+        className="sticky top-0 z-20 px-5 pb-4 pt-5 text-center"
         style={{
           background:
             "linear-gradient(180deg, #1B0E08 0%, #1B0E08 70%, rgba(27,14,8,0.92) 100%)",
           boxShadow: "0 16px 30px -18px rgba(0,0,0,0.75)",
         }}
       >
-        <p className="brand-eyebrow text-amber-200/70">
-          Coffee House · Virginia Beach
-        </p>
-        <h1
-          className="brand-wordmark mt-1 text-[26px] text-[var(--col-parchment-2)]"
-          style={{ textShadow: "0 0 24px rgba(212,162,76,0.18)" }}
-        >
-          Colattao
-        </h1>
-        <div className="mt-1.5 flex items-center justify-center gap-3">
+        {/* Prominent Colattao logo */}
+        <Image
+          src="/assets/colattao/logo/colattao-logo.png"
+          alt="Colattao Coffee House"
+          width={180}
+          height={70}
+          priority
+          className="mx-auto h-auto w-[150px] select-none drop-shadow-[0_0_18px_rgba(212,162,76,0.20)]"
+        />
+
+        <div className="mt-2 flex items-center justify-center gap-3">
           <span className="h-px w-8 bg-gradient-to-r from-transparent to-amber-300/55" />
-          <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/75">
+          <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/80">
             Digital Menu
           </span>
           <span className="h-px w-8 bg-gradient-to-l from-transparent to-amber-300/55" />
@@ -66,7 +79,11 @@ export default function MenuPage() {
           ────────────────────────────────────────────────────── */}
       <div className="flex-1 space-y-5 px-4 py-6">
         {menuCategories.map((c) => (
-          <MenuCategorySection key={c.id} category={c} />
+          <MenuCategorySection
+            key={c.id}
+            category={c}
+            accentImage={CATEGORY_ACCENTS[c.id]}
+          />
         ))}
       </div>
 

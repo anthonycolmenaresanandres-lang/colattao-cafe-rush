@@ -1,6 +1,13 @@
+import Image from "next/image";
 import type { MenuCategory as MenuCategoryType } from "@/data/colattaoMenu";
 
-export default function MenuCategory({ category }: { category: MenuCategoryType }) {
+type Props = {
+  category: MenuCategoryType;
+  /** Optional decorative game asset shown beside the category title */
+  accentImage?: { src: string; alt: string };
+};
+
+export default function MenuCategory({ category, accentImage }: Props) {
   return (
     <section id={category.id} className="menu-card scroll-mt-32 px-5 pb-5 pt-5">
       {/* ── Category header ── */}
@@ -11,6 +18,16 @@ export default function MenuCategory({ category }: { category: MenuCategoryType 
         >
           La Carta
         </p>
+        {accentImage && (
+          <Image
+            src={accentImage.src}
+            alt={accentImage.alt}
+            width={44}
+            height={44}
+            className="mx-auto mt-1 h-11 w-11 select-none object-contain drop-shadow"
+            priority={false}
+          />
+        )}
         <h2
           className="brand-wordmark mt-1 text-[22px] text-[var(--col-espresso)]"
           style={{ letterSpacing: "0.04em" }}
