@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { GameWonPayload } from "@/types/game";
 
 type VisualFlashPassProps = {
@@ -24,14 +23,23 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/65 px-4 py-6 backdrop-blur-sm">
       <section className="coffee-card w-full max-w-sm px-6 pb-7 pt-8 text-center">
-        {/* ── Brand mark — prominent, primary brand voice ──── */}
-        <Image
-          src="/assets/colattao/logo/colattao-logo.png"
-          alt="Colattao"
-          width={260}
-          height={104}
-          priority
-          className="mx-auto h-auto w-[200px] select-none drop-shadow-[0_2px_4px_rgba(75,36,18,0.18)]"
+        {/* ── Brand lockup — text-based, premium typography ── */}
+        <div className="brand-wordmark text-[34px] leading-none text-[var(--col-espresso)]"
+             style={{ letterSpacing: "0.18em" }}>
+          COLATTAO
+        </div>
+        <p
+          className="mt-1 text-[10px] font-semibold text-[var(--col-espresso-3)]/85"
+          style={{ letterSpacing: "0.42em" }}
+        >
+          COFFEE HOUSE
+        </p>
+        <div
+          className="mx-auto mt-3 h-px w-24"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, rgba(156,107,31,0.7), transparent)",
+          }}
         />
 
         <p className="brand-eyebrow mt-4 text-[var(--col-gold-deep)]">
