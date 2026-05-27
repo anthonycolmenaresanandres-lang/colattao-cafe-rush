@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef } from "react";
 
@@ -26,7 +26,7 @@ export default function GameCanvas() {
         parent: hostRef.current,
         width: 360,
         height: 640,
-        backgroundColor: "#fef3c7",
+        backgroundColor: "#1B0E08",
         scene: [BootScene, DemoScene],
         scale: {
           mode: Phaser.Scale.FIT,
@@ -48,8 +48,12 @@ export default function GameCanvas() {
   }, []);
 
   return (
-    <div className="game-shell w-full max-w-[460px] p-0.5 sm:p-1">
-      <div ref={hostRef} className="mx-auto aspect-[9/16] w-full overflow-hidden rounded-[20px]" />
+    <div className="game-shell w-full max-w-[460px]">
+      <div
+        ref={hostRef}
+        className="mx-auto aspect-[9/16] w-full overflow-hidden rounded-[20px]"
+        style={{ background: "#1B0E08" }}
+      />
     </div>
   );
 }

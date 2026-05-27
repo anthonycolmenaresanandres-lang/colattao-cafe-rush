@@ -1,4 +1,4 @@
-﻿import Phaser from "phaser";
+import Phaser from "phaser";
 import { EventBus } from "@/game/events/EventBus";
 
 type FallingKind = "good" | "bad";
@@ -12,6 +12,20 @@ const ASSET_KEYS = {
   bad: "item-seafarers-bad",
 } as const;
 
+// ── Premium type stacks (Phaser uses web fonts loaded by next/font) ──
+const FONT_SERIF = '"Playfair Display", Georgia, "Times New Roman", serif';
+const FONT_SANS = 'Inter, ui-sans-serif, system-ui, -apple-system, sans-serif';
+
+// ── Brand palette (mirrors globals.css) ──
+const COLOR_ESPRESSO = 0x1b0e08;
+const COLOR_ESPRESSO_2 = 0x2a1208;
+const COLOR_PARCHMENT = 0xf5e9d0;
+const COLOR_CREAM = 0xfff6e2;
+const COLOR_GOLD = 0xd4a24c;
+const COLOR_GOLD_SOFT = 0xe9c988;
+const COLOR_CERAMIC = 0x2e5a7c;
+const COLOR_TERRACOTTA = 0xb45309;
+
 export class DemoScene extends Phaser.Scene {
   private score = 0;
   private timeLeft = 20;
@@ -22,10 +36,10 @@ export class DemoScene extends Phaser.Scene {
   private scoreText?: Phaser.GameObjects.Text;
   private timerText?: Phaser.GameObjects.Text;
   private statusText?: Phaser.GameObjects.Text;
+  private hudGroup?: Phaser.GameObjects.Container;
   private spawnTimer?: Phaser.Time.TimerEvent;
   private countdownTimer?: Phaser.Time.TimerEvent;
   private offRestart?: () => void;
-  private statusBackdrop?: Phaser.GameObjects.Rectangle;
 
   constructor() {
     super("DemoScene");
@@ -55,17 +69,25 @@ export class DemoScene extends Phaser.Scene {
     this.showStartScreen();
   }
 
+  // ─────────────────────────────────────────────────────────
+  // Background
+  // ─────────────────────────────────────────────────────────
   private drawSceneBackground() {
     const { width, height } = this.scale;
 
     if (this.textures.exists(ASSET_KEYS.bg)) {
       this.add.image(width / 2, height / 2, ASSET_KEYS.bg).setDisplaySize(width, height);
-      this.add.rectangle(width / 2, height / 2, width, height, 0x2a1208, 0.16);
+      // Warm espresso wash for legibility & mood
+      this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO_2, 0.32);
+      // Subtle gold vignette at top
+      const vignette = this.add.graphics();
+      vignette.fillGradientStyle(COLOR_GOLD, COLOR_GOLD, 0x000000, 0x000000, 0.12, 0.12, 0, 0);
+      vignette.fillRect(0, 0, width, height * 0.45);
       return;
     }
 
     const bg = this.add.graphics();
-    bg.fillGradientStyle(0xfef3c7, 0xfffbeb, 0xfdba74, 0xfb923c, 1);
+    bg.fillGradientStyle(0x150a05, 0x150a05, 0x4b2412, 0x4b2412, 1);
     bg.fillRect(0, 0, width, height);
   }
 
@@ -79,131 +101,230 @@ export class DemoScene extends Phaser.Scene {
     this.countdownTimer?.remove(false);
   }
 
+  // ─────────────────────────────────────────────────────────
+  // HUD — slim parchment chips with gold underline
+  // ─────────────────────────────────────────────────────────
   private buildHud() {
     const { width } = this.scale;
+    this.hudGroup = this.add.container(0, 0);
 
-    this.add.rectangle(97, 74, 132, 34, 0xfff3d6, 0.84).setStrokeStyle(1, 0xd99028, 0.2);
-    this.add
-      .rectangle(width - 97, 74, 132, 34, 0xfff3d6, 0.84)
-      .setStrokeStyle(1, 0xd99028, 0.2);
+    const chipWidth = 110;
+    const chipHeight = 30;
+    const chipY = 36;
+    const chipLeftX = 78;
+    const chipRightX = width - 78;
 
-    this.scoreText = this.add
-      .text(97, 74, "Score 0", {
-        fontFamily: "Arial",
-        fontSize: "16px",
-        color: "#4B2412",
-      })
-      .setOrigin(0.5);
+    const buildChip = (cx: number, label: string, value: string) => {
+      const bg = this.add
+        .rectangle(cx, chipY, chipWidth, chipHeight, COLOR_PARCHMENT, 0.92)
+        .setStrokeStyle(1, COLOR_GOLD, 0.55);
+      // Gold hairline underline
+      const underline = this.add.rectangle(cx, chipY + chipHeight / 2 - 2, chipWidth - 14, 1, COLOR_GOLD, 0.75);
 
-    this.timerText = this.add
-      .text(width - 97, 74, "Time 20", {
-        fontFamily: "Arial",
-        fontSize: "16px",
-        color: "#4B2412",
-      })
-      .setOrigin(0.5);
+      const labelText = this.add
+        .text(cx - chipWidth / 2 + 12, chipY, label.toUpperCase(), {
+          fontFamily: FONT_SANS,
+          fontSize: "9px",
+          color: "#9C6B1F",
+        })
+        .setOrigin(0, 0.5);
+      labelText.setLetterSpacing(2);
 
-    this.statusBackdrop = this.add.rectangle(width / 2, 118, width - 66, 24, 0x2a1208, 0.23);
+      const valueText = this.add
+        .text(cx + chipWidth / 2 - 12, chipY, value, {
+          fontFamily: FONT_SERIF,
+          fontSize: "18px",
+          color: "#2A1208",
+        })
+        .setOrigin(1, 0.5);
 
+      this.hudGroup?.add([bg, underline, labelText, valueText]);
+      return valueText;
+    };
+
+    this.scoreText = buildChip(chipLeftX, "Score", "0");
+    this.timerText = buildChip(chipRightX, "Time", "20");
+
+    // Single elegant status line — no muddy band
     this.statusText = this.add
-      .text(width / 2, 116, "Catch Colombian treats. Dodge chain coffee.", {
-        fontFamily: "Arial",
-        fontSize: "14px",
-        color: "#FFF3D6",
-        stroke: "#2A1208",
-        strokeThickness: 2,
+      .text(width / 2, 78, "Catch Colombian treats. Avoid chain coffee.", {
+        fontFamily: FONT_SANS,
+        fontSize: "11px",
+        color: "#F5E9D0",
         align: "center",
       })
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setAlpha(0.85);
+    this.statusText.setLetterSpacing(1.2);
+    this.hudGroup.add(this.statusText);
+
+    // Ceramic-blue hairline under status
+    const ceramic = this.add.rectangle(width / 2, 90, 120, 1, COLOR_CERAMIC, 0.55);
+    this.hudGroup.add(ceramic);
 
     if (this.textures.exists(ASSET_KEYS.logo)) {
-      this.add.image(width - 42, 30, ASSET_KEYS.logo).setDisplaySize(64, 26).setAlpha(0.78);
+      const logoMark = this.add.image(width / 2, 36, ASSET_KEYS.logo).setAlpha(0.0);
+      // hidden during play — brand stays in React shell above the canvas
+      this.hudGroup.add(logoMark);
     }
   }
 
+  // ─────────────────────────────────────────────────────────
+  // Start screen — golden ratio composition
+  // ─────────────────────────────────────────────────────────
   private showStartScreen() {
     const { width, height } = this.scale;
     this.statusText?.setVisible(false);
-    this.statusBackdrop?.setVisible(false);
+    this.hudGroup?.setVisible(false);
 
-    const topZone = height / 1.618;
-    const logoY = topZone * 0.33;
-    const rushY = topZone * 0.57;
-    const subtitleY = topZone * 0.71;
-    const ctaY = topZone + (height - topZone) * 0.38;
+    // Top brand zone ≈ 38.2 %, bottom interaction ≈ 61.8 %
+    const brandZone = height * 0.382;
+    const playZone = height - brandZone;
 
-    const topVeil = this.add.ellipse(width / 2, topZone * 0.56, width * 0.94, topZone * 0.88, 0x2a1208, 0.17);
+    // Soft espresso veil to anchor the brand zone
+    const veil = this.add.graphics();
+    veil.fillGradientStyle(COLOR_ESPRESSO, COLOR_ESPRESSO, COLOR_ESPRESSO_2, COLOR_ESPRESSO_2, 0.55, 0.55, 0, 0);
+    veil.fillRect(0, 0, width, brandZone + 20);
 
-    const rushTitle = this.add
-      .text(width / 2, rushY, "Café Rush", {
-        fontFamily: "Arial",
-        fontSize: "34px",
-        color: "#FFF3D6",
-        stroke: "#2A1208",
-        strokeThickness: 4,
-        align: "center",
+    // Eyebrow
+    const eyebrow = this.add
+      .text(width / 2, brandZone * 0.18, "COFFEE HOUSE · VIRGINIA BEACH", {
+        fontFamily: FONT_SANS,
+        fontSize: "10px",
+        color: "#E9C988",
       })
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setAlpha(0.85);
+    eyebrow.setLetterSpacing(3);
 
-    const subtitle = this.add
-      .text(width / 2, subtitleY, "Catch Colombian treats. Dodge chain coffee.", {
-        fontFamily: "Arial",
-        fontSize: "16px",
-        color: "#FFF3D6",
-        stroke: "#2A1208",
-        strokeThickness: 3,
-        align: "center",
-        wordWrap: { width: width - 90 },
-      })
-      .setOrigin(0.5);
-
+    // Logo image — hero element
     let logo: Phaser.GameObjects.Image | undefined;
     if (this.textures.exists(ASSET_KEYS.logo)) {
-      logo = this.add.image(width / 2, logoY, ASSET_KEYS.logo).setAlpha(0.96);
+      logo = this.add.image(width / 2, brandZone * 0.48, ASSET_KEYS.logo);
       const frame = this.textures.getFrame(ASSET_KEYS.logo, "__BASE");
       if (frame) {
-        const targetWidth = 244;
+        const targetWidth = 220;
         const ratio = frame.height / frame.width;
         logo.setDisplaySize(targetWidth, targetWidth * ratio);
       }
+    } else {
+      // Fallback wordmark
+      logo = undefined;
+      this.add
+        .text(width / 2, brandZone * 0.48, "Colattao", {
+          fontFamily: FONT_SERIF,
+          fontSize: "44px",
+          color: "#F5E9D0",
+        })
+        .setOrigin(0.5);
     }
 
-    const startButton = this.add
-      .rectangle(width / 2, ctaY, 166, 44, 0xf5c46b)
-      .setStrokeStyle(1, 0x4b2412, 0.36)
-      .setInteractive({ useHandCursor: true });
+    // Gold rule
+    const ruleY = brandZone * 0.78;
+    const rule = this.add.graphics();
+    rule.lineStyle(1, COLOR_GOLD, 0.7);
+    rule.lineBetween(width / 2 - 60, ruleY, width / 2 + 60, ruleY);
 
-    const startLabel = this.add
-      .text(width / 2, ctaY, "Start", {
-        fontFamily: "Arial",
-        fontSize: "23px",
-        color: "#4B2412",
+    // Serif title "Café Rush"
+    const rushTitle = this.add
+      .text(width / 2, brandZone * 0.92, "Café Rush", {
+        fontFamily: FONT_SERIF,
+        fontSize: "30px",
+        color: "#FFF6E2",
+        align: "center",
       })
       .setOrigin(0.5);
+    rushTitle.setLetterSpacing(2);
+
+    // Subtitle — refined, single line
+    const subtitle = this.add
+      .text(width / 2, brandZone + playZone * 0.16, "Catch the treats. Avoid the chain.", {
+        fontFamily: FONT_SANS,
+        fontSize: "12px",
+        color: "#F5E9D0",
+        align: "center",
+        wordWrap: { width: width - 80 },
+      })
+      .setOrigin(0.5)
+      .setAlpha(0.78);
+    subtitle.setLetterSpacing(0.6);
+
+    // ── Premium gold-pill CTA ──
+    const ctaY = brandZone + playZone * 0.46;
+    const ctaW = 180;
+    const ctaH = 50;
+
+    // Soft glow
+    const ctaGlow = this.add
+      .rectangle(width / 2, ctaY + 6, ctaW + 18, ctaH + 14, COLOR_GOLD, 0.18)
+      .setAlpha(0.55);
+
+    const ctaBg = this.add
+      .rectangle(width / 2, ctaY, ctaW, ctaH, COLOR_GOLD_SOFT)
+      .setStrokeStyle(1, 0x4b2412, 0.55)
+      .setInteractive({ useHandCursor: true });
+
+    // Top inner highlight
+    const ctaHighlight = this.add.rectangle(
+      width / 2,
+      ctaY - ctaH / 2 + 6,
+      ctaW - 18,
+      2,
+      0xffffff,
+      0.55,
+    );
+
+    const ctaLabel = this.add
+      .text(width / 2, ctaY, "Begin", {
+        fontFamily: FONT_SERIF,
+        fontSize: "22px",
+        color: "#2A1208",
+      })
+      .setOrigin(0.5);
+    ctaLabel.setLetterSpacing(2);
+
+    // Tiny tagline under CTA
+    const ctaHint = this.add
+      .text(width / 2, ctaY + ctaH / 2 + 18, "Tap to start your round", {
+        fontFamily: FONT_SANS,
+        fontSize: "10px",
+        color: "#E9C988",
+      })
+      .setOrigin(0.5)
+      .setAlpha(0.65);
+    ctaHint.setLetterSpacing(1.5);
 
     this.tweens.add({
-      targets: [startButton, startLabel],
-      scaleX: 1.03,
-      scaleY: 1.03,
-      duration: 900,
+      targets: [ctaBg, ctaLabel, ctaHighlight],
+      scaleX: 1.025,
+      scaleY: 1.025,
+      duration: 1100,
       yoyo: true,
       repeat: -1,
       ease: "Sine.easeInOut",
     });
 
-    startButton.on("pointerdown", () => {
-      topVeil.destroy();
+    ctaBg.on("pointerdown", () => {
+      veil.destroy();
+      eyebrow.destroy();
+      logo?.destroy();
+      rule.destroy();
       rushTitle.destroy();
       subtitle.destroy();
-      logo?.destroy();
-      startButton.destroy();
-      startLabel.destroy();
+      ctaGlow.destroy();
+      ctaBg.destroy();
+      ctaHighlight.destroy();
+      ctaLabel.destroy();
+      ctaHint.destroy();
+      this.hudGroup?.setVisible(true);
       this.statusText?.setVisible(true);
-      this.statusBackdrop?.setVisible(true);
       this.startRound();
     });
   }
 
+  // ─────────────────────────────────────────────────────────
+  // Round loop (gameplay unchanged)
+  // ─────────────────────────────────────────────────────────
   private startRound() {
     this.roundStarted = true;
     this.configureSpawnTimer();
@@ -217,7 +338,7 @@ export class DemoScene extends Phaser.Scene {
         }
 
         this.timeLeft -= 1;
-        this.timerText?.setText(`Time ${this.timeLeft}`);
+        this.timerText?.setText(`${this.timeLeft}`);
         if (this.timeLeft > 0 && this.timeLeft % 5 === 0) {
           this.spawnDelayMs = Math.max(470, this.spawnDelayMs - 35);
           this.configureSpawnTimer();
@@ -272,7 +393,7 @@ export class DemoScene extends Phaser.Scene {
       ? this.add.image(x, -50, textureKey).setDisplaySize(itemSize, itemSize).setInteractive({ useHandCursor: true })
       : this.add
           .text(x, -36, fallbackEmoji, {
-            fontFamily: "Arial",
+            fontFamily: FONT_SANS,
             fontSize: "52px",
           })
           .setOrigin(0.5)
@@ -299,14 +420,14 @@ export class DemoScene extends Phaser.Scene {
       item.destroy();
 
       if (kind === "bad") {
-        this.showFloatingFeedback(item.x, item.y, "Not Colattao behavior.", "#7f1d1d");
-        this.endGame(false, "Chain coffee got you. Abuela would be disappointed.");
+        this.showFloatingFeedback(item.x, item.y, "Not Colattao.", "#7f1d1d");
+        this.endGame(false, "Chain coffee got you. Try again.");
         return;
       }
 
       this.score += 10;
-      this.scoreText?.setText(`Score ${this.score}`);
-      this.showFloatingFeedback(item.x, item.y, "+10", "#14532d");
+      this.scoreText?.setText(`${this.score}`);
+      this.showFloatingFeedback(item.x, item.y, "+10", "#1f3a1f");
 
       if (this.score >= this.scoreTarget) {
         this.endGame(true);
@@ -325,10 +446,10 @@ export class DemoScene extends Phaser.Scene {
   private showFloatingFeedback(x: number, y: number, text: string, color: string) {
     const feedback = this.add
       .text(x, y, text, {
-        fontFamily: "Arial",
-        fontSize: "26px",
+        fontFamily: FONT_SERIF,
+        fontSize: "22px",
         color,
-        stroke: "#fff7ed",
+        stroke: "#FFF6E2",
         strokeThickness: 3,
       })
       .setOrigin(0.5);
@@ -337,12 +458,15 @@ export class DemoScene extends Phaser.Scene {
       targets: feedback,
       y: y - 42,
       alpha: 0,
-      duration: 550,
+      duration: 600,
       ease: "Cubic.easeOut",
       onComplete: () => feedback.destroy(),
     });
   }
 
+  // ─────────────────────────────────────────────────────────
+  // End game — refined restart card
+  // ─────────────────────────────────────────────────────────
   private endGame(won: boolean, lossMessage?: string) {
     if (this.gameEnded) {
       return;
@@ -353,7 +477,7 @@ export class DemoScene extends Phaser.Scene {
     this.countdownTimer?.remove(false);
 
     if (won) {
-      this.statusText?.setText("You earned your Colattao pass!");
+      this.statusText?.setText("You earned your Colattao pass.");
       this.time.delayedCall(800, () => {
         EventBus.emit("GAME_WON", {
           score: this.score,
@@ -364,24 +488,59 @@ export class DemoScene extends Phaser.Scene {
       return;
     }
 
-    this.statusText?.setText(lossMessage ?? "Almost there. Try again!");
     const { width, height } = this.scale;
 
-    const restartButton = this.add
-      .rectangle(width / 2, height - 94, 220, 64, 0xb45309)
-      .setStrokeStyle(3, 0x78350f)
-      .setInteractive({ useHandCursor: true });
+    // Dim the play area
+    const dim = this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.55);
 
-    this.add
-      .text(width / 2, height - 94, "Restart", {
-        fontFamily: "Arial",
-        fontSize: "28px",
-        color: "#fff7ed",
+    // Centered message
+    const msg = this.add
+      .text(width / 2, height / 2 - 30, lossMessage ?? "Almost there.", {
+        fontFamily: FONT_SERIF,
+        fontSize: "22px",
+        color: "#FFF6E2",
+        align: "center",
+        wordWrap: { width: width - 80 },
       })
       .setOrigin(0.5);
 
-    restartButton.on("pointerdown", () => {
+    const sub = this.add
+      .text(width / 2, height / 2 + 4, "Catch 120 to earn your pass.", {
+        fontFamily: FONT_SANS,
+        fontSize: "11px",
+        color: "#E9C988",
+      })
+      .setOrigin(0.5)
+      .setAlpha(0.8);
+    sub.setLetterSpacing(1.5);
+
+    // Refined gold pill restart
+    const btnW = 170;
+    const btnH = 44;
+    const btnY = height / 2 + 60;
+
+    const btnBg = this.add
+      .rectangle(width / 2, btnY, btnW, btnH, COLOR_GOLD_SOFT)
+      .setStrokeStyle(1, 0x4b2412, 0.55)
+      .setInteractive({ useHandCursor: true });
+
+    const btnLabel = this.add
+      .text(width / 2, btnY, "Try Again", {
+        fontFamily: FONT_SERIF,
+        fontSize: "18px",
+        color: "#2A1208",
+      })
+      .setOrigin(0.5);
+    btnLabel.setLetterSpacing(1.5);
+
+    btnBg.on("pointerdown", () => {
+      dim.destroy();
+      msg.destroy();
+      sub.destroy();
+      btnBg.destroy();
+      btnLabel.destroy();
       this.scene.restart();
     });
   }
 }
+

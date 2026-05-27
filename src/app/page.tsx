@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState } from "react";
 import GameCanvas from "@/components/GameCanvas";
@@ -26,11 +26,32 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[470px] flex-col items-center justify-center gap-2 bg-colattao-page px-0.5 py-0.5 text-amber-50 sm:px-1 sm:py-1">
-      <p className="select-none text-center text-sm font-semibold tracking-[0.2em] text-amber-100/90 drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]">
-        Colattao Coffee House
-      </p>
-      <GameCanvas />
+    <main className="mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-parchment">
+      {/* ───────────────────────────────────────────────────────
+          Golden-ratio shell
+          Top brand zone ≈ 38.2 % · Game zone ≈ 61.8 %
+          ─────────────────────────────────────────────────────── */}
+      <header className="flex basis-[38.2%] flex-col items-center justify-end px-6 pb-3 pt-6 text-center">
+        <p className="brand-eyebrow text-amber-100/70">Coffee House · Virginia Beach</p>
+        <h1
+          className="brand-wordmark mt-1 text-3xl text-amber-50 sm:text-[34px]"
+          style={{ textShadow: "0 1px 0 rgba(0,0,0,0.35), 0 0 24px rgba(212,162,76,0.18)" }}
+        >
+          Colattao
+        </h1>
+        <div className="mt-2 flex items-center justify-center gap-3">
+          <span className="h-px w-10 bg-gradient-to-r from-transparent to-amber-300/55" />
+          <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/70">
+            Café Rush
+          </span>
+          <span className="h-px w-10 bg-gradient-to-l from-transparent to-amber-300/55" />
+        </div>
+      </header>
+
+      <section className="flex basis-[61.8%] flex-col items-center justify-start px-2 pb-4 sm:px-3">
+        <GameCanvas />
+      </section>
+
       {showReward && lastWin ? (
         <VisualFlashPass payload={lastWin} onPlayAgain={handlePlayAgain} />
       ) : null}

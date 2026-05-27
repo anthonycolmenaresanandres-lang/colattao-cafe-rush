@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import type { GameWonPayload } from "@/types/game";
@@ -96,105 +96,139 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
           text: shareText,
           url: "https://colattao-cafe-rush.vercel.app/",
         });
-        setShareStatus("Shared. Show your shared post or repost screen for a bonus surprise.");
+        setShareStatus("Shared. Show the post to your barista for a small surprise.");
         return;
       }
 
       if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(shareText);
-        setShareStatus("Share text copied. Post it, tag Colattao, and show the barista.");
+        setShareStatus("Copied. Post it, tag Colattao, and show the barista.");
         return;
       }
 
-      setShareStatus("Share unavailable on this device. Copy and post your win manually.");
+      setShareStatus("Share unavailable here — copy your win manually.");
     } catch {
       if (typeof navigator !== "undefined" && navigator.clipboard?.writeText) {
         try {
           await navigator.clipboard.writeText(shareText);
-          setShareStatus("Share text copied. Post it, tag Colattao, and show the barista.");
+          setShareStatus("Copied. Post it, tag Colattao, and show the barista.");
           return;
         } catch {
-          setShareStatus("Share canceled or unavailable. You can still post your win manually.");
+          setShareStatus("Share canceled. You can still post your win manually.");
           return;
         }
       }
 
-      setShareStatus("Share canceled or unavailable. You can still post your win manually.");
+      setShareStatus("Share canceled. You can still post your win manually.");
     }
   };
 
   return (
-    <div className="fixed inset-0 z-20 flex items-center justify-center bg-amber-950/45 p-4">
-      <section className="flash-pass-bg w-full max-w-sm rounded-3xl border border-amber-100/85 p-5 text-amber-50 shadow-2xl">
-        <p className="text-center text-[11px] uppercase tracking-[0.22em]">
-          {rewardConfig.shopName} Cafe Crush
+    <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/65 px-4 py-6 backdrop-blur-sm">
+      <section className="coffee-card w-full max-w-sm px-6 pb-6 pt-7">
+        {/* ── Header ─────────────────────────────────────────── */}
+        <p className="brand-eyebrow text-center text-[var(--col-gold-deep)]">
+          {rewardConfig.shopName} · Café Rush
         </p>
-        <h2 className="mt-2 text-center text-3xl font-black leading-tight">{rewardConfig.rewardText}</h2>
-        <p className="mt-1 text-center text-xs uppercase tracking-[0.14em] text-amber-100">
+        <h2
+          className="brand-wordmark mt-1 text-center text-3xl text-[var(--col-espresso)]"
+          style={{ letterSpacing: "0.02em" }}
+        >
+          {rewardConfig.rewardText}
+        </h2>
+        <p className="mt-1 text-center text-[11px] uppercase tracking-[0.22em] text-[var(--col-espresso-3)]/75">
           {rewardConfig.location}
         </p>
-        <p className="mt-3 text-center text-sm">
-          Live clock: <span className="font-mono">{formatTime(clockNow)}</span>
-        </p>
-        <p className="text-center text-sm">
-          Date: <span className="font-mono">{todayLabel}</span>
-        </p>
-        <p className="mt-1 text-center text-xs font-semibold uppercase tracking-[0.12em]">
-          Valid today only
-        </p>
 
-        <div className="mt-4 space-y-1 rounded-xl bg-black/35 p-3 text-sm">
-          <p>score: <span className="font-mono">{payload.score}</span></p>
-          <p>wonAt: <span className="font-mono">{wonAtLabel}</span></p>
-          <p>Win Code: <span className="font-mono">{winCode}</span></p>
+        <div className="ceramic-rule mx-auto my-4 w-3/4" />
+
+        {/* ── Live verification ─────────────────────────────── */}
+        <div className="space-y-1 text-center">
+          <p className="text-xs uppercase tracking-[0.18em] text-[var(--col-espresso-3)]/70">
+            Verified live
+          </p>
+          <p className="font-mono text-sm text-[var(--col-espresso)]">
+            {formatTime(clockNow)} · {todayLabel}
+          </p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--col-terracotta)]">
+            Valid today only
+          </p>
         </div>
-        <p className="mt-3 rounded-lg bg-black/25 p-2 text-center text-xs font-semibold">
+
+        {/* ── Receipt-style data block ──────────────────────── */}
+        <div className="mt-4 rounded-xl border border-[var(--col-gold-deep)]/25 bg-white/55 px-4 py-3 text-[13px]">
+          <div className="flex justify-between">
+            <span className="text-[var(--col-espresso-3)]/75">Score</span>
+            <span className="font-mono text-[var(--col-espresso)]">{payload.score}</span>
+          </div>
+          <div className="mt-1 flex justify-between">
+            <span className="text-[var(--col-espresso-3)]/75">Earned</span>
+            <span className="font-mono text-[var(--col-espresso)]">{wonAtLabel}</span>
+          </div>
+          <div className="gold-rule my-2" />
+          <div className="flex items-baseline justify-between">
+            <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--col-espresso-3)]/70">
+              Win Code
+            </span>
+            <span className="font-mono text-base font-bold tracking-[0.08em] text-[var(--col-espresso)]">
+              {winCode}
+            </span>
+          </div>
+        </div>
+
+        <p className="mt-3 text-center text-[11px] italic text-[var(--col-espresso-3)]/75">
           {rewardConfig.verificationText}
         </p>
 
+        {/* ── Status ─────────────────────────────────────────── */}
         {blocked ? (
-          <p className="mt-4 rounded-lg bg-red-900/60 p-2 text-center text-sm font-semibold">
-            Come back tomorrow for another discount! ({formatDuration(remainingMs)} remaining)
+          <p className="mt-4 rounded-lg border border-[var(--col-terracotta)]/30 bg-[var(--col-terracotta)]/10 px-3 py-2 text-center text-xs font-semibold text-[var(--col-terracotta-2)]">
+            Come back tomorrow for another reward · {formatDuration(remainingMs)} remaining
           </p>
         ) : claimed ? (
-          <p className="mt-4 rounded-lg bg-emerald-900/60 p-2 text-center text-sm font-semibold">
-            Discount claimed. Show this active screen to your barista.
+          <p className="mt-4 rounded-lg border border-emerald-700/30 bg-emerald-700/10 px-3 py-2 text-center text-xs font-semibold text-emerald-800">
+            Claimed · show this active screen to your barista
           </p>
         ) : null}
 
-        <div className="mt-4 grid grid-cols-2 gap-3">
+        {/* ── Primary actions ───────────────────────────────── */}
+        <div className="mt-5 grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={onClaim}
-            className="rounded-lg bg-white px-3 py-2 text-sm font-bold text-amber-950 shadow"
+            className="btn-gold rounded-xl px-3 py-3 text-sm font-bold uppercase tracking-[0.12em]"
           >
-            Claim Discount
+            Claim
           </button>
           <button
             type="button"
             onClick={onPlayAgain}
-            className="rounded-lg border border-white bg-white/15 px-3 py-2 text-sm font-bold"
+            className="btn-ghost rounded-xl px-3 py-3 text-sm font-bold uppercase tracking-[0.12em]"
           >
             Play Again
           </button>
         </div>
 
-        <div className="mt-4 rounded-xl bg-black/30 p-3">
-          <p className="text-center text-sm font-semibold">Want a bonus reward?</p>
-          <p className="mt-1 text-center text-xs text-amber-100">
-            Share or repost your win and show the barista.
+        {/* ── Share / bonus ─────────────────────────────────── */}
+        <div className="mt-5 rounded-xl border border-[var(--col-ceramic)]/25 bg-[var(--col-ceramic)]/8 px-4 py-3">
+          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--col-ceramic)]">
+            Bonus surprise
+          </p>
+          <p className="mt-1 text-center text-[11px] leading-snug text-[var(--col-espresso-3)]/80">
+            Share your win and show the barista for a small extra.
           </p>
           <button
             type="button"
             onClick={onShare}
-            className="mt-3 w-full rounded-lg bg-amber-100 px-3 py-2 text-sm font-bold text-amber-950"
+            className="btn-ceramic mt-3 w-full rounded-xl px-3 py-2.5 text-sm font-bold uppercase tracking-[0.12em]"
           >
             Share My Win
           </button>
-          <p className="mt-2 text-center text-xs font-semibold">
-            Show your shared post or repost screen for a bonus surprise.
-          </p>
-          {shareStatus ? <p className="mt-2 text-center text-xs">{shareStatus}</p> : null}
+          {shareStatus ? (
+            <p className="mt-2 text-center text-[11px] text-[var(--col-espresso-3)]/80">
+              {shareStatus}
+            </p>
+          ) : null}
         </div>
       </section>
     </div>
