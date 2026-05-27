@@ -24,6 +24,150 @@ const COLOR_GOLD = 0xd4a24c;
 const COLOR_GOLD_SOFT = 0xe9c988;
 const COLOR_CERAMIC = 0x2e5a7c;
 
+// ─────────────────────────────────────────────────────────
+// Rotating bad-tap loss messages
+// 100 short funny lines in the Colattao voice.
+// On the player's 100th cumulative bad-tap loss (tracked in
+// localStorage under `colattao_bad_loss_count`) we override
+// the random pick with a special line. Timeout messages
+// remain unaffected.
+// ─────────────────────────────────────────────────────────
+const BAD_LOSS_STORAGE_KEY = "colattao_bad_loss_count";
+
+const LOSS_MESSAGES: readonly string[] = [
+  "That cup had no soul.",
+  "Abuela just sighed from another continent.",
+  "The cafecito wept softly.",
+  "Even the beans are embarrassed.",
+  "That's not coffee. That's a confession.",
+  "The chain wins this round. Barely.",
+  "Tía would have caught that.",
+  "The roaster is shaking its head.",
+  "You owe the beans an apology.",
+  "Pour one out for that lost shot.",
+  "Even decaf wouldn't make that mistake.",
+  "The crema deserved better.",
+  "Your tastebuds called HR.",
+  "That brew had your number.",
+  "The espresso machine just unsubscribed.",
+  "Abuela's spoon is rattling in the cup.",
+  "The barista is praying for you.",
+  "The chain coffee just smirked.",
+  "Even drip coffee felt that.",
+  "Your palate clocked out early.",
+  "The roastery is in mourning.",
+  "Pour out a cafecito for that one.",
+  "Even the steamed milk gasped.",
+  "The grinder paused in respect.",
+  "The Colombian highlands felt that miss.",
+  "Your tongue filed a complaint.",
+  "The crema refuses to comment.",
+  "Even the cup handle backed away.",
+  "The mochila just slipped off your shoulder.",
+  "The beans are unionizing against you.",
+  "That tap was espresso-pardonable.",
+  "Even the foam bubbled with disappointment.",
+  "The pour-over politely walked away.",
+  "Your reflexes are still on drip mode.",
+  "The chain coffee left a tip.",
+  "That moment will haunt the brew log.",
+  "The latte art just frowned.",
+  "The roast date called in sick.",
+  "Even Yirgacheffe wouldn't help you here.",
+  "The tamper was tampered with.",
+  "The mug is requesting reassignment.",
+  "Your hand and the cup never met.",
+  "The chain coffee high-fived itself.",
+  "The espresso shot you ghosted.",
+  "The cup is on read.",
+  "Even the spoon looked away.",
+  "The Andes shrugged.",
+  "The blend disowned you.",
+  "The cupping notes say: 'tragic.'",
+  "Your finesse left for vacation.",
+  "The chain coffee filed a flex.",
+  "The single origin demands a refund.",
+  "The barista clinked the pitcher in solidarity.",
+  "The crema cracked under pressure.",
+  "The cafetera puffed in disgust.",
+  "Even the sugar packet judged.",
+  "That's a microfoam misdemeanor.",
+  "The beans rolled their tiny brown eyes.",
+  "The latte called HR on you.",
+  "The chain coffee bought itself a treat.",
+  "The aeropress would never.",
+  "Your timing is in beta.",
+  "The espresso ratio is crying.",
+  "The portafilter is filing for divorce.",
+  "The cafecito ran for the hills.",
+  "Even iced coffee melted in regret.",
+  "The roast plant is rethinking the contract.",
+  "The barista's apron just twitched.",
+  "Even drip coffee dripped harder.",
+  "The grinder ground its teeth.",
+  "The latte foam is on strike.",
+  "The crema slid off the cup in protest.",
+  "Even cold brew warmed up to that miss.",
+  "The mocha lost its sweetness.",
+  "The chain coffee posted a story.",
+  "The beans are texting your other apps.",
+  "Your reaction time is in pre-roast.",
+  "The cafetera muttered something in Spanish.",
+  "The espresso shot ducked.",
+  "Your finger and the cup are in couples therapy.",
+  "The Colattao crew gasped in unison.",
+  "That brew is gone. Forever.",
+  "Even instant coffee wouldn't dare.",
+  "The pour ratio is broken.",
+  "The bean is suing for emotional damages.",
+  "The crema requested witness protection.",
+  "The chain coffee left you a Yelp review.",
+  "The cortado just cortado-ed itself.",
+  "The flat white went flat.",
+  "The cold foam is now warm with shame.",
+  "The Andean mist parted in despair.",
+  "The grinder issued a public apology on your behalf.",
+  "The latte art is just a swirl of regret now.",
+  "The mug is checking its options.",
+  "The chain coffee added you to its rewards.",
+  "The beans booked a one-way flight home.",
+  "Your form is in extended brew.",
+  "The cafecito spilled all over your reputation.",
+  "The barista whispered: 'que pena.'",
+  "The cup turned its handle away from you.",
+  "Even the napkin is folding itself in shame.",
+  "The chain coffee just typed 'lol'.",
+];
+
+const HUNDREDTH_LOSS_MESSAGE =
+  "100 losses? At this point, the chain coffee has a rewards program for you.";
+
+function incrementAndReadBadLossCount(): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    const raw = window.localStorage.getItem(BAD_LOSS_STORAGE_KEY);
+    const prev = raw ? Math.max(0, parseInt(raw, 10) || 0) : 0;
+    const next = prev + 1;
+    window.localStorage.setItem(BAD_LOSS_STORAGE_KEY, String(next));
+    return next;
+  } catch {
+    return 0;
+  }
+}
+
+function pickRandomLossMessage(): string {
+  const i = Math.floor(Math.random() * LOSS_MESSAGES.length);
+  return LOSS_MESSAGES[i] ?? "That cup had no soul.";
+}
+
+function getBadLossMessage(): string {
+  const count = incrementAndReadBadLossCount();
+  if (count === 100) {
+    return HUNDREDTH_LOSS_MESSAGE;
+  }
+  return pickRandomLossMessage();
+}
+
 // ── Level configuration ──
 interface LevelConfig {
   index: number;          // 1-based
@@ -517,7 +661,7 @@ export class DemoScene extends Phaser.Scene {
 
       if (kind === "bad") {
         this.showFloatingFeedback(item.x, item.y, "Not Colattao.", "#7f1d1d");
-        this.endLevel(false, "That cup had no soul.");
+        this.endLevel(false, getBadLossMessage());
         return;
       }
 
