@@ -9,6 +9,33 @@ export const metadata = {
     "Digital menu for Colattao Coffee House – Virginia Beach, VA",
 };
 
+// ── Owner update request mailto ────────────────────────────
+// See OWNER_UPDATE_PROCESS.md for the full workflow.
+const OWNER_UPDATE_EMAIL = "anthonycolmenares92@gmail.com";
+const OWNER_UPDATE_SUBJECT = "Colattao Update Request";
+const OWNER_UPDATE_BODY = [
+  "Hello Anthony,",
+  "",
+  "Request type:",
+  "Menu / Price / Product / Photo / Game / Promo",
+  "",
+  "What needs to change:",
+  "",
+  "Current item or section:",
+  "",
+  "New text, price, or detail:",
+  "",
+  "Priority:",
+  "Low / Normal / Urgent",
+  "",
+  "Notes:",
+  "",
+].join("\n");
+
+const OWNER_UPDATE_MAILTO = `mailto:${OWNER_UPDATE_EMAIL}?subject=${encodeURIComponent(
+  OWNER_UPDATE_SUBJECT,
+)}&body=${encodeURIComponent(OWNER_UPDATE_BODY)}`;
+
 // ── Decorative game-asset accents per category ──
 const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined> = {
   espresso: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
@@ -100,6 +127,12 @@ export default function MenuPage() {
         <p className="mt-4 text-[10px] uppercase tracking-[0.28em] text-amber-200/45">
           © {new Date().getFullYear()} Colattao Coffee House
         </p>
+        <a
+          href={OWNER_UPDATE_MAILTO}
+          className="mt-2 inline-block text-[10px] tracking-[0.18em] text-amber-200/40 underline decoration-amber-200/25 underline-offset-[3px] transition-colors hover:text-amber-200/75"
+        >
+          Need a menu update?
+        </a>
       </footer>
     </main>
   );
