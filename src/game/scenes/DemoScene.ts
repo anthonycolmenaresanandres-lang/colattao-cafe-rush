@@ -47,14 +47,14 @@ const LEVELS: LevelConfig[] = [
     name: "Warm-up",
     durationSec: 20,
     targetScore: 120,
-    initialSpawnDelayMs: 620,
-    spawnDelayFloorMs: 470,
-    spawnDelayStepMs: 35,
-    badRate: 0.16,
-    fallMinMs: 2200,
-    fallMaxMs: 3400,
-    fallSpeedupCapMs: 520,
-    fallSpeedupStepMs: 120,
+    initialSpawnDelayMs: 500,
+    spawnDelayFloorMs: 340,
+    spawnDelayStepMs: 40,
+    badRate: 0.20,
+    fallMinMs: 1700,
+    fallMaxMs: 2600,
+    fallSpeedupCapMs: 700,
+    fallSpeedupStepMs: 160,
     timeoutMessage: "Almost there. The cafecito escaped.",
   },
   {
@@ -62,14 +62,14 @@ const LEVELS: LevelConfig[] = [
     name: "Rush Hour",
     durationSec: 25,
     targetScore: 180,
-    initialSpawnDelayMs: 520,
-    spawnDelayFloorMs: 380,
-    spawnDelayStepMs: 28,
-    badRate: 0.24,
-    fallMinMs: 1800,
-    fallMaxMs: 2800,
-    fallSpeedupCapMs: 600,
-    fallSpeedupStepMs: 130,
+    initialSpawnDelayMs: 400,
+    spawnDelayFloorMs: 280,
+    spawnDelayStepMs: 35,
+    badRate: 0.28,
+    fallMinMs: 1300,
+    fallMaxMs: 2100,
+    fallSpeedupCapMs: 800,
+    fallSpeedupStepMs: 180,
     timeoutMessage: "Almost there. The cafecito escaped.",
   },
   {
@@ -77,14 +77,14 @@ const LEVELS: LevelConfig[] = [
     name: "Colattao Lovers Only",
     durationSec: 30,
     targetScore: 300,
-    initialSpawnDelayMs: 360,
-    spawnDelayFloorMs: 260,
-    spawnDelayStepMs: 22,
-    badRate: 0.34,
-    fallMinMs: 1300,
-    fallMaxMs: 2000,
-    fallSpeedupCapMs: 500,
-    fallSpeedupStepMs: 110,
+    initialSpawnDelayMs: 280,
+    spawnDelayFloorMs: 180,
+    spawnDelayStepMs: 25,
+    badRate: 0.38,
+    fallMinMs: 900,
+    fallMaxMs: 1500,
+    fallSpeedupCapMs: 700,
+    fallSpeedupStepMs: 170,
     timeoutMessage: "Only true Colattao lovers survive this rush.",
   },
 ];
@@ -463,8 +463,9 @@ export class DemoScene extends Phaser.Scene {
       cfg.fallSpeedupCapMs,
       Math.floor(elapsed / 5) * cfg.fallSpeedupStepMs,
     );
-    const minDuration = Math.max(900, cfg.fallMinMs - fallBonus);
-    const maxDuration = Math.max(1400, cfg.fallMaxMs - fallBonus);
+    // Hard floors low enough for Level 3 to actually feel its speed ramp.
+    const minDuration = Math.max(550, cfg.fallMinMs - fallBonus);
+    const maxDuration = Math.max(850, cfg.fallMaxMs - fallBonus);
     const fallDuration = Phaser.Math.Between(minDuration, maxDuration);
     const isBad = Math.random() < cfg.badRate;
     const kind: FallingKind = isBad ? "bad" : "good";
@@ -675,35 +676,30 @@ export class DemoScene extends Phaser.Scene {
     this.startRound();
   }
 
+  /**
+   * Loss overlay — intentionally minimal:
+   * one message block, plenty of breathing room, one button.
+   * No level-progression helper text (that lives on the level-complete overlay).
+   */
   private showLossOverlay(message: string) {
     const { width, height } = this.scale;
 
-    const dim = this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.6);
+    const dim = this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.65);
 
+    const msgY = height / 2 - 60;
     const msg = this.add
-      .text(width / 2, height / 2 - 30, message, {
+      .text(width / 2, msgY, message, {
         fontFamily: FONT_SERIF,
-        fontSize: "22px",
+        fontSize: "20px",
         color: "#FFF6E2",
         align: "center",
         wordWrap: { width: width - 80 },
+        lineSpacing: 4,
       })
-      .setOrigin(0.5);
-
-    const sub = this.add
-      .text(width / 2, height / 2 + 14, `Reach ${this.level.targetScore} on ${this.level.name} to advance.`, {
-        fontFamily: FONT_SANS,
-        fontSize: "11px",
-        color: "#E9C988",
-        align: "center",
-        wordWrap: { width: width - 80 },
-      })
-      .setOrigin(0.5)
-      .setAlpha(0.85);
-    sub.setLetterSpacing(1.5);
+      .setOrigin(0.5, 0.5);
 
     const btnW = 170;
-    const btnH = 44;
+    const btnH = 46;
     const btnY = height / 2 + 70;
 
     const btnBg = this.add
@@ -723,7 +719,6 @@ export class DemoScene extends Phaser.Scene {
     btnBg.on("pointerdown", () => {
       dim.destroy();
       msg.destroy();
-      sub.destroy();
       btnBg.destroy();
       btnLabel.destroy();
       this.scene.restart();
