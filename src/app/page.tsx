@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import GameCanvas from "@/components/GameCanvas";
 import VisualFlashPass from "@/components/VisualFlashPass";
@@ -32,13 +33,18 @@ export default function Home() {
           Top brand zone ≈ 38.2 % · Game zone ≈ 61.8 %
           ─────────────────────────────────────────────────────── */}
       <header className="flex basis-[38.2%] flex-col items-center justify-end px-6 pb-3 pt-6 text-center">
-        <p className="brand-eyebrow text-amber-100/70">Coffee House · Virginia Beach</p>
-        <h1
-          className="brand-wordmark mt-1 text-3xl text-amber-50 sm:text-[34px]"
-          style={{ textShadow: "0 1px 0 rgba(0,0,0,0.35), 0 0 24px rgba(212,162,76,0.18)" }}
-        >
-          Colattao
-        </h1>
+        <p className="brand-eyebrow text-amber-100/70">
+          Coffee House · Virginia Beach
+        </p>
+        <h1 className="sr-only">Colattao Café Rush</h1>
+        <Image
+          src="/assets/colattao/logo/colattao-logo.png"
+          alt="Colattao"
+          width={260}
+          height={104}
+          priority
+          className="mx-auto mt-2 h-auto w-[200px] select-none drop-shadow-[0_0_24px_rgba(212,162,76,0.22)] sm:w-[220px]"
+        />
         <div className="mt-2 flex items-center justify-center gap-3">
           <span className="h-px w-10 bg-gradient-to-r from-transparent to-amber-300/55" />
           <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/70">
