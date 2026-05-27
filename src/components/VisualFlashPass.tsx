@@ -58,7 +58,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
 
         {/* ── Subtext ───────────────────────────────────────── */}
         <p className="text-[13px] leading-snug text-[var(--col-espresso-3)]/85">
-          Thanks for playing. Rewards and promos will be updated by Colattao.
+          You brewed greatness.
         </p>
 
         {/* ── Score acknowledgement ─────────────────────────── */}

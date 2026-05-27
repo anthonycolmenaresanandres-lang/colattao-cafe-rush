@@ -517,7 +517,7 @@ export class DemoScene extends Phaser.Scene {
 
       if (kind === "bad") {
         this.showFloatingFeedback(item.x, item.y, "Not Colattao.", "#7f1d1d");
-        this.endLevel(false, "Chain coffee got you. Abuela would be disappointed.");
+        this.endLevel(false, "That cup had no soul.");
         return;
       }
 
@@ -576,7 +576,7 @@ export class DemoScene extends Phaser.Scene {
       this.totalScore += this.score;
       const isFinal = this.currentLevelIndex >= LEVELS.length - 1;
       if (isFinal) {
-        this.statusText?.setText("You earned your Colattao pass.");
+        this.statusText?.setText("You brewed greatness.");
         this.time.delayedCall(700, () => {
           EventBus.emit("GAME_WON", {
             score: this.totalScore,
