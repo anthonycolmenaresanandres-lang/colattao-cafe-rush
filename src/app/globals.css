@@ -1,54 +1,236 @@
 @import "tailwindcss";
 
+/* ────────────────────────────────────────────────────────────
+   Colattao Premium Design System
+   Espresso · Cream Parchment · Terracotta · Soft Gold · Ceramic Blue
+   ──────────────────────────────────────────────────────────── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand palette */
+  --col-espresso: #1B0E08;
+  --col-espresso-2: #2A1208;
+  --col-espresso-3: #4B2412;
+  --col-parchment: #F5E9D0;
+  --col-parchment-2: #FFF6E2;
+  --col-cream: #FBF1DC;
+  --col-terracotta: #B45309;
+  --col-terracotta-2: #C2410C;
+  --col-gold: #D4A24C;
+  --col-gold-soft: #E9C988;
+  --col-gold-deep: #9C6B1F;
+  --col-ceramic: #2E5A7C;
+  --col-ceramic-soft: #5887AB;
+
+  --background: var(--col-espresso);
+  --foreground: var(--col-parchment);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-espresso: var(--col-espresso);
+  --color-espresso-2: var(--col-espresso-2);
+  --color-parchment: var(--col-parchment);
+  --color-cream: var(--col-cream);
+  --color-terracotta: var(--col-terracotta);
+  --color-gold: var(--col-gold);
+  --color-ceramic: var(--col-ceramic);
+  --font-display: var(--font-playfair);
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
   margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+/* ── Immersive page background ─────────────────────────── */
+.bg-colattao-page {
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(212, 162, 76, 0.16), transparent 55%),
+    radial-gradient(80% 50% at 50% 100%, rgba(46, 90, 124, 0.10), transparent 60%),
+    linear-gradient(180deg, #150A05 0%, #1F0E07 50%, #2D170B 100%);
+}
+
+/* ── Parchment-glass game shell ─────────────────────────── */
+.game-shell {
+  position: relative;
+  border-radius: 26px;
+  background:
+    linear-gradient(155deg, rgba(245, 233, 208, 0.06), rgba(212, 162, 76, 0.05));
+  box-shadow:
+    0 24px 60px -20px rgba(0, 0, 0, 0.65),
+    0 2px 0 0 rgba(212, 162, 76, 0.10) inset,
+    0 -1px 0 0 rgba(0, 0, 0, 0.35) inset;
+  border: 1px solid rgba(212, 162, 76, 0.22);
+  padding: 6px;
+}
+.game-shell::before {
+  /* Hairline ceramic-blue accent under the gold border */
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 22px;
+  pointer-events: none;
+  border: 1px solid rgba(46, 90, 124, 0.18);
+}
+.game-shell::after {
+  /* Subtle mochila zigzag corner accent — top-right only, very low opacity */
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 64px;
+  height: 10px;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(135deg, transparent 45%, var(--col-gold) 45% 55%, transparent 55%),
+    linear-gradient(45deg, transparent 45%, var(--col-gold) 45% 55%, transparent 55%);
+  background-size: 8px 8px;
+}
+
+/* ── Premium coffee-card surface (Flash Pass) ───────────── */
+.coffee-card {
+  position: relative;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 246, 226, 0.08), transparent 60%),
+    linear-gradient(180deg, #FBF1DC 0%, #F5E5C2 100%);
+  color: var(--col-espresso);
+  border-radius: 22px;
+  box-shadow:
+    0 30px 80px -20px rgba(0, 0, 0, 0.55),
+    0 2px 0 rgba(255, 255, 255, 0.6) inset,
+    0 -2px 0 rgba(156, 107, 31, 0.18) inset;
+  border: 1px solid rgba(156, 107, 31, 0.25);
+  overflow: hidden;
+}
+.coffee-card::before {
+  /* Gold-foil header strip */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, #9C6B1F, #E9C988 35%, #FFF1C2 50%, #E9C988 65%, #9C6B1F);
+}
+.coffee-card::after {
+  /* Mochila weave hairline along the bottom */
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  opacity: 0.55;
+  background-image:
+    linear-gradient(135deg, transparent 45%, var(--col-gold-deep) 45% 55%, transparent 55%),
+    linear-gradient(45deg, transparent 45%, var(--col-gold-deep) 45% 55%, transparent 55%);
+  background-size: 8px 8px;
+}
+
+.ceramic-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(46, 90, 124, 0.55), transparent);
+}
+
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(156, 107, 31, 0.55), transparent);
+}
+
+/* ── Refined CTA buttons ────────────────────────────────── */
+.btn-gold {
+  background: linear-gradient(180deg, #E9C988 0%, #C99846 100%);
+  color: var(--col-espresso);
+  border: 1px solid rgba(75, 36, 18, 0.35);
+  box-shadow:
+    0 8px 20px -6px rgba(156, 107, 31, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  letter-spacing: 0.02em;
+}
+.btn-ghost {
+  background: rgba(27, 14, 8, 0.04);
+  color: var(--col-espresso);
+  border: 1px solid rgba(75, 36, 18, 0.35);
+}
+.btn-ceramic {
+  background: linear-gradient(180deg, #3E6F92 0%, #234A66 100%);
+  color: var(--col-parchment-2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 8px 20px -6px rgba(46, 90, 124, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.2) inset;
+}
+
+/* ── Brand header treatments ────────────────────────────── */
+.brand-wordmark {
+  font-family: var(--font-playfair), Georgia, serif;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+}
+.brand-eyebrow {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  letter-spacing: 0.28em;
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.65;
+}
+
+/* ── Menu surfaces ──────────────────────────────────────── */
+.menu-card {
+  position: relative;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(255, 246, 226, 0.95), transparent 60%),
+    linear-gradient(180deg, #FBF1DC 0%, #F2E2BD 100%);
+  border: 1px solid rgba(156, 107, 31, 0.22);
+  border-radius: 18px;
+  box-shadow:
+    0 12px 28px -14px rgba(0, 0, 0, 0.45),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset;
+  overflow: hidden;
+}
+.menu-card::before {
+  /* gold foil hairline at the top */
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #9C6B1F, #E9C988 35%, #FFF1C2 50%, #E9C988 65%, #9C6B1F);
+  opacity: 0.85;
+}
+
+.menu-chip {
+  background: rgba(27, 14, 8, 0.55);
+  border: 1px solid rgba(212, 162, 76, 0.45);
+  color: #F5E9D0;
+  letter-spacing: 0.16em;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.menu-chip:hover {
+  background: rgba(75, 36, 18, 0.85);
+  border-color: rgba(212, 162, 76, 0.85);
+}
+
+.dotted-rule {
+  flex: 1;
+  border-bottom: 1px dotted rgba(75, 36, 18, 0.3);
+  margin: 0 8px 4px;
+}
+
+/* ── Flash-pass legacy glow kept for tween compatibility ──*/
 @keyframes passGlow {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-}
-
-.flash-pass-bg {
-  background:
-    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.25), transparent 35%),
-    linear-gradient(125deg, #5a2a0a, #a1480f, #d97706, #3f1d0a, #f59e0b);
-  background-size: 100% 100%, 280% 280%;
-  animation: passGlow 3s linear infinite;
-}
-
-.game-shell {
-  border-radius: 22px;
-  background: linear-gradient(150deg, rgba(255, 243, 214, 0.22), rgba(245, 196, 107, 0.14));
-  box-shadow: 0 14px 32px rgba(14, 7, 4, 0.34);
-  border: 1px solid rgba(245, 196, 107, 0.22);
-}
-
-.bg-colattao-page {
-  background:
-    radial-gradient(120% 60% at 50% -10%, rgba(217, 144, 40, 0.22), transparent 58%),
-    linear-gradient(180deg, #1B0E08 0%, #2A1208 45%, #4B2412 100%);
 }

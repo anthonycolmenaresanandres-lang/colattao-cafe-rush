@@ -10,52 +10,77 @@ export const metadata = {
 
 export default function MenuPage() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-lg flex-col bg-amber-50 text-amber-950">
-      {/* ── Header ── */}
-      <header className="sticky top-0 z-20 bg-amber-950 px-4 pb-2 pt-4 text-center text-amber-50 shadow-md">
-        <h1 className="text-xl font-extrabold tracking-wide">
-          Colattao Coffee House
+    <main className="mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]">
+      {/* ──────────────────────────────────────────────────────
+          Header — premium brand band, sticky on scroll
+          ────────────────────────────────────────────────────── */}
+      <header
+        className="sticky top-0 z-20 px-5 pb-4 pt-6 text-center"
+        style={{
+          background:
+            "linear-gradient(180deg, #1B0E08 0%, #1B0E08 70%, rgba(27,14,8,0.92) 100%)",
+          boxShadow: "0 16px 30px -18px rgba(0,0,0,0.75)",
+        }}
+      >
+        <p className="brand-eyebrow text-amber-200/70">
+          Coffee House · Virginia Beach
+        </p>
+        <h1
+          className="brand-wordmark mt-1 text-[26px] text-[var(--col-parchment-2)]"
+          style={{ textShadow: "0 0 24px rgba(212,162,76,0.18)" }}
+        >
+          Colattao
         </h1>
-        <p className="mt-0.5 text-xs text-amber-200/80">
+        <div className="mt-1.5 flex items-center justify-center gap-3">
+          <span className="h-px w-8 bg-gradient-to-r from-transparent to-amber-300/55" />
+          <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/75">
+            Digital Menu
+          </span>
+          <span className="h-px w-8 bg-gradient-to-l from-transparent to-amber-300/55" />
+        </div>
+
+        {/* address & hours */}
+        <p className="mt-3 text-[11px] text-amber-100/65">
           1115 Independence Blvd, Virginia Beach, VA 23455
         </p>
-        <p className="mt-0.5 text-[11px] leading-tight text-amber-300/70">
+        <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-amber-200/55">
           Tue–Fri 7–4 · Sat & Sun 8–4 · Mon Closed
         </p>
 
-        {/* ── Category nav chips ── */}
+        {/* category chips */}
         <nav
           aria-label="Menu categories"
-          className="-mx-4 mt-2 flex gap-1.5 overflow-x-auto px-4 pb-1 scrollbar-none"
+          className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1"
+          style={{ scrollbarWidth: "none" }}
         >
           {menuCategories.map((c) => (
-            <a
-              key={c.id}
-              href={`#${c.id}`}
-              className="shrink-0 rounded-full border border-amber-700/40 bg-amber-900/60 px-3 py-1 text-[11px] font-semibold text-amber-100 transition-colors hover:bg-amber-800"
-            >
+            <a key={c.id} href={`#${c.id}`} className="menu-chip shrink-0">
               {c.title}
             </a>
           ))}
         </nav>
       </header>
 
-      {/* ── Menu body ── */}
-      <div className="flex-1 space-y-6 px-4 py-5">
+      {/* ──────────────────────────────────────────────────────
+          Menu body — parchment cards on espresso shell
+          ────────────────────────────────────────────────────── */}
+      <div className="flex-1 space-y-5 px-4 py-6">
         {menuCategories.map((c) => (
           <MenuCategorySection key={c.id} category={c} />
         ))}
       </div>
 
-      {/* ── Footer ── */}
-      <footer className="border-t border-amber-200 bg-amber-100/60 px-4 py-4 text-center text-xs text-amber-800">
+      {/* ──────────────────────────────────────────────────────
+          Footer
+          ────────────────────────────────────────────────────── */}
+      <footer className="px-5 pb-7 pt-3 text-center">
         <Link
           href="/"
-          className="inline-block rounded-full bg-amber-900 px-5 py-2 text-sm font-bold text-amber-50 shadow transition-colors hover:bg-amber-800"
+          className="btn-gold inline-block rounded-full px-6 py-3 text-sm font-bold uppercase tracking-[0.18em]"
         >
           ☕ Play Café Rush
         </Link>
-        <p className="mt-2 text-amber-600/70">
+        <p className="mt-4 text-[10px] uppercase tracking-[0.28em] text-amber-200/45">
           © {new Date().getFullYear()} Colattao Coffee House
         </p>
       </footer>
