@@ -132,6 +132,9 @@ export default function OwnerPresentationPage() {
             pensado para que el cliente lo abra escaneando un código QR
             mientras espera en la fila.
           </Bullet>
+          <Bullet label="Pulido visual del menú">
+            El menú digital ahora incluye una nota elegante de opciones de leche, una imagen cálida del espacio, y acceso discreto al concepto de website.
+          </Bullet>
           <Bullet label="Sistema de marca premium">
             Paleta espresso, pergamino, terracota, oro y azul cerámica;
             tipografía Playfair Display + Inter; detalles inspirados en la
