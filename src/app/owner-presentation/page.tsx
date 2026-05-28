@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import FeedbackBox from "@/components/FeedbackBox";
 
 export const metadata = {
   title: "Presentación · Colattao Café Rush",
@@ -333,6 +334,13 @@ export default function OwnerPresentationPage() {
           </ActionLink>
         </ActionRow>
       </SectionBlock>
+
+      {/* ──────────────────────────────────────────────────────
+          COMENTARIOS (antes de Próximos pasos)
+          ────────────────────────────────────────────────────── */}
+      <section className="px-4 pt-7">
+        <FeedbackBox pageSource="presentation" variant="dark" />
+      </section>
 
       {/* ──────────────────────────────────────────────────────
           06 · PRÓXIMOS PASOS

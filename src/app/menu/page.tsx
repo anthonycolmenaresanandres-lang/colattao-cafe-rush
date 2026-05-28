@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import MenuCategorySection from "@/components/MenuCategory";
+import FeedbackBox from "@/components/FeedbackBox";
 
 export const metadata = {
   title: "Menu · Colattao Coffee House",
@@ -118,6 +119,10 @@ export default function MenuPage() {
           Footer
           ────────────────────────────────────────────────────── */}
       <footer className="px-5 pb-7 pt-3 text-center">
+        <div className="mb-5 text-left">
+          <FeedbackBox pageSource="menu" variant="light" />
+        </div>
+
         <Link
           href="/"
           className="btn-gold inline-block rounded-full px-6 py-3 text-sm font-bold uppercase tracking-[0.18em]"

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import GameCanvas from "@/components/GameCanvas";
 import VisualFlashPass from "@/components/VisualFlashPass";
+import FeedbackBox from "@/components/FeedbackBox";
 import { EventBus } from "@/game/events/EventBus";
 import type { GameWonPayload } from "@/types/game";
 
@@ -76,6 +77,10 @@ export default function Home() {
             Ver presentación
           </Link>
         </nav>
+
+        <div className="mt-4 w-full max-w-[460px] px-2">
+          <FeedbackBox pageSource="game" variant="dark" />
+        </div>
       </section>
 
       {showReward && lastWin ? (
