@@ -107,49 +107,33 @@ export default function MenuPage() {
           Menu body — parchment cards on espresso shell
           ────────────────────────────────────────────────────── */}
       <div className="flex-1 space-y-5 px-4 py-6">
-        <section className="overflow-hidden rounded-2xl border border-amber-300/25 bg-[#2a1208]/70 p-4 shadow-[0_14px_30px_-20px_rgba(0,0,0,0.85)]">
-          <div className="grid gap-4 sm:grid-cols-[1.2fr_1fr] sm:items-center">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.24em] text-amber-200/70">
-                Colattao notes
+        <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#201008]/88 via-[#2a1208]/82 to-[#2e5a7c]/22 px-5 py-6 sm:px-6 sm:py-7">
+          <div className="grid items-center gap-5 sm:grid-cols-[1.05fr_1fr]">
+            <div className="order-2 sm:order-1">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-amber-200/70">
+                FROM THE COUNTER
               </p>
-              <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-[var(--col-parchment)]">
-                <li>Pair your coffee with something warm.</li>
-                <li>Stay a little longer. That is part of the experience.</li>
-                <li>Ask what is fresh today.</li>
-              </ul>
+              <h2 className="mt-2 font-serif text-2xl leading-tight text-[#fff3d6] sm:text-[2rem]">
+                Slow coffee. Warm pastry.
+              </h2>
+              <p className="mt-3 text-sm text-amber-100/90">
+                Ask what just came out fresh.
+              </p>
+              <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[#92aecd]">
+                Stay a little longer.
+              </p>
             </div>
-            <figure className="overflow-hidden rounded-xl border border-amber-200/25 bg-[#1b0e08]/50">
-              <div className="relative h-36 w-full">
+            <figure className="order-1 sm:order-2">
+              <div className="relative h-48 w-full overflow-hidden rounded-2xl sm:h-56">
                 <Image
                   src="/assets/colattao/website-concept/real-cup-cake-pairing.png"
-                  alt="Blue ceramic coffee cup with a warm cake pairing on a wooden cafe table"
+                  alt="Blue floral ceramic coffee cup beside a warm pastry on a wooden Colattao table"
                   fill
-                  sizes="(max-width: 470px) 100vw, 200px"
+                  sizes="(max-width: 640px) 100vw, 240px"
                   className="object-cover object-center"
                 />
               </div>
             </figure>
-          </div>
-        </section>
-
-        <section className="rounded-2xl border border-[#2e5a7c]/40 bg-gradient-to-br from-[#1b0e08]/90 via-[#2a1208]/88 to-[#2e5a7c]/35 p-4">
-          <div className="flex items-center gap-3">
-            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-amber-200/30">
-              <Image
-                src="/assets/colattao/website-concept/real-cheesecake.png"
-                alt="Cheesecake plated as a soft dessert finish with coffee"
-                fill
-                sizes="64px"
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <h2 className="font-serif text-lg text-[#fff3d6]">Sweet finish</h2>
-              <p className="mt-1 text-sm text-amber-100/90">
-                A small dessert can turn a coffee stop into a moment.
-              </p>
-            </div>
           </div>
         </section>
 
