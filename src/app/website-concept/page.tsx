@@ -71,7 +71,7 @@ const nextSteps = [
 const sensoryCards = [
   {
     title: "Steam",
-    text: "The first curl of steam off a fresh pour â€” that quiet promise of warmth before the first sip.",
+    text: "The first curl of steam off a fresh pour — that quiet promise of warmth before the first sip.",
   },
   {
     title: "Warm bread",
@@ -169,7 +169,7 @@ export default function WebsiteConceptPage() {
 
       <div className="relative z-10 mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-12">
         <section className="overflow-hidden rounded-3xl border border-[#f5e9d0]/20 bg-[#1b0e08]/60 shadow-2xl shadow-black/30 backdrop-blur-sm">
-          {/* Hero banner â€” strongest wide interior image */}
+          {/* Hero banner — strongest wide interior image */}
           <div className="relative h-52 w-full sm:h-80 lg:h-[26rem]">
             <Image
               src={`${IMG}/hero-interior.png`}
@@ -210,7 +210,7 @@ export default function WebsiteConceptPage() {
               href="/"
               className="rounded-full border border-[#f5e9d0]/40 bg-[#1b0e08]/70 px-6 py-3 text-center font-semibold text-[#f5e9d0] transition hover:bg-[#2a1208]"
             >
-              Play CafÃ© Rush
+              Play Café Rush
             </Link>
             <Link
               href="/owner-presentation"
@@ -382,7 +382,7 @@ export default function WebsiteConceptPage() {
             What to order first
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-[#f5e9d0]/85">
-            A few warm places to start â€” ask the team for the day&apos;s details.
+            A few warm places to start — ask the team for the day&apos;s details.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {orderFirst.map((card) => (
@@ -438,20 +438,20 @@ export default function WebsiteConceptPage() {
             </article>
 
             <article className={`relative overflow-hidden rounded-2xl border border-[#f5c46b]/25 bg-[#2a1208]/55 p-5 ${wovenBorder}`}>
-              <h3 className="font-serif text-xl text-[#fff3d6]">Play CafÃ© Rush</h3>
+              <h3 className="font-serif text-xl text-[#fff3d6]">Play Café Rush</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#f5e9d0]/85">
-                Turn the wait into a moment â€” a quick, playful catch game with the Colattao spirit.
+                Turn the wait into a moment — a quick, playful catch game with the Colattao spirit.
               </p>
               <Link
                 href="/"
                 className="mt-4 inline-block rounded-full border border-[#f5e9d0]/40 bg-[#1b0e08]/70 px-5 py-2.5 text-sm font-semibold text-[#f5e9d0] transition hover:bg-[#2a1208]"
               >
-                Play CafÃ© Rush
+                Play Café Rush
               </Link>
             </article>
 
             <article className={`relative overflow-hidden rounded-2xl border border-[#f5c46b]/25 bg-[#2a1208]/55 p-5 ${wovenBorder}`}>
-              <h3 className="font-serif text-xl text-[#fff3d6]">Visit the cafÃ©</h3>
+              <h3 className="font-serif text-xl text-[#fff3d6]">Visit the café</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#f5e9d0]/85">
                 Pull up a chair in the boho-warm space, surrounded by local artwork and good company.
               </p>
@@ -548,7 +548,7 @@ export default function WebsiteConceptPage() {
               href="/"
               className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-5 py-3 text-center text-sm font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
             >
-              Play CafÃ© Rush
+              Play Café Rush
             </Link>
           </div>
           </div>
