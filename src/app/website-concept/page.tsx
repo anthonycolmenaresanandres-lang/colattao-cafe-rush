@@ -75,6 +75,12 @@ export default function WebsiteConceptPage() {
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
+              href="/owner-presentation"
+              className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-6 py-3 text-center font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
+            >
+              Open Owner Presentation
+            </Link>
+            <Link
               href="/menu"
               className="rounded-full border border-[#f5c46b]/60 bg-[#f5c46b] px-6 py-3 text-center font-semibold text-[#2a1208] transition hover:bg-[#ffe1a0]"
             >
@@ -166,7 +172,7 @@ export default function WebsiteConceptPage() {
               href="/"
               className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-5 py-3 text-center text-sm font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
             >
-              Open Game
+              Play Café Rush
             </Link>
           </div>
         </footer>
