@@ -252,33 +252,36 @@ export default function OwnerPresentationPage() {
       <SectionBlock eyebrow="04" title="Privacidad">
         <div className="mt-4 space-y-4 text-left text-[13px] leading-snug text-[var(--col-espresso)]">
           <p>
-            Esta versión <strong>no recopila</strong> nombres, teléfonos,
-            correos, información de pago, ubicación ni datos personales de los
+            Esta versión <strong>no recopila datos personales</strong> de los
             clientes. El juego corre en el navegador del celular del cliente.
           </p>
 
           <ul className="space-y-2 rounded-xl border border-[var(--col-gold-deep)]/25 bg-white/55 px-4 py-3 text-[13px]">
-            <PrivacyRow>No recopilamos nombres.</PrivacyRow>
-            <PrivacyRow>No recopilamos teléfonos.</PrivacyRow>
-            <PrivacyRow>No recopilamos correos.</PrivacyRow>
-            <PrivacyRow>No recopilamos información de pago.</PrivacyRow>
-            <PrivacyRow>No recopilamos ubicación.</PrivacyRow>
-            <PrivacyRow>No recopilamos datos personales.</PrivacyRow>
-            <PrivacyRow>El juego corre en el navegador del cliente.</PrivacyRow>
+            <PrivacyRow>
+              No recopilamos datos personales de los clientes.
+            </PrivacyRow>
+            <PrivacyRow>
+              No recopilamos nombres, teléfonos, correos, información de pago
+              ni ubicación.
+            </PrivacyRow>
+            <PrivacyRow>El juego corre en el navegador.</PrivacyRow>
             <PrivacyRow>
               El conteo de pérdidas se queda en el dispositivo del cliente.
             </PrivacyRow>
             <PrivacyRow>
-              Nada se envía a Anthony, a Colattao ni a una base de datos
-              externa.
+              Vercel Web Analytics puede darnos métricas anónimas de tráfico
+              sin cookies.
+            </PrivacyRow>
+            <PrivacyRow>
+              No vendemos datos ni usamos perfiles personales.
             </PrivacyRow>
           </ul>
 
           <p className="text-[12.5px] leading-snug text-[var(--col-espresso-3)]/85">
-            Lo único que se utiliza es almacenamiento local básico del
-            navegador para funciones internas del juego, como contar pérdidas
-            para mostrar frases divertidas. Esa información permanece en el
-            propio dispositivo del cliente.
+            Lo único que se utiliza dentro del juego es almacenamiento local
+            básico del navegador (por ejemplo, contar pérdidas para mostrar
+            frases divertidas). Esa información permanece en el propio
+            dispositivo del cliente.
           </p>
 
           <div className="rounded-xl border border-[var(--col-ceramic)]/25 bg-[var(--col-ceramic)]/8 px-3 py-3">

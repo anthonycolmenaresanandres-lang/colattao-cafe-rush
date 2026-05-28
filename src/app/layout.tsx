@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const inter = Inter({
@@ -33,6 +34,12 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-colattao-page">
         {children}
+        {/*
+          Vercel Web Analytics.
+          No personal customer data is collected by this app. Vercel Web
+          Analytics may provide anonymized traffic insights without cookies.
+        */}
+        <Analytics />
       </body>
     </html>
   );
