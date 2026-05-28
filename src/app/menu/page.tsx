@@ -58,7 +58,7 @@ export default function MenuPage() {
           aria-hidden="true"
           fill
           sizes="470px"
-          className="object-cover opacity-[0.08]"
+          className="object-cover opacity-[0.06]"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1b0e08]/25 via-transparent to-[#1b0e08]/30" />
       </div>
@@ -109,7 +109,7 @@ export default function MenuPage() {
       </header>
 
       <div className="relative z-10 flex-1 space-y-5 px-4 py-6">
-        <section className="relative overflow-hidden rounded-3xl px-5 py-7 sm:px-6 sm:py-8">
+        <section className="relative overflow-hidden rounded-3xl px-5 py-6 sm:px-6 sm:py-7">
           <div className="pointer-events-none absolute inset-0">
             <Image
               src="/assets/colattao/website-concept/background-texture-colattao.png"
@@ -117,7 +117,7 @@ export default function MenuPage() {
               aria-hidden="true"
               fill
               sizes="470px"
-              className="object-cover opacity-[0.13]"
+              className="object-cover opacity-[0.1]"
             />
             <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.08)_0%,rgba(42,18,8,0.76)_48%,rgba(46,90,124,0.2)_100%)]" />
           </div>
@@ -138,7 +138,7 @@ export default function MenuPage() {
             </div>
 
             <figure className="order-1 sm:order-2">
-              <div className="relative h-48 w-full overflow-hidden rounded-2xl sm:h-56">
+              <div className="relative h-[10.5rem] w-full overflow-hidden rounded-2xl sm:h-56">
                 <Image
                   src="/assets/colattao/website-concept/real-cup-cake-pairing.png"
                   alt="Blue floral ceramic coffee cup beside a warm pastry on a wooden Colattao table"
