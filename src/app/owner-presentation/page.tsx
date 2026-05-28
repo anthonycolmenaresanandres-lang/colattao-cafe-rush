@@ -112,6 +112,9 @@ export default function OwnerPresentationPage() {
           <ActionLink href="/menu" variant="ceramic">
             Ver menú digital
           </ActionLink>
+          <ActionLink href="/website-concept" variant="ceramic">
+            Ver concepto de website
+          </ActionLink>
         </ActionRow>
       </section>
 
@@ -351,6 +354,9 @@ export default function OwnerPresentationPage() {
           ────────────────────────────────────────────────────── */}
       <section id="proximos-pasos" className="scroll-mt-6">
       <SectionBlock eyebrow="06" title="Próximos pasos">
+        <p className="mt-4 text-center text-[12.5px] leading-snug text-[var(--col-espresso-3)]/85">
+          También preparé un concepto visual de cómo podría verse una página web más premium para Colattao.
+        </p>
         <ul className="mt-4 space-y-3 text-left text-[13px] leading-snug text-[var(--col-espresso-3)]">
           <Bullet label="Imprimir los stickers">
             Escoger 2 o 3 diseños y mandar una pequeña tanda para vasos y
@@ -377,6 +383,9 @@ export default function OwnerPresentationPage() {
           <ActionLink href="/menu" variant="ceramic">
             Abrir menú
           </ActionLink>
+          <ActionLink href="/website-concept" variant="ceramic">
+            Ver concepto de website
+          </ActionLink>
         </ActionRow>
       </SectionBlock>
       </section>
@@ -399,6 +408,12 @@ export default function OwnerPresentationPage() {
             className="btn-ceramic inline-block w-56 rounded-full px-6 py-3 text-[12px] font-bold uppercase tracking-[0.18em]"
           >
             Ver el Menú
+          </Link>
+          <Link
+            href="/website-concept"
+            className="btn-ceramic inline-block w-56 rounded-full px-6 py-3 text-[12px] font-bold uppercase tracking-[0.18em]"
+          >
+            Ver concepto de website
           </Link>
         </div>
         <p className="mt-6 text-[10px] uppercase tracking-[0.28em] text-amber-200/45">
