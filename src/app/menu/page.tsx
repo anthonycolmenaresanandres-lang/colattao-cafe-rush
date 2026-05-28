@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import MenuCategorySection from "@/components/MenuCategory";
@@ -6,12 +6,11 @@ import FeedbackBox from "@/components/FeedbackBox";
 import appTheme from "@/config/theme";
 
 export const metadata = {
-  title: "Menu · Colattao Coffee House",
-  description:
-    "Digital menu for Colattao Coffee House – Virginia Beach, VA",
+  title: "Menu - Colattao Coffee House",
+  description: "Digital menu for Colattao Coffee House - Virginia Beach, VA",
 };
 
-// ── Owner update request mailto ────────────────────────────
+// Owner update request mailto
 // See OWNER_UPDATE_PROCESS.md for the full workflow.
 const OWNER_UPDATE_EMAIL = "anthonycolmenares92@gmail.com";
 const OWNER_UPDATE_SUBJECT = "Colattao Update Request";
@@ -38,7 +37,7 @@ const OWNER_UPDATE_MAILTO = `mailto:${OWNER_UPDATE_EMAIL}?subject=${encodeURICom
   OWNER_UPDATE_SUBJECT,
 )}&body=${encodeURIComponent(OWNER_UPDATE_BODY)}`;
 
-// ── Decorative game-asset accents per category ──
+// Decorative game-asset accents per category
 const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined> = {
   espresso: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
   favorites: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
@@ -51,10 +50,19 @@ const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined>
 
 export default function MenuPage() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]">
-      {/* ──────────────────────────────────────────────────────
-          Header — premium brand band, sticky on scroll
-          ────────────────────────────────────────────────────── */}
+    <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <Image
+          src="/assets/colattao/website-concept/background-texture-colattao.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="470px"
+          className="object-cover opacity-[0.08]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1b0e08]/25 via-transparent to-[#1b0e08]/30" />
+      </div>
+
       <header
         className="sticky top-0 z-20 px-5 pb-4 pt-5 text-center"
         style={{
@@ -63,7 +71,6 @@ export default function MenuPage() {
           boxShadow: "0 16px 30px -18px rgba(0,0,0,0.75)",
         }}
       >
-        {/* Prominent brand logo */}
         <Image
           src={appTheme.brand.logoPath}
           alt={appTheme.brand.displayName}
@@ -81,15 +88,13 @@ export default function MenuPage() {
           <span className="h-px w-8 bg-gradient-to-l from-transparent to-amber-300/55" />
         </div>
 
-        {/* address & hours */}
         <p className="mt-3 text-[11px] text-amber-100/65">
           1115 Independence Blvd, Virginia Beach, VA 23455
         </p>
         <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-amber-200/55">
-          Tue–Fri 7–4 · Sat & Sun 8–4 · Mon Closed
+          Tue-Fri 7-4 - Sat and Sun 8-4 - Mon Closed
         </p>
 
-        {/* category chips */}
         <nav
           aria-label="Menu categories"
           className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1"
@@ -103,12 +108,22 @@ export default function MenuPage() {
         </nav>
       </header>
 
-      {/* ──────────────────────────────────────────────────────
-          Menu body — parchment cards on espresso shell
-          ────────────────────────────────────────────────────── */}
-      <div className="flex-1 space-y-5 px-4 py-6">
-        <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#201008]/88 via-[#2a1208]/82 to-[#2e5a7c]/22 px-5 py-6 sm:px-6 sm:py-7">
-          <div className="grid items-center gap-5 sm:grid-cols-[1.05fr_1fr]">
+      <div className="relative z-10 flex-1 space-y-5 px-4 py-6">
+        <section className="relative overflow-hidden rounded-3xl px-5 py-7 sm:px-6 sm:py-8">
+          <div className="pointer-events-none absolute inset-0">
+            <Image
+              src="/assets/colattao/website-concept/background-texture-colattao.png"
+              alt=""
+              aria-hidden="true"
+              fill
+              sizes="470px"
+              className="object-cover opacity-[0.13]"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.08)_0%,rgba(42,18,8,0.76)_48%,rgba(46,90,124,0.2)_100%)]" />
+          </div>
+          <div className="pointer-events-none absolute left-6 right-6 top-0 h-px bg-gradient-to-r from-transparent via-[#f5c46b]/45 to-transparent" />
+
+          <div className="relative z-10 grid items-center gap-5 sm:grid-cols-[1.618fr_1fr]">
             <div className="order-2 sm:order-1">
               <p className="text-[10px] uppercase tracking-[0.28em] text-amber-200/70">
                 FROM THE COUNTER
@@ -116,13 +131,12 @@ export default function MenuPage() {
               <h2 className="mt-2 font-serif text-2xl leading-tight text-[#fff3d6] sm:text-[2rem]">
                 Slow coffee. Warm pastry.
               </h2>
-              <p className="mt-3 text-sm text-amber-100/90">
-                Ask what just came out fresh.
-              </p>
+              <p className="mt-3 text-sm text-amber-100/90">Ask what just came out fresh.</p>
               <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[#92aecd]">
                 Stay a little longer.
               </p>
             </div>
+
             <figure className="order-1 sm:order-2">
               <div className="relative h-48 w-full overflow-hidden rounded-2xl sm:h-56">
                 <Image
@@ -138,17 +152,10 @@ export default function MenuPage() {
         </section>
 
         {menuCategories.map((c) => (
-          <MenuCategorySection
-            key={c.id}
-            category={c}
-            accentImage={CATEGORY_ACCENTS[c.id]}
-          />
+          <MenuCategorySection key={c.id} category={c} accentImage={CATEGORY_ACCENTS[c.id]} />
         ))}
       </div>
 
-      {/* ──────────────────────────────────────────────────────
-          Footer
-          ────────────────────────────────────────────────────── */}
       <footer className="px-5 pb-7 pt-3 text-center">
         <div className="mb-5 text-left">
           <FeedbackBox pageSource="menu" variant="light" />
