@@ -135,6 +135,9 @@ export default function MenuPage() {
               <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[#92aecd]">
                 Stay a little longer.
               </p>
+              <p className="mt-3 text-[11px] leading-relaxed text-amber-100/70">
+                Milk options available: whole milk, almond, oat, and more. If you do not see your preferred option, ask the cashier.
+              </p>
             </div>
 
             <figure className="order-1 sm:order-2">
@@ -176,6 +179,12 @@ export default function MenuPage() {
         >
           Need a menu update?
         </a>
+        <Link
+          href="/website-concept"
+          className="mt-2 block text-[10px] tracking-[0.16em] text-amber-200/35 underline decoration-amber-200/20 underline-offset-[3px] transition-colors hover:text-amber-200/60"
+        >
+          Ver concepto de website
+        </Link>
       </footer>
     </main>
   );
