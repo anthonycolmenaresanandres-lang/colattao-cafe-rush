@@ -115,6 +115,9 @@ export default function OwnerPresentationPage() {
           <ActionLink href="/website-concept" variant="ceramic">
             Ver concepto de website
           </ActionLink>
+          <ActionLink href="/owner-command-center" variant="ceramic">
+            Abrir Command Center
+          </ActionLink>
         </ActionRow>
       </section>
 
@@ -424,6 +427,12 @@ export default function OwnerPresentationPage() {
             className="btn-ceramic inline-block w-56 rounded-full px-6 py-3 text-[12px] font-bold uppercase tracking-[0.18em]"
           >
             Ver concepto de website
+          </Link>
+          <Link
+            href="/owner-command-center"
+            className="btn-ceramic inline-block w-56 rounded-full px-6 py-3 text-[12px] font-bold uppercase tracking-[0.18em]"
+          >
+            Abrir Command Center
           </Link>
         </div>
         <p className="mt-6 text-[10px] uppercase tracking-[0.28em] text-amber-200/45">

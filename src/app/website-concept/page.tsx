@@ -539,6 +539,12 @@ export default function WebsiteConceptPage() {
               Open Owner Presentation
             </Link>
             <Link
+              href="/owner-command-center"
+              className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-5 py-3 text-center text-sm font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
+            >
+              Open Command Center
+            </Link>
+            <Link
               href="/menu"
               className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-5 py-3 text-center text-sm font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
             >
