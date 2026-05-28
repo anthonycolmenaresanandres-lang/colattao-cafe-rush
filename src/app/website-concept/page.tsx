@@ -1,4 +1,4 @@
-import Image from "next/image";
+﻿import Image from "next/image";
 import Link from "next/link";
 import appTheme from "@/config/theme";
 
@@ -71,7 +71,7 @@ const nextSteps = [
 const sensoryCards = [
   {
     title: "Steam",
-    text: "The first curl of steam off a fresh pour — that quiet promise of warmth before the first sip.",
+    text: "The first curl of steam off a fresh pour â€” that quiet promise of warmth before the first sip.",
   },
   {
     title: "Warm bread",
@@ -86,9 +86,9 @@ const sensoryCards = [
 const orderFirst = [
   {
     title: "Signature coffee",
-    text: "Start with the house craft — espresso poured with care into handmade ceramic.",
-    image: `${IMG}/barista-craft.png`,
-    alt: "A barista finishing a rosetta of latte art in a ceramic cup",
+    text: "Start with the house craft beside something sweet, served in a blue floral ceramic cup.",
+    image: `${IMG}/real-cup-cake-pairing.png`,
+    alt: "Blue floral ceramic coffee cup beside a cake pairing on a warm wooden cafe table",
   },
   {
     title: "Iced specialty",
@@ -97,23 +97,46 @@ const orderFirst = [
     alt: "A tall iced specialty latte with cinnamon-dusted cold foam",
   },
   {
-    title: "Pastry pairing",
-    text: "Pair it with something fresh from the case — flaky, golden, and made to share.",
-    image: `${IMG}/pastry-showcase.png`,
-    alt: "A flaky croissant beside a latte-art cappuccino on a sunlit marble table",
+    title: "Dessert moment",
+    text: "A slow, creamy slice that turns a quick coffee stop into a stay-a-while ritual.",
+    image: `${IMG}/real-cheesecake.png`,
+    alt: "A creamy cheesecake dessert plated for a premium coffeehouse moment",
   },
   {
-    title: "Seasonal pick",
-    text: "Ask what's new — a rotating seasonal drink that captures the moment.",
-    image: `${IMG}/cultural-still-life.png`,
-    alt: "A ceramic cup of coffee in a warm Colombian still life with coffee cherries",
+    title: "Pistachio tres leches",
+    text: "A pistachio and tres leches inspired dessert direction with soft color and cafe warmth.",
+    image: `${IMG}/real-pistachio-tres-leches.png`,
+    alt: "Pistachio tres leches style dessert with soft cream and green pistachio detail",
+  },
+];
+
+const realColattaoDetails = [
+  {
+    image: `${IMG}/real-hanging-plant.png`,
+    alt: "Hanging plant detail against warm brick inside a Colattao-inspired cafe space",
+    label: "Plants and brick",
+  },
+  {
+    image: `${IMG}/real-ceramic-shelf.png`,
+    alt: "Ceramic shelf still life with blue cups, warm wood, and Colattao decor",
+    label: "Ceramic shelf",
+  },
+  {
+    image: `${IMG}/real-cheesecake.png`,
+    alt: "Cheesecake dessert styled for a warm coffeehouse table",
+    label: "Dessert case",
+  },
+  {
+    image: `${IMG}/real-pistachio-tres-leches.png`,
+    alt: "Pistachio tres leches inspired dessert with cream and pistachio garnish",
+    label: "Pistachio dessert",
   },
 ];
 
 // Espresso-dust / gold glow divider used between sections.
 function GlowDivider() {
   return (
-    <div className="my-10 flex items-center justify-center gap-3" aria-hidden="true">
+    <div className="my-7 flex items-center justify-center gap-3 sm:my-10" aria-hidden="true">
       <span className="h-px w-16 bg-gradient-to-r from-transparent to-[#f5c46b]/60" />
       <span className="h-1.5 w-1.5 rotate-45 bg-[#f5c46b]/70" />
       <span className="h-px w-24 bg-gradient-to-r from-[#f5c46b]/60 via-[#2e5a7c]/50 to-[#f5c46b]/60" />
@@ -130,7 +153,7 @@ const wovenBorder =
 export default function WebsiteConceptPage() {
   return (
     <main className="relative min-h-screen bg-[radial-gradient(circle_at_top,#2e5a7c_0%,#1b0e08_45%,#120905_100%)] text-[#f5e9d0]">
-      {/* ── Page-wide warm Colattao texture layer (subtle, behind content) ── */}
+      {/* â”€â”€ Page-wide warm Colattao texture layer (subtle, behind content) â”€â”€ */}
       <div className="pointer-events-none fixed inset-0 z-0">
         <Image
           src={`${IMG}/background-texture-colattao.png`}
@@ -144,19 +167,19 @@ export default function WebsiteConceptPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(46,90,124,0.35)_0%,rgba(27,14,8,0.82)_45%,rgba(18,9,5,0.94)_100%)]" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-12">
         <section className="overflow-hidden rounded-3xl border border-[#f5e9d0]/20 bg-[#1b0e08]/60 shadow-2xl shadow-black/30 backdrop-blur-sm">
-          {/* Hero banner — strongest wide interior image */}
-          <div className="relative h-56 w-full sm:h-80 lg:h-[26rem]">
+          {/* Hero banner â€” strongest wide interior image */}
+          <div className="relative h-52 w-full sm:h-80 lg:h-[26rem]">
             <Image
               src={`${IMG}/hero-interior.png`}
               alt="Warm boho Colattao coffee house interior with an espresso bar, blue-and-white ceramics, and an ocean view through a tall window"
               fill
               priority
               sizes="(max-width: 1152px) 100vw, 1152px"
-              className="object-cover"
+              className="object-cover object-[center_35%]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1b0e08] via-[#1b0e08]/35 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1b0e08] via-[#1b0e08]/55 to-[#1b0e08]/10" />
           </div>
 
           <div className="p-6 sm:p-10">
@@ -176,13 +199,7 @@ export default function WebsiteConceptPage() {
             <p className="mt-3 text-center text-base text-[#f5c46b] sm:text-lg">
               Una experiencia digital con sabor, cultura y alma.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Link
-              href="/owner-presentation"
-              className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-6 py-3 text-center font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
-            >
-              Open Owner Presentation
-            </Link>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Link
               href="/menu"
               className="rounded-full border border-[#f5c46b]/60 bg-[#f5c46b] px-6 py-3 text-center font-semibold text-[#2a1208] transition hover:bg-[#ffe1a0]"
@@ -193,7 +210,13 @@ export default function WebsiteConceptPage() {
               href="/"
               className="rounded-full border border-[#f5e9d0]/40 bg-[#1b0e08]/70 px-6 py-3 text-center font-semibold text-[#f5e9d0] transition hover:bg-[#2a1208]"
             >
-              Play Cafe Rush
+              Play CafÃ© Rush
+            </Link>
+            <Link
+              href="/owner-presentation"
+              className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-6 py-3 text-center font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
+            >
+              Open Owner Presentation
             </Link>
             </div>
           </div>
@@ -201,7 +224,7 @@ export default function WebsiteConceptPage() {
 
         <GlowDivider />
 
-        {/* ── First, make them feel it ── */}
+        {/* â”€â”€ First, make them feel it â”€â”€ */}
         <section className="rounded-3xl border border-[#f5e9d0]/15 bg-[#1b0e08]/55 p-6 sm:p-8">
           <h2 className="text-center font-serif text-2xl text-[#fff3d6] sm:text-4xl">
             First, make them feel it.
@@ -225,6 +248,64 @@ export default function WebsiteConceptPage() {
 
         <GlowDivider />
 
+        <section className="rounded-3xl border border-[#f5c46b]/20 bg-[#120905]/65 p-6 shadow-2xl shadow-black/20 sm:p-8">
+          <div className="grid gap-6 lg:grid-cols-[1.618fr_1fr] lg:items-end">
+            <div>
+              <h2 className="font-serif text-2xl text-[#fff3d6] sm:text-4xl">
+                Inspired by the real Colattao feeling.
+              </h2>
+              <p className="mt-4 max-w-3xl text-[#f5e9d0]/90">
+                The concept should not feel invented from scratch. It should feel like the best version
+                of what already exists inside the cafe: blue ceramics, warm wood, brick, art, plants,
+                pastries, and people staying longer than they planned.
+              </p>
+            </div>
+            <article className={`relative overflow-hidden rounded-2xl border border-[#f5c46b]/25 bg-[#2a1208]/60 p-5 ${wovenBorder}`}>
+              <h3 className="font-serif text-xl text-[#fff3d6]">The details are the brand.</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#f5e9d0]/85">
+                Ceramic cups, brick wall texture, chandelier glow, plants, art, and warm wood should
+                become part of the digital identity, not just decoration.
+              </p>
+            </article>
+          </div>
+
+          <div className="mt-7 grid gap-4 lg:grid-cols-[1.618fr_1fr]">
+            <div className="relative min-h-[20rem] overflow-hidden rounded-3xl border border-[#f5c46b]/25 sm:min-h-[28rem]">
+              <Image
+                src={`${IMG}/real-lounge-fireplace-wide.png`}
+                alt="Warm Colattao-inspired lounge with fireplace, chandelier glow, brick, art, and guests gathered inside the cafe"
+                fill
+                sizes="(max-width: 1024px) 100vw, 680px"
+                className="object-cover object-[center_45%]"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1b0e08]/45 via-transparent to-transparent" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {realColattaoDetails.map((item) => (
+                <figure
+                  key={item.label}
+                  className="overflow-hidden rounded-2xl border border-[#f5c46b]/20 bg-[#2a1208]/50"
+                >
+                  <div className="relative h-36 w-full sm:h-44 lg:h-36">
+                    <Image
+                      src={item.image}
+                      alt={item.alt}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 220px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <figcaption className="px-3 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#f5c46b]/85">
+                    {item.label}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <GlowDivider />
+
         <section className="grid items-center gap-6 rounded-3xl border border-[#f5e9d0]/15 bg-[#1b0e08]/50 p-6 sm:p-8 lg:grid-cols-[1.618fr_1fr]">
           <div>
             <h2 className="font-serif text-2xl text-[#fff3d6] sm:text-3xl">Current website opportunity</h2>
@@ -236,8 +317,8 @@ export default function WebsiteConceptPage() {
           </div>
           <div className="relative h-44 w-full overflow-hidden rounded-2xl border border-[#f5c46b]/20 sm:h-56">
             <Image
-              src={`${IMG}/pastry-showcase.png`}
-              alt="A warm pastry-and-coffee moment: a flaky croissant beside a latte-art cappuccino in golden light"
+              src={`${IMG}/real-cup-lounge-pairing.png`}
+              alt="Blue floral Colattao coffee cup and dessert pairing in a warm lounge setting"
               fill
               sizes="(max-width: 1024px) 100vw, 400px"
               className="object-cover"
@@ -253,13 +334,13 @@ export default function WebsiteConceptPage() {
                 key={card.title}
                 className="overflow-hidden rounded-2xl border border-[#f5c46b]/25 bg-[linear-gradient(135deg,#fff3d6_0%,#f5e9d0_100%)] text-[#2a1208] shadow-lg"
               >
-                <div className="relative h-40 w-full">
+                <div className="relative h-44 w-full sm:h-40">
                   <Image
                     src={card.image}
                     alt={card.alt}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 360px"
-                    className="object-cover"
+                    className="object-cover object-[center_35%]"
                   />
                 </div>
                 <div className="p-5">
@@ -295,13 +376,13 @@ export default function WebsiteConceptPage() {
 
         <GlowDivider />
 
-        {/* ── What to order first ── */}
+        {/* â”€â”€ What to order first â”€â”€ */}
         <section className="rounded-3xl border border-[#f5e9d0]/15 bg-[#1b0e08]/50 p-6 sm:p-8">
           <h2 className="text-center font-serif text-2xl text-[#fff3d6] sm:text-3xl">
             What to order first
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-center text-[#f5e9d0]/85">
-            A few warm places to start — ask the team for the day&apos;s details.
+            A few warm places to start â€” ask the team for the day&apos;s details.
           </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {orderFirst.map((card) => (
@@ -309,13 +390,13 @@ export default function WebsiteConceptPage() {
                 key={card.title}
                 className="overflow-hidden rounded-2xl border border-[#f5c46b]/25 bg-[#2a1208]/55 shadow-lg"
               >
-                <div className="relative h-36 w-full">
+                <div className="relative h-44 w-full sm:h-36">
                   <Image
                     src={card.image}
                     alt={card.alt}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 280px"
-                    className="object-cover"
+                    className="object-cover object-[center_35%]"
                   />
                 </div>
                 <div className="p-4">
@@ -337,7 +418,7 @@ export default function WebsiteConceptPage() {
 
         <GlowDivider />
 
-        {/* ── What the customer should do next ── */}
+        {/* â”€â”€ What the customer should do next â”€â”€ */}
         <section className="rounded-3xl border border-[#2e5a7c]/40 bg-[#1b0e08]/55 p-6 sm:p-8">
           <h2 className="text-center font-serif text-2xl text-[#fff3d6] sm:text-3xl">
             What the customer should do next
@@ -357,20 +438,20 @@ export default function WebsiteConceptPage() {
             </article>
 
             <article className={`relative overflow-hidden rounded-2xl border border-[#f5c46b]/25 bg-[#2a1208]/55 p-5 ${wovenBorder}`}>
-              <h3 className="font-serif text-xl text-[#fff3d6]">Play Café Rush</h3>
+              <h3 className="font-serif text-xl text-[#fff3d6]">Play CafÃ© Rush</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#f5e9d0]/85">
-                Turn the wait into a moment — a quick, playful catch game with the Colattao spirit.
+                Turn the wait into a moment â€” a quick, playful catch game with the Colattao spirit.
               </p>
               <Link
                 href="/"
                 className="mt-4 inline-block rounded-full border border-[#f5e9d0]/40 bg-[#1b0e08]/70 px-5 py-2.5 text-sm font-semibold text-[#f5e9d0] transition hover:bg-[#2a1208]"
               >
-                Play Café Rush
+                Play CafÃ© Rush
               </Link>
             </article>
 
             <article className={`relative overflow-hidden rounded-2xl border border-[#f5c46b]/25 bg-[#2a1208]/55 p-5 ${wovenBorder}`}>
-              <h3 className="font-serif text-xl text-[#fff3d6]">Visit the café</h3>
+              <h3 className="font-serif text-xl text-[#fff3d6]">Visit the cafÃ©</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#f5e9d0]/85">
                 Pull up a chair in the boho-warm space, surrounded by local artwork and good company.
               </p>
@@ -405,8 +486,8 @@ export default function WebsiteConceptPage() {
           </div>
           <div className="relative h-64 w-full overflow-hidden rounded-2xl border border-[#f5c46b]/25 sm:h-72">
             <Image
-              src={`${IMG}/cultural-still-life.png`}
-              alt="A Colombian cultural still life: a ceramic cup of black coffee beside a woven mochila and sombrero vueltiao with fresh coffee cherries"
+              src={`${IMG}/real-lounge-fireplace-vertical.png`}
+              alt="Vertical view of a warm coffeehouse lounge with fireplace, chandelier glow, brick wall, and local art"
               fill
               sizes="(max-width: 1024px) 100vw, 400px"
               className="object-cover"
@@ -467,7 +548,7 @@ export default function WebsiteConceptPage() {
               href="/"
               className="rounded-full border border-[#f5e9d0]/40 bg-[#2a1208] px-5 py-3 text-center text-sm font-semibold text-[#f5e9d0] transition hover:bg-[#4b2412]"
             >
-              Play Café Rush
+              Play CafÃ© Rush
             </Link>
           </div>
           </div>
