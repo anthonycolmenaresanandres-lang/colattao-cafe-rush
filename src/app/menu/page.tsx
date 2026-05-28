@@ -107,6 +107,52 @@ export default function MenuPage() {
           Menu body — parchment cards on espresso shell
           ────────────────────────────────────────────────────── */}
       <div className="flex-1 space-y-5 px-4 py-6">
+        <section className="overflow-hidden rounded-2xl border border-amber-300/25 bg-[#2a1208]/70 p-4 shadow-[0_14px_30px_-20px_rgba(0,0,0,0.85)]">
+          <div className="grid gap-4 sm:grid-cols-[1.2fr_1fr] sm:items-center">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.24em] text-amber-200/70">
+                Colattao notes
+              </p>
+              <ul className="mt-2 space-y-1.5 text-sm leading-relaxed text-[var(--col-parchment)]">
+                <li>Pair your coffee with something warm.</li>
+                <li>Stay a little longer. That is part of the experience.</li>
+                <li>Ask what is fresh today.</li>
+              </ul>
+            </div>
+            <figure className="overflow-hidden rounded-xl border border-amber-200/25 bg-[#1b0e08]/50">
+              <div className="relative h-36 w-full">
+                <Image
+                  src="/assets/colattao/website-concept/real-cup-cake-pairing.png"
+                  alt="Blue ceramic coffee cup with a warm cake pairing on a wooden cafe table"
+                  fill
+                  sizes="(max-width: 470px) 100vw, 200px"
+                  className="object-cover object-center"
+                />
+              </div>
+            </figure>
+          </div>
+        </section>
+
+        <section className="rounded-2xl border border-[#2e5a7c]/40 bg-gradient-to-br from-[#1b0e08]/90 via-[#2a1208]/88 to-[#2e5a7c]/35 p-4">
+          <div className="flex items-center gap-3">
+            <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-amber-200/30">
+              <Image
+                src="/assets/colattao/website-concept/real-cheesecake.png"
+                alt="Cheesecake plated as a soft dessert finish with coffee"
+                fill
+                sizes="64px"
+                className="object-cover"
+              />
+            </div>
+            <div>
+              <h2 className="font-serif text-lg text-[#fff3d6]">Sweet finish</h2>
+              <p className="mt-1 text-sm text-amber-100/90">
+                A small dessert can turn a coffee stop into a moment.
+              </p>
+            </div>
+          </div>
+        </section>
+
         {menuCategories.map((c) => (
           <MenuCategorySection
             key={c.id}
