@@ -181,6 +181,12 @@ export default function MenuPage() {
           Need a menu update?
         </a>
         <Link
+          href="/request-update"
+          className="mt-2 block text-[10px] tracking-[0.16em] text-amber-200/40 underline decoration-amber-200/25 underline-offset-[3px] transition-colors hover:text-amber-200/70"
+        >
+          Probar formulario de cambios
+        </Link>
+        <Link
           href="/website-concept"
           className="mt-2 block text-[10px] tracking-[0.16em] text-amber-200/35 underline decoration-amber-200/20 underline-offset-[3px] transition-colors hover:text-amber-200/60"
         >

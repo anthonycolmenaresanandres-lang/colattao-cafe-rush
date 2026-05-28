@@ -342,7 +342,14 @@ export default function OwnerPresentationPage() {
           <ActionLink href="/menu" variant="gold">
             Ir al menú y pedir cambio
           </ActionLink>
+          <ActionLink href="/request-update" variant="ceramic">
+            Probar formulario de cambios
+          </ActionLink>
         </ActionRow>
+        <p className="mt-3 text-center text-[11px] italic leading-snug text-[var(--col-espresso-3)]/75">
+          Este formulario todavía está en modo demo: no envía ni guarda información hasta que el
+          dueño apruebe la conexión final.
+        </p>
       </SectionBlock>
 
       {/* ──────────────────────────────────────────────────────
