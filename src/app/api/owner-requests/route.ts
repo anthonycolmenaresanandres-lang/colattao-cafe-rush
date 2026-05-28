@@ -45,10 +45,19 @@ type Payload = {
   company?: unknown;
 };
 
+function envDiagnostics() {
+  return {
+    requestsDbEnabled: process.env.REQUESTS_DB_ENABLED === "true",
+    hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
+    hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+  };
+}
+
 export async function POST(request: Request) {
   // If the persisted flow isn't enabled/configured, tell the client to
   // fall back to demo behavior gracefully (no error noise).
   if (!isRequestsDbEnabled()) {
+    console.warn("[owner-requests] DB path disabled or not configured", envDiagnostics());
     return NextResponse.json(
       { ok: false, reason: "disabled" },
       { status: 503 },
@@ -92,6 +101,7 @@ export async function POST(request: Request) {
 
   const supabase = getSupabaseAdmin();
   if (!supabase) {
+    console.warn("[owner-requests] Supabase client unavailable", envDiagnostics());
     return NextResponse.json(
       { ok: false, reason: "not_configured" },
       { status: 503 },
@@ -119,6 +129,12 @@ export async function POST(request: Request) {
     .single();
 
   if (error) {
+    console.error("[owner-requests] Insert failed", {
+      code: error.code,
+      message: error.message,
+      hint: error.hint,
+      details: error.details,
+    });
     return NextResponse.json(
       { ok: false, reason: "insert_failed" },
       { status: 500 },
