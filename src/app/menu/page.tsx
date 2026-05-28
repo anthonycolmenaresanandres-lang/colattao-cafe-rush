@@ -143,11 +143,11 @@ export default function MenuPage() {
             <figure className="order-1 sm:order-2">
               <div className="relative h-40 w-full overflow-hidden rounded-2xl sm:h-56">
                 <Image
-                  src="/assets/colattao/website-concept/community-cafe.png"
-                  alt="Warm Colattao community moment with people talking over coffee in a cozy cafe"
+                  src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
+                  alt="Warm Colattao lounge with seated guests, fireplace glow, and cozy conversation"
                   fill
                   sizes="(max-width: 640px) 100vw, 240px"
-                  className="object-cover object-[center_42%]"
+                  className="object-cover object-[center_45%]"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-[#1b0e08]/18" />
               </div>
