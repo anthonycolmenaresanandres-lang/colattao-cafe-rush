@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { EventBus } from "@/game/events/EventBus";
+import appTheme from "@/config/theme";
 
 type FallingKind = "good" | "bad";
 
@@ -139,8 +140,8 @@ const LOSS_MESSAGES: readonly string[] = [
   "The chain coffee just typed 'lol'.",
 ];
 
-const HUNDREDTH_LOSS_MESSAGE =
-  "100 losses? At this point, the chain coffee has a rewards program for you.";
+// Milestone (100th-loss) line now sourced from the master theme config.
+const HUNDREDTH_LOSS_MESSAGE = appTheme.game.copy.milestoneLossMessage;
 
 function incrementAndReadBadLossCount(): number {
   if (typeof window === "undefined") return 0;
@@ -261,12 +262,14 @@ export class DemoScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image(ASSET_KEYS.bg, "assets/colattao/backgrounds/colattao-bg.png");
-    this.load.image(ASSET_KEYS.logo, "assets/colattao/logo/colattao-logo.png");
-    this.load.image(ASSET_KEYS.coffee, "assets/colattao/items/coffee-cup.png");
-    this.load.image(ASSET_KEYS.croissant, "assets/colattao/items/croissant.png");
-    this.load.image(ASSET_KEYS.matcha, "assets/colattao/items/matcha-iced.png");
-    this.load.image(ASSET_KEYS.bad, "assets/colattao/items/seafarers-bad.png");
+    // Asset paths sourced from the master theme config (texture keys unchanged).
+    const assets = appTheme.game.assets;
+    this.load.image(ASSET_KEYS.bg, assets.background);
+    this.load.image(ASSET_KEYS.logo, appTheme.brand.logoPath);
+    this.load.image(ASSET_KEYS.coffee, assets.goodItems[0]);
+    this.load.image(ASSET_KEYS.croissant, assets.goodItems[1]);
+    this.load.image(ASSET_KEYS.matcha, assets.goodItems[2]);
+    this.load.image(ASSET_KEYS.bad, assets.badItems[0]);
   }
 
   create() {
@@ -463,7 +466,7 @@ export class DemoScene extends Phaser.Scene {
     rule.lineBetween(width / 2 - 60, ruleY, width / 2 + 60, ruleY);
 
     const rushTitle = this.add
-      .text(width / 2, brandZone * 0.92, "Café Rush", {
+      .text(width / 2, brandZone * 0.92, appTheme.game.title, {
         fontFamily: FONT_SERIF,
         fontSize: "30px",
         color: "#FFF6E2",
@@ -473,7 +476,7 @@ export class DemoScene extends Phaser.Scene {
     rushTitle.setLetterSpacing(2);
 
     const subtitle = this.add
-      .text(width / 2, brandZone + playZone * 0.16, "Three levels. Catch the treats. Avoid the chain.", {
+      .text(width / 2, brandZone + playZone * 0.16, `Three levels. ${appTheme.game.subtitle}`, {
         fontFamily: FONT_SANS,
         fontSize: "12px",
         color: "#F5E9D0",
@@ -720,7 +723,7 @@ export class DemoScene extends Phaser.Scene {
       this.totalScore += this.score;
       const isFinal = this.currentLevelIndex >= LEVELS.length - 1;
       if (isFinal) {
-        this.statusText?.setText("You brewed greatness.");
+        this.statusText?.setText(appTheme.game.copy.winMessage);
         this.time.delayedCall(700, () => {
           EventBus.emit("GAME_WON", {
             score: this.totalScore,
