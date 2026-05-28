@@ -8,6 +8,7 @@ import VisualFlashPass from "@/components/VisualFlashPass";
 import FeedbackBox from "@/components/FeedbackBox";
 import { EventBus } from "@/game/events/EventBus";
 import type { GameWonPayload } from "@/types/game";
+import appTheme from "@/config/theme";
 
 export default function Home() {
   const [lastWin, setLastWin] = useState<GameWonPayload | null>(null);
@@ -38,10 +39,10 @@ export default function Home() {
         <p className="brand-eyebrow text-amber-100/70">
           Coffee House · Virginia Beach
         </p>
-        <h1 className="sr-only">Colattao Café Rush</h1>
+        <h1 className="sr-only">{`${appTheme.brand.displayName} ${appTheme.game.title}`}</h1>
         <Image
-          src="/assets/colattao/logo/colattao-logo.png"
-          alt="Colattao"
+          src={appTheme.brand.logoPath}
+          alt={appTheme.brand.displayName}
           width={260}
           height={104}
           priority
@@ -50,7 +51,7 @@ export default function Home() {
         <div className="mt-2 flex items-center justify-center gap-3">
           <span className="h-px w-10 bg-gradient-to-r from-transparent to-amber-300/55" />
           <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/70">
-            Café Rush
+            {appTheme.game.title}
           </span>
           <span className="h-px w-10 bg-gradient-to-l from-transparent to-amber-300/55" />
         </div>
@@ -68,13 +69,13 @@ export default function Home() {
             href="/menu"
             className="btn-ceramic inline-block rounded-full px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em]"
           >
-            Ver menú
+            {appTheme.ui.menuButtonText}
           </Link>
           <Link
             href="/owner-presentation"
             className="btn-ghost inline-block rounded-full border border-amber-300/40 bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-100"
           >
-            Ver presentación
+            {appTheme.ui.presentationButtonText}
           </Link>
         </nav>
 

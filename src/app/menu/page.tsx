@@ -3,6 +3,7 @@ import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import MenuCategorySection from "@/components/MenuCategory";
 import FeedbackBox from "@/components/FeedbackBox";
+import appTheme from "@/config/theme";
 
 export const metadata = {
   title: "Menu · Colattao Coffee House",
@@ -62,10 +63,10 @@ export default function MenuPage() {
           boxShadow: "0 16px 30px -18px rgba(0,0,0,0.75)",
         }}
       >
-        {/* Prominent Colattao logo */}
+        {/* Prominent brand logo */}
         <Image
-          src="/assets/colattao/logo/colattao-logo.png"
-          alt="Colattao Coffee House"
+          src={appTheme.brand.logoPath}
+          alt={appTheme.brand.displayName}
           width={180}
           height={70}
           priority

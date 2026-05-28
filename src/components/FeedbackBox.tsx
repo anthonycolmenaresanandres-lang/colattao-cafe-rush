@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import appTheme from "@/config/theme";
 
 /**
  * Lightweight feedback box.
@@ -172,7 +173,7 @@ export default function FeedbackBox({
             disabled={!comment.trim()}
             className="btn-gold mt-1 w-full rounded-full px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] disabled:cursor-not-allowed disabled:opacity-55"
           >
-            Enviar comentario
+            {appTheme.ui.feedbackButtonText}
           </button>
         </form>
       )}

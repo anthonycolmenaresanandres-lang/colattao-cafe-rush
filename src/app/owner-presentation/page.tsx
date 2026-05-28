@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import FeedbackBox from "@/components/FeedbackBox";
+import appTheme from "@/config/theme";
 
 export const metadata = {
   title: "Presentación · Colattao Café Rush",
@@ -84,8 +85,8 @@ export default function OwnerPresentationPage() {
           Para el Dueño · {new Date().getFullYear()}
         </p>
         <Image
-          src="/assets/colattao/logo/colattao-logo.png"
-          alt="Colattao"
+          src={appTheme.brand.logoPath}
+          alt={appTheme.brand.displayName}
           width={260}
           height={104}
           priority

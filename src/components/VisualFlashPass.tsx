@@ -1,6 +1,7 @@
 "use client";
 
 import type { GameWonPayload } from "@/types/game";
+import appTheme from "@/config/theme";
 
 type VisualFlashPassProps = {
   payload: GameWonPayload;
@@ -43,7 +44,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
         />
 
         <p className="brand-eyebrow mt-4 text-[var(--col-gold-deep)]">
-          Café Rush · Round Complete
+          {appTheme.game.title} · Round Complete
         </p>
 
         {/* ── Headline ──────────────────────────────────────── */}
@@ -58,7 +59,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
 
         {/* ── Subtext ───────────────────────────────────────── */}
         <p className="text-[13px] leading-snug text-[var(--col-espresso-3)]/85">
-          You brewed greatness.
+          {appTheme.game.copy.winMessage}
         </p>
 
         {/* ── Score acknowledgement ─────────────────────────── */}
@@ -77,7 +78,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
           onClick={onPlayAgain}
           className="btn-gold mt-6 w-full rounded-xl px-3 py-3 text-sm font-bold uppercase tracking-[0.18em]"
         >
-          Play Again
+          {appTheme.ui.playAgainButtonText}
         </button>
       </section>
     </div>
