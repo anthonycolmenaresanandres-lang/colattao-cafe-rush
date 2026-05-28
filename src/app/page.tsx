@@ -77,6 +77,12 @@ export default function Home() {
           >
             {appTheme.ui.presentationButtonText}
           </Link>
+          <Link
+            href="/website-concept"
+            className="btn-ghost inline-block rounded-full border border-amber-300/40 bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.18em] text-amber-100"
+          >
+            Ver website
+          </Link>
         </nav>
 
         <div className="mt-4 w-full max-w-[460px] px-2">
@@ -90,3 +96,4 @@ export default function Home() {
     </main>
   );
 }
+
