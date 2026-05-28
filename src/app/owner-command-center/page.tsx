@@ -10,12 +10,14 @@ const ACTIVE_MODULES = [
   "Digital Menu",
   "Website Concept",
   "Stickers / QR Campaign",
+  "Favorites Memory",
   "Favorite Hearts",
   "Feedback Inbox",
 ];
 
 const OWNER_MISSIONS = [
   "Confirm official milk options",
+  "Revisar productos favoritos del mes.",
   "Review sticker designs",
   "Approve website direction",
   "Decide Square ordering path",

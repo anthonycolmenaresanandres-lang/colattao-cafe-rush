@@ -138,6 +138,9 @@ export default function OwnerPresentationPage() {
           <Bullet label="Pulido visual del menú">
             El menú digital ahora incluye una nota elegante de opciones de leche, una imagen cálida del espacio, y acceso discreto al concepto de website.
           </Bullet>
+          <Bullet label="Favoritos del cliente">
+            El menú ahora permite guardar favoritos en el teléfono del cliente. Así pueden recordar qué pedir y mostrar su lista en el mostrador, sin crear cuenta ni recopilar datos personales.
+          </Bullet>
           <Bullet label="Sistema de marca premium">
             Paleta espresso, pergamino, terracota, oro y azul cerámica;
             tipografía Playfair Display + Inter; detalles inspirados en la
