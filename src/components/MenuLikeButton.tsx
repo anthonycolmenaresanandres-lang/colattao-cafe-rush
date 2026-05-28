@@ -7,7 +7,8 @@ type Props = {
   itemName: string;
 };
 
-const STORAGE_KEY = "colattao_favorites";
+export const STORAGE_KEY = "colattao_favorites";
+export const FAVORITES_UPDATED_EVENT = "colattao:favorites-updated";
 
 function readFavorites(): string[] {
   try {
@@ -26,6 +27,7 @@ function writeFavorites(next: string[]) {
   try {
     if (typeof window === "undefined") return;
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent(FAVORITES_UPDATED_EVENT));
   } catch {
     // Intentionally swallow local-only persistence errors.
   }
@@ -70,16 +72,17 @@ export default function MenuLikeButton({ itemName }: Props) {
       type="button"
       onClick={onToggle}
       aria-label={ariaLabel}
-      title={liked ? "Favorited" : "Add to favorites"}
+      title={liked ? "Saved to favorites" : "Save to favorites"}
       className={[
-        "ml-2 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
-        "border border-amber-200/25 bg-[#1b0e08]/20 text-sm transition duration-150",
-        liked ? "text-[#f5c46b]" : "text-amber-100/45 hover:text-amber-100/75",
+        "ml-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
+        "border border-amber-200/35 bg-[#1b0e08]/30 text-base transition duration-150",
+        liked ? "text-[#f5c46b]" : "text-amber-100/65 hover:text-amber-100/90",
         popping ? "scale-110" : "scale-100",
       ].join(" ")}
     >
-      <span aria-hidden="true">{liked ? "♥" : "♡"}</span>
+      <span aria-hidden="true" className="leading-none">
+        {liked ? "♥" : "♡"}
+      </span>
     </button>
   );
 }
-

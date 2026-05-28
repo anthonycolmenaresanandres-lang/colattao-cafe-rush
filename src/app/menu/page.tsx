@@ -3,6 +3,7 @@ import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import FeedbackBox from "@/components/FeedbackBox";
 import MenuLikeButton from "@/components/MenuLikeButton";
+import MenuFavoritesSummary from "@/components/MenuFavoritesSummary";
 import appTheme from "@/config/theme";
 
 export const metadata = {
@@ -154,6 +155,7 @@ export default function MenuPage() {
             </figure>
           </div>
         </section>
+        <MenuFavoritesSummary />
 
         {menuCategories.map((category) => {
           const accent = CATEGORY_ACCENTS[category.id];
