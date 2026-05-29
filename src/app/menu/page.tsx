@@ -49,18 +49,14 @@ const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined>
   pastries: { src: "/assets/colattao/items/croissant.png", alt: "Croissant" },
 };
 
-// Slim editorial photo banners on a few key sections only (kept subtle so
-// item names and prices stay dominant).
-const CATEGORY_FEATURES: Record<string, { src: string; alt: string } | undefined> = {
-  espresso: {
-    src: "/assets/colattao/menu/menu-eldorado-01.png",
-    alt: "El Dorado parchment study with a blue ceramic latte and cake on a warm cream backdrop",
-  },
-  pastries: {
-    src: "/assets/colattao/menu/menu-eldorado-02.png",
-    alt: "Soft parchment study with desserts and a sun motif in the Colattao El Dorado style",
-  },
+// Subtle El Dorado parchment textures layered *inside* each category card
+// (very low opacity) — not standalone banners. Text/prices stay dominant.
+const CATEGORY_TEXTURES: Record<string, string> = {
+  espresso: "/assets/colattao/menu/menu-eldorado-01.png",
+  pastries: "/assets/colattao/menu/menu-eldorado-02.png",
+  favorites: "/assets/colattao/menu/menu-eldorado-03.png",
 };
+const DEFAULT_CATEGORY_TEXTURE = "/assets/colattao/menu/menu-eldorado-04.png";
 
 export default function MenuPage() {
   return (
@@ -157,11 +153,11 @@ export default function MenuPage() {
             <figure className="order-1 sm:order-2">
               <div className="relative h-40 w-full overflow-hidden rounded-2xl sm:h-56">
                 <Image
-                  src="/assets/colattao/menu/menu-eldorado-03.png"
-                  alt="El Dorado parchment study with a blue ceramic latte, cheesecake, and pistachio tres leches"
+                  src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
+                  alt="The Colattao lounge — owners and guests gathered by the fireplace, a warm community moment"
                   fill
                   sizes="(max-width: 640px) 100vw, 240px"
-                  className="object-cover object-[center_80%]"
+                  className="object-cover object-[center_40%]"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-[#1b0e08]/18" />
               </div>
@@ -172,22 +168,26 @@ export default function MenuPage() {
 
         {menuCategories.map((category) => {
           const accent = CATEGORY_ACCENTS[category.id];
-          const feature = CATEGORY_FEATURES[category.id];
+          const texture = CATEGORY_TEXTURES[category.id] ?? DEFAULT_CATEGORY_TEXTURE;
           return (
-            <section key={category.id} id={category.id} className="menu-card scroll-mt-32 px-5 pb-5 pt-5">
-              {feature && (
-                <div className="relative mb-4 h-24 w-full overflow-hidden rounded-2xl sm:h-28">
-                  <Image
-                    src={feature.src}
-                    alt={feature.alt}
-                    fill
-                    sizes="(max-width: 470px) 100vw, 430px"
-                    className="object-cover object-[center_80%]"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-[#1b0e08]/15" />
-                </div>
-              )}
-              <div className="text-center">
+            <section
+              key={category.id}
+              id={category.id}
+              className="menu-card relative scroll-mt-32 overflow-hidden px-5 pb-5 pt-5"
+            >
+              {/* Subtle El Dorado parchment texture inside the card. */}
+              <div className="pointer-events-none absolute inset-0 z-0">
+                <Image
+                  src={texture}
+                  alt=""
+                  aria-hidden="true"
+                  fill
+                  sizes="(max-width: 470px) 100vw, 430px"
+                  className="object-cover opacity-[0.07]"
+                />
+              </div>
+
+              <div className="relative z-10 text-center">
                 <p
                   className="text-[10px] uppercase text-[var(--col-gold-deep)]"
                   style={{ letterSpacing: "0.32em" }}
@@ -218,7 +218,7 @@ export default function MenuPage() {
                 )}
               </div>
 
-              <ul className="mt-4 space-y-3">
+              <ul className="relative z-10 mt-4 space-y-3">
                 {category.items.map((item) => (
                   <li key={item.name} className="flex items-start gap-2 text-[var(--col-espresso)]">
                     <div className="min-w-0 flex-1">
