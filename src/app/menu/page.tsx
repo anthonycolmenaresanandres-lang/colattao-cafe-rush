@@ -54,7 +54,7 @@ export default function MenuPage() {
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
-          src="/assets/colattao/website-concept/background-texture-colattao.png"
+          src="/assets/colattao/website-concept/menu-texture-eldorado.png"
           alt=""
           aria-hidden="true"
           fill
@@ -113,7 +113,7 @@ export default function MenuPage() {
         <section className="relative overflow-hidden rounded-3xl px-5 py-6 sm:px-6 sm:py-7">
           <div className="pointer-events-none absolute inset-0">
             <Image
-              src="/assets/colattao/website-concept/background-texture-colattao.png"
+              src="/assets/colattao/website-concept/menu-texture-eldorado.png"
               alt=""
               aria-hidden="true"
               fill
