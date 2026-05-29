@@ -183,9 +183,9 @@ export default function MenuPage() {
                   aria-hidden="true"
                   fill
                   sizes="(max-width: 470px) 100vw, 430px"
-                  className="object-cover opacity-[0.3]"
+                  className="object-cover opacity-[0.32]"
                 />
-                <div className="absolute inset-[10px] rounded-[18px] bg-[linear-gradient(180deg,rgba(248,237,215,0.86)_0%,rgba(248,237,215,0.8)_100%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,237,215,0.55)_0%,rgba(248,237,215,0.38)_100%)]" />
                 <div className="absolute inset-0 ring-1 ring-inset ring-[#4b2412]/16" />
               </div>
 
