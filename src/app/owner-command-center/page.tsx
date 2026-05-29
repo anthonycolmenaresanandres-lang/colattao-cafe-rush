@@ -41,6 +41,9 @@ export default function OwnerCommandCenterPage() {
           <p className="mt-3 max-w-3xl text-sm text-[#f4deba]/85 sm:text-base">
             A game-style owner interface for managing the digital ecosystem.
           </p>
+          <p className="mt-3 max-w-3xl text-[13px] leading-snug text-[#f4deba]/75">
+            El menú digital ahora combina textura visual, imágenes por categoría, productos guardados, opciones de leche y una experiencia más premium sin perder claridad para ordenar.
+          </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/menu"

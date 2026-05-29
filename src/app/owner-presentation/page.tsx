@@ -136,7 +136,7 @@ export default function OwnerPresentationPage() {
             mientras espera en la fila.
           </Bullet>
           <Bullet label="Pulido visual del menú">
-            El menú digital ahora incluye una nota elegante de opciones de leche, una imagen cálida del espacio, y acceso discreto al concepto de website.
+            El menú digital ahora combina textura visual, imágenes por categoría, productos guardados, opciones de leche y una experiencia más premium sin perder claridad para ordenar.
           </Bullet>
           <Bullet label="Favoritos del cliente">
             El menú ahora permite guardar favoritos en el teléfono del cliente. Así pueden recordar qué pedir y mostrar su lista en el mostrador, sin crear cuenta ni recopilar datos personales.
