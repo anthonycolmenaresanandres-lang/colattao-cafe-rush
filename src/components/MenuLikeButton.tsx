@@ -34,31 +34,32 @@ function writeFavorites(next: string[]) {
 }
 
 export default function MenuLikeButton({ itemName }: Props) {
-  const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
   const [popping, setPopping] = useState(false);
   const ariaLabel = useMemo(
-    () => (liked ? `Remove favorite for ${itemName}` : `Favorite ${itemName}`),
-    [liked, itemName],
+    () => (saved ? `Saved item: ${itemName}` : `Save item: ${itemName}`),
+    [saved, itemName],
   );
 
   useEffect(() => {
     const favorites = readFavorites();
-    setLiked(favorites.includes(itemName));
+    setSaved(favorites.includes(itemName));
   }, [itemName]);
 
   function onToggle() {
     const favorites = readFavorites();
-    const alreadyLiked = favorites.includes(itemName);
-    const next = alreadyLiked
+    const alreadySaved = favorites.includes(itemName);
+    const next = alreadySaved
       ? favorites.filter((name) => name !== itemName)
       : [...favorites, itemName];
 
     writeFavorites(next);
-    setLiked(!alreadyLiked);
+    setSaved(!alreadySaved);
     setPopping(true);
     setTimeout(() => setPopping(false), 160);
 
-    if (!alreadyLiked) {
+    // Track only when newly saved (never on unsave).
+    if (!alreadySaved) {
       try {
         track("Menu_Item_Liked", { item: itemName });
       } catch {
@@ -71,18 +72,22 @@ export default function MenuLikeButton({ itemName }: Props) {
     <button
       type="button"
       onClick={onToggle}
+      aria-pressed={saved}
       aria-label={ariaLabel}
-      title={liked ? "Saved to favorites" : "Save to favorites"}
+      title={saved ? "Saved item" : "Save item"}
       className={[
-        "ml-2 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full",
-        "border border-amber-200/35 bg-[#1b0e08]/30 text-base transition duration-150",
-        liked ? "text-[#f5c46b]" : "text-amber-100/65 hover:text-amber-100/90",
-        popping ? "scale-110" : "scale-100",
+        "ml-2 inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1",
+        "border text-[11px] font-semibold uppercase tracking-[0.12em] transition duration-150",
+        saved
+          ? "border-[#d99028]/55 bg-[#f5c46b] text-[#4b2412]"
+          : "border-amber-200/35 bg-[#1b0e08]/30 text-amber-100/75 hover:text-amber-100/95",
+        popping ? "scale-105" : "scale-100",
       ].join(" ")}
     >
-      <span aria-hidden="true" className="leading-none">
-        {liked ? "♥" : "♡"}
+      <span aria-hidden="true" className="text-[12px] leading-none">
+        {saved ? "♥" : "♡"}
       </span>
+      <span className="leading-none">{saved ? "Saved" : "Save"}</span>
     </button>
   );
 }

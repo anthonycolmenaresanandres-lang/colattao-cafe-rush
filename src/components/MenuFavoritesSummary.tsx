@@ -18,6 +18,7 @@ function readFavorites(): string[] {
 
 export default function MenuFavoritesSummary() {
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [expanded, setExpanded] = useState(true);
 
   useEffect(() => {
     const refresh = () => setFavorites(readFavorites());
@@ -31,20 +32,43 @@ export default function MenuFavoritesSummary() {
     };
   }, []);
 
+  const count = favorites.length;
+
+  // ── Empty state ──
+  if (count === 0) {
+    return (
+      <section className="menu-card px-5 pb-4 pt-4">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--col-gold-deep)]">
+          Saved items
+        </h3>
+        <p className="mt-2 text-[12px] text-[var(--col-espresso-3)]/80">
+          Tap Save beside any item to remember it.
+        </p>
+      </section>
+    );
+  }
+
+  // ── Counter-focused state ──
   return (
     <section className="menu-card px-5 pb-4 pt-4">
-      <div className="flex items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--col-gold-deep)]">
-          My favorites
-        </h3>
-        <span className="text-[10px] text-[var(--col-espresso-3)]/70">{favorites.length} saved</span>
-      </div>
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
+        className="flex w-full items-center justify-between gap-2 text-left"
+      >
+        <span className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--col-gold-deep)]">
+          {count} saved {count === 1 ? "item" : "items"}
+        </span>
+        <span
+          aria-hidden="true"
+          className="text-[11px] font-semibold text-[var(--col-espresso-3)]/70"
+        >
+          {expanded ? "Hide ▲" : "Show ▼"}
+        </span>
+      </button>
 
-      {favorites.length === 0 ? (
-        <p className="mt-2 text-[12px] text-[var(--col-espresso-3)]/80">
-          Tap the heart beside any item to remember it.
-        </p>
-      ) : (
+      {expanded ? (
         <>
           <div className="mt-3 flex flex-wrap gap-2">
             {favorites.map((item) => (
@@ -56,9 +80,11 @@ export default function MenuFavoritesSummary() {
               </span>
             ))}
           </div>
-          <p className="mt-2 text-[11px] text-[var(--col-espresso-3)]/75">Show this list at the counter.</p>
+          <p className="mt-3 text-[11px] text-[var(--col-espresso-3)]/75">
+            Show this at the counter.
+          </p>
         </>
-      )}
+      ) : null}
     </section>
   );
 }
