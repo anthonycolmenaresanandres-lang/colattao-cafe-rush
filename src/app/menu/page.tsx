@@ -173,9 +173,9 @@ export default function MenuPage() {
             <section
               key={category.id}
               id={category.id}
-              className="menu-card relative scroll-mt-32 overflow-hidden px-5 pb-5 pt-5"
+              className="menu-card relative scroll-mt-32 overflow-hidden border border-[#d2b27a]/55 px-5 pb-5 pt-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35"
             >
-              {/* Subtle El Dorado parchment texture inside the card. */}
+              {/* El Dorado board image is now clearly visible as the card surface. */}
               <div className="pointer-events-none absolute inset-0 z-0">
                 <Image
                   src={texture}
@@ -183,8 +183,10 @@ export default function MenuPage() {
                   aria-hidden="true"
                   fill
                   sizes="(max-width: 470px) 100vw, 430px"
-                  className="object-cover opacity-[0.07]"
+                  className="object-cover opacity-[0.3]"
                 />
+                <div className="absolute inset-[10px] rounded-[18px] bg-[linear-gradient(180deg,rgba(248,237,215,0.86)_0%,rgba(248,237,215,0.8)_100%)]" />
+                <div className="absolute inset-0 ring-1 ring-inset ring-[#4b2412]/16" />
               </div>
 
               <div className="relative z-10 text-center">
