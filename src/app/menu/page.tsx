@@ -49,6 +49,23 @@ const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined>
   pastries: { src: "/assets/colattao/items/croissant.png", alt: "Croissant" },
 };
 
+// Slim editorial photo banners on a few key sections only (kept subtle so
+// item names and prices stay dominant).
+const CATEGORY_FEATURES: Record<string, { src: string; alt: string } | undefined> = {
+  espresso: {
+    src: "/assets/colattao/menu/menu-coffee-feature.png",
+    alt: "Latte with leaf latte art in a blue floral Colattao cup beside a slice of cake",
+  },
+  favorites: {
+    src: "/assets/colattao/menu/menu-food-feature.png",
+    alt: "Colattao Coffee House counter scene with a blue floral latte and a pistachio-dusted pastry",
+  },
+  pastries: {
+    src: "/assets/colattao/menu/menu-dessert-feature.png",
+    alt: "Raspberry-topped cheesecake on a gold-rimmed plate",
+  },
+};
+
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
@@ -159,8 +176,21 @@ export default function MenuPage() {
 
         {menuCategories.map((category) => {
           const accent = CATEGORY_ACCENTS[category.id];
+          const feature = CATEGORY_FEATURES[category.id];
           return (
             <section key={category.id} id={category.id} className="menu-card scroll-mt-32 px-5 pb-5 pt-5">
+              {feature && (
+                <div className="relative mb-4 h-24 w-full overflow-hidden rounded-2xl sm:h-28">
+                  <Image
+                    src={feature.src}
+                    alt={feature.alt}
+                    fill
+                    sizes="(max-width: 470px) 100vw, 430px"
+                    className="object-cover object-[center_40%]"
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-[#1b0e08]/15" />
+                </div>
+              )}
               <div className="text-center">
                 <p
                   className="text-[10px] uppercase text-[var(--col-gold-deep)]"
