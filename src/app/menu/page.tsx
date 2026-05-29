@@ -53,16 +53,12 @@ const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined>
 // item names and prices stay dominant).
 const CATEGORY_FEATURES: Record<string, { src: string; alt: string } | undefined> = {
   espresso: {
-    src: "/assets/colattao/menu/menu-coffee-feature.png",
-    alt: "Latte with leaf latte art in a blue floral Colattao cup beside a slice of cake",
-  },
-  favorites: {
-    src: "/assets/colattao/menu/menu-food-feature.png",
-    alt: "Colattao Coffee House counter scene with a blue floral latte and a pistachio-dusted pastry",
+    src: "/assets/colattao/menu/menu-eldorado-01.png",
+    alt: "El Dorado parchment study with a blue ceramic latte and cake on a warm cream backdrop",
   },
   pastries: {
-    src: "/assets/colattao/menu/menu-dessert-feature.png",
-    alt: "Raspberry-topped cheesecake on a gold-rimmed plate",
+    src: "/assets/colattao/menu/menu-eldorado-02.png",
+    alt: "Soft parchment study with desserts and a sun motif in the Colattao El Dorado style",
   },
 };
 
@@ -71,7 +67,7 @@ export default function MenuPage() {
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
-          src="/assets/colattao/website-concept/menu-texture-eldorado.png"
+          src="/assets/colattao/menu/menu-eldorado-04.png"
           alt=""
           aria-hidden="true"
           fill
@@ -130,7 +126,7 @@ export default function MenuPage() {
         <section className="relative overflow-hidden rounded-3xl px-5 py-6 sm:px-6 sm:py-7">
           <div className="pointer-events-none absolute inset-0">
             <Image
-              src="/assets/colattao/website-concept/menu-texture-eldorado.png"
+              src="/assets/colattao/menu/menu-eldorado-04.png"
               alt=""
               aria-hidden="true"
               fill
@@ -161,11 +157,11 @@ export default function MenuPage() {
             <figure className="order-1 sm:order-2">
               <div className="relative h-40 w-full overflow-hidden rounded-2xl sm:h-56">
                 <Image
-                  src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
-                  alt="Warm Colattao lounge with seated guests, fireplace glow, and cozy conversation"
+                  src="/assets/colattao/menu/menu-eldorado-03.png"
+                  alt="El Dorado parchment study with a blue ceramic latte, cheesecake, and pistachio tres leches"
                   fill
                   sizes="(max-width: 640px) 100vw, 240px"
-                  className="object-cover object-[center_45%]"
+                  className="object-cover object-[center_80%]"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-[#1b0e08]/18" />
               </div>
@@ -186,7 +182,7 @@ export default function MenuPage() {
                     alt={feature.alt}
                     fill
                     sizes="(max-width: 470px) 100vw, 430px"
-                    className="object-cover object-[center_40%]"
+                    className="object-cover object-[center_80%]"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-[#1b0e08]/15" />
                 </div>
