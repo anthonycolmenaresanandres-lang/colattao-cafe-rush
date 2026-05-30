@@ -10,14 +10,14 @@ const ACTIVE_MODULES = [
   "Digital Menu",
   "Website Concept",
   "Stickers / QR Campaign",
-  "Favorites Memory",
+  "Menu Highlights",
   "Favorite Hearts",
   "Feedback Inbox",
 ];
 
 const OWNER_MISSIONS = [
   "Confirm official milk options",
-  "Revisar productos favoritos del mes.",
+  "Revisar productos destacados del mes.",
   "Review sticker designs",
   "Approve website direction",
   "Decide Square ordering path",
@@ -39,10 +39,7 @@ export default function OwnerCommandCenterPage() {
           <p className="text-[10px] uppercase tracking-[0.32em] text-[#92aecd]">Mission Control</p>
           <h1 className="mt-3 font-serif text-3xl text-[#fff3d6] sm:text-4xl">Colattao Command Center</h1>
           <p className="mt-3 max-w-3xl text-sm text-[#f4deba]/85 sm:text-base">
-            A game-style owner interface for managing the digital ecosystem.
-          </p>
-          <p className="mt-3 max-w-3xl text-[13px] leading-snug text-[#f4deba]/75">
-            El menú digital ahora combina textura visual, imágenes por categoría, productos guardados, opciones de leche y una experiencia más premium sin perder claridad para ordenar.
+            A game-style owner interface for managing the digital ecosystem. El menú digital ahora combina textura visual, imágenes por categoría, opciones de leche y una experiencia más premium sin perder claridad para ordenar.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link

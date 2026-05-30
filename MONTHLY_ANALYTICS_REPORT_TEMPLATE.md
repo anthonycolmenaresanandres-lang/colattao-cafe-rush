@@ -17,9 +17,9 @@
 - Instagram/bio traffic (if ref links are used):
 - QR traffic (if ref links are used):
 
-## 4) Menu Favorite Insights
-- Most liked item:
-- Top 5 liked items:
+## 4) Menu Interest Insights
+- Most viewed/promoted item:
+- Top 5 items with strongest interest:
 1. 
 2. 
 3. 

@@ -23,7 +23,6 @@ Contexto para explicarlo en vivo:
 - No se recogen nombres.
 - No se recogen correos.
 - No se recoge información de pago.
-- Los favoritos se quedan en el teléfono del cliente.
 - Las analíticas son anónimas.
 
 ## 5. Explicación del Futuro de Pedidos

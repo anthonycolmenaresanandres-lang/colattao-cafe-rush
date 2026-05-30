@@ -136,10 +136,7 @@ export default function OwnerPresentationPage() {
             mientras espera en la fila.
           </Bullet>
           <Bullet label="Pulido visual del menú">
-            El menú digital ahora combina textura visual, imágenes por categoría, productos guardados, opciones de leche y una experiencia más premium sin perder claridad para ordenar.
-          </Bullet>
-          <Bullet label="Favoritos del cliente">
-            El menú ahora permite guardar favoritos en el teléfono del cliente. Así pueden recordar qué pedir y mostrar su lista en el mostrador, sin crear cuenta ni recopilar datos personales.
+            El menú digital ahora combina textura visual, imágenes por categoría y opciones de leche para una experiencia más premium sin perder claridad para ordenar.
           </Bullet>
           <Bullet label="Sistema de marca premium">
             Paleta espresso, pergamino, terracota, oro y azul cerámica;
