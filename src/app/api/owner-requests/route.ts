@@ -82,6 +82,32 @@ function validateFile(file: File) {
   return null;
 }
 
+function getResendErrorDiagnostics(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return {
+      name: "unknown",
+      message: "unknown_email_error",
+      status: null,
+      statusCode: null,
+      ...envDiagnostics(),
+    };
+  }
+
+  const record = error as Record<string, unknown>;
+  return {
+    name: typeof record.name === "string" ? record.name : "unknown",
+    message: typeof record.message === "string" ? record.message : "unknown_email_error",
+    status: typeof record.status === "number" || typeof record.status === "string" ? record.status : null,
+    statusCode:
+      typeof record.statusCode === "number" || typeof record.statusCode === "string"
+        ? record.statusCode
+        : null,
+    hasResendApiKey: Boolean(process.env.RESEND_API_KEY),
+    hasOwnerNotificationEmail: Boolean(process.env.OWNER_NOTIFICATION_EMAIL),
+    hasFromEmail: Boolean(process.env.FROM_EMAIL),
+  };
+}
+
 async function uploadFiles(files: File[]) {
   const timestamp = Date.now();
   const uploadedUrls: string[] = [];
@@ -241,10 +267,7 @@ export async function POST(request: Request) {
   });
 
   if (error) {
-    console.error("[owner-requests] Email notification failed", {
-      name: error.name,
-      message: error.message,
-    });
+    console.error("[owner-requests] Email notification failed", getResendErrorDiagnostics(error));
     return NextResponse.json({ ok: false, reason: "email_failed" }, { status: 500 });
   }
 
