@@ -1,4 +1,4 @@
-// ─── Colattao Coffee House – Digital Menu Data ───
+// Colattao Coffee House - Digital Menu Data
 // Prices and items are best-effort drafts.
 // Items marked with `needsConfirmation: true` should be verified with staff.
 
@@ -80,32 +80,6 @@ export const menuCategories: MenuCategory[] = [
       { name: "Pesto Mozzarella", price: "$7.22" },
       { name: "Ham & Cheesy", price: "$7.62" },
       { name: "Turkey Egg & Swiss", price: "$8.60" },
-    ],
-  },
-  {
-    id: "spring",
-    title: "Spring Drinks",
-    items: [
-      {
-        name: "Salted Honey-Nuts Latte",
-        price: null,
-        description: "Honey, macadamia syrup, cold foam, salt flakes, oat milk",
-      },
-      {
-        name: "Blueberries & Cream Matcha",
-        price: null,
-        description: "Blueberry syrup, honey, cinnamon, cold foam",
-      },
-      {
-        name: "White Lavender Mocha",
-        price: null,
-        description: "White chocolate, lavender syrup",
-      },
-      {
-        name: "Cinnamon Horchata",
-        price: null,
-        description: "Vanilla or Chocolate · Add double shot +$1.50",
-      },
     ],
   },
   {

@@ -42,7 +42,6 @@ const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined>
   matcha: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced matcha" },
   tea: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced drink" },
   cocina: { src: "/assets/colattao/items/croissant.png", alt: "Pastry" },
-  spring: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
   pastries: { src: "/assets/colattao/items/croissant.png", alt: "Croissant" },
 };
 
@@ -115,8 +114,8 @@ export default function MenuPage() {
         </nav>
       </header>
 
-      <div className="relative z-10 flex-1 space-y-5 px-4 py-6">
-        <section className="relative overflow-hidden rounded-3xl px-5 py-6 sm:px-6 sm:py-7">
+      <div className="relative z-10 flex-1 space-y-4 px-4 py-5">
+        <section className="relative overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 py-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35 sm:px-6 sm:py-6">
           <div className="pointer-events-none absolute inset-0">
             <Image
               src="/assets/colattao/menu/menu-eldorado-04.png"
@@ -126,7 +125,8 @@ export default function MenuPage() {
               sizes="470px"
               className="object-cover opacity-[0.1]"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.08)_0%,rgba(42,18,8,0.76)_48%,rgba(46,90,124,0.2)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.18)_0%,rgba(42,18,8,0.64)_48%,rgba(46,90,124,0.22)_100%)]" />
+            <div className="absolute inset-0 ring-1 ring-inset ring-[#4b2412]/16" />
           </div>
           <div className="pointer-events-none absolute left-6 right-6 top-0 h-px bg-gradient-to-r from-transparent via-[#f5c46b]/45 to-transparent" />
 
@@ -148,7 +148,7 @@ export default function MenuPage() {
             </div>
 
             <figure className="order-1 sm:order-2">
-              <div className="relative h-40 w-full overflow-hidden rounded-2xl sm:h-56">
+              <div className="relative h-40 w-full overflow-hidden rounded-[1.15rem] border border-[#d2b27a]/45 shadow-[0_12px_24px_-16px_rgba(27,14,8,0.55)] sm:h-56">
                 <Image
                   src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
                   alt="The Colattao lounge — owners and guests gathered by the fireplace, a warm community moment"
@@ -169,7 +169,7 @@ export default function MenuPage() {
             <section
               key={category.id}
               id={category.id}
-              className="menu-card relative scroll-mt-32 overflow-hidden border border-[#d2b27a]/55 px-5 pb-5 pt-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35"
+              className="menu-card relative scroll-mt-32 overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 pb-5 pt-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35"
             >
               {/* El Dorado board image is now clearly visible as the card surface. */}
               <div className="pointer-events-none absolute inset-0 z-0">
