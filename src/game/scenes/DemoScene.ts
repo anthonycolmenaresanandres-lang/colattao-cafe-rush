@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+﻿import Phaser from "phaser";
 import { EventBus } from "@/game/events/EventBus";
 import appTheme from "@/config/theme";
 
@@ -13,11 +13,11 @@ const ASSET_KEYS = {
   bad: "item-seafarers-bad",
 } as const;
 
-// ── Premium type stacks (Phaser uses web fonts loaded by next/font) ──
+// â”€â”€ Premium type stacks (Phaser uses web fonts loaded by next/font) â”€â”€
 const FONT_SERIF = '"Playfair Display", Georgia, "Times New Roman", serif';
 const FONT_SANS = 'Inter, ui-sans-serif, system-ui, -apple-system, sans-serif';
 
-// ── Brand palette (mirrors globals.css) ──
+// â”€â”€ Brand palette (mirrors globals.css) â”€â”€
 const COLOR_ESPRESSO = 0x1b0e08;
 const COLOR_ESPRESSO_2 = 0x2a1208;
 const COLOR_PARCHMENT = 0xf5e9d0;
@@ -25,14 +25,14 @@ const COLOR_GOLD = 0xd4a24c;
 const COLOR_GOLD_SOFT = 0xe9c988;
 const COLOR_CERAMIC = 0x2e5a7c;
 
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Rotating bad-tap loss messages
 // 100 short funny lines in the Colattao voice.
 // On the player's 100th cumulative bad-tap loss (tracked in
 // localStorage under `colattao_bad_loss_count`) we override
 // the random pick with a special line. Timeout messages
 // remain unaffected.
-// ─────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const BAD_LOSS_STORAGE_KEY = "colattao_bad_loss_count";
 
 const LOSS_MESSAGES = appTheme.game.copy.lossMessages;
@@ -67,7 +67,7 @@ function getBadLossMessage(): string {
   return pickRandomLossMessage();
 }
 
-// ── Level configuration ──
+// â”€â”€ Level configuration â”€â”€
 interface LevelConfig {
   index: number;          // 1-based
   name: string;
@@ -133,7 +133,7 @@ const LEVELS: LevelConfig[] = [
 ];
 
 export class DemoScene extends Phaser.Scene {
-  // ── Per-level state ──
+  // â”€â”€ Per-level state â”€â”€
   private currentLevelIndex = 0;             // 0..2
   private score = 0;                          // resets at start of each level
   private totalScore = 0;                     // cumulative across levels
@@ -142,7 +142,7 @@ export class DemoScene extends Phaser.Scene {
   private roundStarted = false;
   private spawnDelayMs = LEVELS[0].initialSpawnDelayMs;
 
-  // ── HUD refs ──
+  // â”€â”€ HUD refs â”€â”€
   private scoreText?: Phaser.GameObjects.Text;
   private timerText?: Phaser.GameObjects.Text;
   private targetText?: Phaser.GameObjects.Text;
@@ -150,7 +150,7 @@ export class DemoScene extends Phaser.Scene {
   private statusText?: Phaser.GameObjects.Text;
   private hudGroup?: Phaser.GameObjects.Container;
 
-  // ── Timers / listeners ──
+  // â”€â”€ Timers / listeners â”€â”€
   private spawnTimer?: Phaser.Time.TimerEvent;
   private countdownTimer?: Phaser.Time.TimerEvent;
   private offRestart?: () => void;
@@ -189,9 +189,9 @@ export class DemoScene extends Phaser.Scene {
     return LEVELS[this.currentLevelIndex];
   }
 
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Background
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private drawSceneBackground() {
     const { width, height } = this.scale;
 
@@ -225,9 +225,9 @@ export class DemoScene extends Phaser.Scene {
     this.countdownTimer?.remove(false);
   }
 
-  // ─────────────────────────────────────────────────────────
-  // HUD — slim parchment chips + level name
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HUD â€” slim parchment chips + level name
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private buildHud() {
     const { width } = this.scale;
     this.hudGroup = this.add.container(0, 0);
@@ -314,9 +314,9 @@ export class DemoScene extends Phaser.Scene {
     this.targetText?.setText(`Target ${this.level.targetScore}`);
   }
 
-  // ─────────────────────────────────────────────────────────
-  // Start screen — golden ratio composition
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // Start screen â€” golden ratio composition
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private showStartScreen() {
     const { width, height } = this.scale;
     this.statusText?.setVisible(false);
@@ -427,7 +427,7 @@ export class DemoScene extends Phaser.Scene {
     );
 
     const ctaLabel = this.add
-      .text(width / 2, ctaY, "Comenzar", {
+      .text(width / 2, ctaY, "Start", {
         fontFamily: FONT_SERIF,
         fontSize: "22px",
         color: "#2A1208",
@@ -436,7 +436,7 @@ export class DemoScene extends Phaser.Scene {
     ctaLabel.setLetterSpacing(2);
 
     const ctaHint = this.add
-      .text(width / 2, ctaY + ctaH / 2 + 18, "Toca para iniciar la ronda", {
+      .text(width / 2, ctaY + ctaH / 2 + 18, "Tap to start the round", {
         fontFamily: FONT_SANS,
         fontSize: "10px",
         color: "#E9C988",
@@ -483,9 +483,9 @@ export class DemoScene extends Phaser.Scene {
     });
   }
 
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Round loop
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private startRound() {
     this.roundStarted = true;
     this.configureSpawnTimer();
@@ -633,9 +633,9 @@ export class DemoScene extends Phaser.Scene {
     });
   }
 
-  // ─────────────────────────────────────────────────────────
-  // Level end — branches: complete, fail-by-bad-tap, fail-by-timeout
-  // ─────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // Level end â€” branches: complete, fail-by-bad-tap, fail-by-timeout
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private endLevel(won: boolean, lossMessage?: string) {
     if (this.gameEnded) {
       return;
@@ -750,7 +750,7 @@ export class DemoScene extends Phaser.Scene {
   }
 
   /**
-   * Loss overlay — intentionally minimal:
+   * Loss overlay â€” intentionally minimal:
    * one message block, plenty of breathing room, one button.
    * No level-progression helper text (that lives on the level-complete overlay).
    */
@@ -798,3 +798,4 @@ export class DemoScene extends Phaser.Scene {
     });
   }
 }
+
