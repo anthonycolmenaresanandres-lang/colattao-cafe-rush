@@ -43,6 +43,12 @@ export default function OwnerCommandCenterPage() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
+              href="/request-update"
+              className="rounded-full border border-[#f5c46b55] bg-[#fff3d61a] px-5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#fff3d6] transition hover:bg-[#fff3d629]"
+            >
+              Enviar solicitud
+            </Link>
+            <Link
               href="/menu"
               className="rounded-full border border-[#f5c46b66] bg-[#d99028] px-5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#2a1208] transition hover:bg-[#f5c46b]"
             >

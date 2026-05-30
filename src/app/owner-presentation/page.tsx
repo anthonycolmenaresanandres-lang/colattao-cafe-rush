@@ -109,6 +109,9 @@ export default function OwnerPresentationPage() {
           <ActionLink href="/" variant="gold">
             Abrir juego
           </ActionLink>
+          <ActionLink href="/request-update" variant="ceramic">
+            Enviar solicitud
+          </ActionLink>
           <ActionLink href="/menu" variant="ceramic">
             Ver menú digital
           </ActionLink>
@@ -392,6 +395,9 @@ export default function OwnerPresentationPage() {
         <ActionRow>
           <ActionLink href="/" variant="gold">
             Abrir juego
+          </ActionLink>
+          <ActionLink href="/request-update" variant="ceramic">
+            Enviar solicitud
           </ActionLink>
           <ActionLink href="/menu" variant="ceramic">
             Abrir menú
