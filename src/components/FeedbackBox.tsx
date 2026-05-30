@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import appTheme from "@/config/theme";
@@ -6,30 +6,23 @@ import appTheme from "@/config/theme";
 /**
  * Lightweight feedback box.
  *
- * On submit, opens the user's mail client with a pre-filled message to
- * Anthony. Nothing is stored anywhere — no backend, no database.
+ * On submit, posts feedback to the existing owner request intake endpoint
+ * so Anthony receives the message by email.
  *
  * Pass `pageSource` so messages tell us which page the feedback came from.
  */
 
-const FEEDBACK_EMAIL = "anthonycolmenares92@gmail.com";
-const FEEDBACK_SUBJECT = "Colattao Feedback";
-
 type FeedbackType =
-  | "General"
-  | "Juego"
-  | "Menú"
-  | "Stickers"
-  | "Presentación"
-  | "Idea futura";
+  | "Question for Anthony"
+  | "Menu update"
+  | "Game idea"
+  | "Website idea";
 
-const FEEDBACK_TYPES: FeedbackType[] = [
-  "General",
-  "Juego",
-  "Menú",
-  "Stickers",
-  "Presentación",
-  "Idea futura",
+const FEEDBACK_TYPES: Array<{ label: string; value: FeedbackType }> = [
+  { label: "General", value: "Question for Anthony" },
+  { label: "Menú", value: "Menu update" },
+  { label: "Juego", value: "Game idea" },
+  { label: "Website", value: "Website idea" },
 ];
 
 type Variant = "light" | "dark";
@@ -46,35 +39,50 @@ export default function FeedbackBox({
   title?: string;
 }) {
   const [name, setName] = useState("");
-  const [type, setType] = useState<FeedbackType>("General");
+  const [type, setType] = useState<FeedbackType>("Question for Anthony");
   const [comment, setComment] = useState("");
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!comment.trim()) return;
 
-    const currentUrl =
-      typeof window !== "undefined" ? window.location.href : "";
+    setStatus("loading");
 
-    const bodyLines = [
-      `Nombre: ${name.trim() || "(no incluido)"}`,
-      `Tipo: ${type}`,
-      `Comentario:`,
-      comment.trim(),
-      "",
-      `Página: ${pageSource ?? "(no especificada)"}`,
-      `URL: ${currentUrl}`,
-    ];
+    const currentUrl = typeof window !== "undefined" ? window.location.href : "";
 
-    const mailto = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent(
-      FEEDBACK_SUBJECT,
-    )}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
+    const formData = new FormData();
+    formData.set("name", name.trim() || "Anonymous feedback");
+    formData.set("contactInfo", "No contact provided");
+    formData.set("requestType", type);
+    formData.set("priority", "Normal");
+    formData.set(
+      "message",
+      [
+        `Feedback type: ${type}`,
+        `Page: ${pageSource ?? "(not specified)"}`,
+        "",
+        comment.trim(),
+      ].join("\n"),
+    );
+    formData.set("sourcePage", currentUrl || pageSource || "feedback-box");
+    formData.set("company", "");
 
-    if (typeof window !== "undefined") {
-      window.location.href = mailto;
+    try {
+      const response = await fetch("/api/owner-requests", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+    } catch {
+      setStatus("error");
     }
-    setSent(true);
   };
 
   const isDark = variant === "dark";
@@ -109,14 +117,13 @@ export default function FeedbackBox({
         {title}
       </h3>
 
-      {sent ? (
+      {status === "success" ? (
         <p
           className={`mt-3 text-center text-[12.5px] ${
             isDark ? "text-amber-100/85" : "text-[var(--col-espresso)]"
           }`}
         >
-          Gracias. Su correo se abrió listo para enviarse — solo presione
-          enviar para que el comentario llegue a Anthony.
+          Comentario enviado. Anthony recibirá una notificación por correo.
         </p>
       ) : (
         <form onSubmit={onSubmit} className="mt-3 space-y-2.5">
@@ -146,8 +153,8 @@ export default function FeedbackBox({
               className={inputClass}
             >
               {FEEDBACK_TYPES.map((t) => (
-                <option key={t} value={t} className="text-[var(--col-espresso)]">
-                  {t}
+                <option key={t.value} value={t.value} className="text-[var(--col-espresso)]">
+                  {t.label}
                 </option>
               ))}
             </select>
@@ -162,18 +169,28 @@ export default function FeedbackBox({
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows={4}
-              placeholder="Cuéntenos qué piensa…"
+              placeholder="Cuéntenos qué piensa..."
               className={inputClass}
               required
             />
           </div>
 
+          {status === "error" ? (
+            <p
+              className={`text-[12px] ${
+                isDark ? "text-amber-100/90" : "text-[var(--col-espresso)]"
+              }`}
+            >
+              No se pudo enviar el comentario. Intente de nuevo.
+            </p>
+          ) : null}
+
           <button
             type="submit"
-            disabled={!comment.trim()}
+            disabled={!comment.trim() || status === "loading"}
             className="btn-gold mt-1 w-full rounded-full px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] disabled:cursor-not-allowed disabled:opacity-55"
           >
-            {appTheme.ui.feedbackButtonText}
+            {status === "loading" ? "Enviando..." : appTheme.ui.feedbackButtonText}
           </button>
         </form>
       )}

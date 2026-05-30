@@ -1,7 +1,6 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
-import FeedbackBox from "@/components/FeedbackBox";
 import CustomerHeader from "@/components/CustomerHeader";
 import appTheme from "@/config/theme";
 
@@ -260,9 +259,6 @@ export default function MenuPage() {
       </div>
 
       <footer className="px-5 pb-7 pt-3 text-center">
-        <div className="mb-5 text-left">
-          <FeedbackBox pageSource="menu" variant="light" />
-        </div>
 
         <Link
           href="/"
@@ -295,4 +291,5 @@ export default function MenuPage() {
     </main>
   );
 }
+
 
