@@ -44,3 +44,4 @@ _local_secrets/
 .env.local
 .env*.local
 
+.vercel
