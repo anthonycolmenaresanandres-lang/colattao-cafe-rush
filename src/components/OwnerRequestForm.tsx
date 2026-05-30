@@ -117,10 +117,10 @@ export default function OwnerRequestForm() {
         </h2>
         <div className="ceramic-rule mx-auto my-4 w-2/3" />
         <p className="mx-auto max-w-md text-[13px] leading-relaxed text-[var(--col-espresso-3)]/85">
-          Request sent. Anthony will review it.
+          Solicitud enviada. Anthony recibirá una notificación por correo y revisará los detalles.
         </p>
         <p className="mx-auto mt-2 max-w-md text-[12px] italic leading-relaxed text-[var(--col-espresso-3)]/70">
-          Solicitud enviada. Anthony la revisarÃ¡.
+          Si adjuntó archivos, se enviaron con la solicitud.
         </p>
         <button
           type="button"
