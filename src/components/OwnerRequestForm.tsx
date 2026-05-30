@@ -239,6 +239,9 @@ export default function OwnerRequestForm() {
         <p className="mt-1 text-[11px] text-[var(--col-espresso-3)]/70">
           Up to 5 files. Images and PDF only.
         </p>
+        <p className="mt-1 text-[11px] italic text-[var(--col-espresso-3)]/65">
+          Files are optional. If upload fails, Anthony will still receive your message.
+        </p>
 
         {selectedFileNames.length > 0 ? (
           <ul className="mt-2 space-y-1 text-[11px] text-[var(--col-espresso-3)]/85">

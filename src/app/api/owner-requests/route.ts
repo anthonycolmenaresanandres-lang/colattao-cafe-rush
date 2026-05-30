@@ -66,7 +66,6 @@ function envDiagnostics() {
 
 function missingEnvVars() {
   const missing: string[] = [];
-  if (!process.env.BLOB_READ_WRITE_TOKEN) missing.push("BLOB_READ_WRITE_TOKEN");
   if (!process.env.RESEND_API_KEY) missing.push("RESEND_API_KEY");
   if (!process.env.OWNER_NOTIFICATION_EMAIL) missing.push("OWNER_NOTIFICATION_EMAIL");
   if (!process.env.FROM_EMAIL) missing.push("FROM_EMAIL");
@@ -169,13 +168,20 @@ export async function POST(request: Request) {
   }
 
   let uploadedFileUrls: string[] = [];
-  try {
-    uploadedFileUrls = await uploadFiles(files);
-  } catch (error) {
-    console.error("[owner-requests] Blob upload failed", {
-      message: error instanceof Error ? error.message : "unknown_blob_error",
-    });
-    return NextResponse.json({ ok: false, reason: "upload_failed" }, { status: 500 });
+  let uploadNote: string | null = null;
+
+  if (files.length > 0 && !process.env.BLOB_READ_WRITE_TOKEN) {
+    uploadNote = "File upload was skipped because Blob storage is not configured.";
+  } else if (files.length > 0 && process.env.BLOB_READ_WRITE_TOKEN) {
+    try {
+      uploadedFileUrls = await uploadFiles(files);
+    } catch (error) {
+      console.error("[owner-requests] Blob upload failed", {
+        message: error instanceof Error ? error.message : "unknown_blob_error",
+      });
+      uploadNote =
+        "Files were attached, but upload failed. Please ask the owner to resend files by email.";
+    }
   }
 
   const ownerEmail = process.env.OWNER_NOTIFICATION_EMAIL!;
@@ -199,6 +205,7 @@ export async function POST(request: Request) {
     "",
     "Uploaded file links:",
     linksBlock,
+    ...(uploadNote ? ["", `Upload note: ${uploadNote}`] : []),
     "",
     `Source page URL: ${sourcePage}`,
     `Timestamp: ${submittedAt}`,
@@ -220,6 +227,7 @@ export async function POST(request: Request) {
     <p><strong>Message:</strong><br/>${escapeHtml(message).replaceAll("\n", "<br/>")}</p>
     <h3>Uploaded file links</h3>
     ${htmlLinks}
+    ${uploadNote ? `<p><strong>Upload note:</strong> ${escapeHtml(uploadNote)}</p>` : ""}
     <p><strong>Source page URL:</strong> ${escapeHtml(sourcePage)}</p>
     <p><strong>Timestamp:</strong> ${escapeHtml(submittedAt)}</p>
   `;
