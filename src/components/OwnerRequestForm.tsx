@@ -127,7 +127,7 @@ export default function OwnerRequestForm() {
           onClick={resetForm}
           className="btn-ghost mt-6 rounded-full px-6 py-2.5 text-[12px] font-bold uppercase tracking-[0.18em]"
         >
-          Enviar otra Â· Send another
+          Enviar otra · Send another
         </button>
       </section>
     );
@@ -138,7 +138,7 @@ export default function OwnerRequestForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="owner-name" className={labelClass}>
-            Nombre Â· Name
+            Nombre · Name
           </label>
           <input
             id="owner-name"
@@ -154,7 +154,7 @@ export default function OwnerRequestForm() {
 
         <div>
           <label htmlFor="owner-contact" className={labelClass}>
-            Correo o telÃ©fono Â· Email or phone
+            Correo o teléfono · Email or phone
           </label>
           <input
             id="owner-contact"
@@ -172,7 +172,7 @@ export default function OwnerRequestForm() {
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div>
           <label htmlFor="owner-type" className={labelClass}>
-            Tipo de solicitud Â· Request type
+            Tipo de solicitud · Request type
           </label>
           <select
             id="owner-type"
@@ -191,7 +191,7 @@ export default function OwnerRequestForm() {
 
         <div>
           <label htmlFor="owner-priority" className={labelClass}>
-            Prioridad Â· Priority
+            Prioridad · Priority
           </label>
           <select
             id="owner-priority"
@@ -211,7 +211,7 @@ export default function OwnerRequestForm() {
 
       <div className="mt-4">
         <label htmlFor="owner-message" className={labelClass}>
-          Mensaje Â· Message
+          Mensaje · Message
         </label>
         <textarea
           id="owner-message"
@@ -219,14 +219,14 @@ export default function OwnerRequestForm() {
           onChange={(event) => setMessage(event.target.value)}
           rows={5}
           className={fieldClass}
-          placeholder="Describa su solicitud aquÃ­â€¦"
+          placeholder="Describa su solicitud aquí…"
           required
         />
       </div>
 
       <div className="mt-4">
         <label htmlFor="owner-files" className={labelClass}>
-          Archivos (opcional) Â· Files (optional)
+          Archivos (opcional) · Files (optional)
         </label>
         <input
           id="owner-files"
@@ -271,7 +271,7 @@ export default function OwnerRequestForm() {
         disabled={status === "submitting" || !isValid}
         className="btn-gold mt-6 w-full rounded-full px-5 py-3 text-[12px] font-bold uppercase tracking-[0.18em] disabled:cursor-not-allowed disabled:opacity-55"
       >
-        {status === "submitting" ? "Enviandoâ€¦ Â· Sendingâ€¦" : "Enviar solicitud Â· Send request"}
+        {status === "submitting" ? "Enviando… · Sending…" : "Enviar solicitud · Send request"}
       </button>
 
       {status === "error" ? (
@@ -286,11 +286,13 @@ export default function OwnerRequestForm() {
           Anthony can review them. Do not upload sensitive payment or personal customer information.
         </p>
         <p className="mt-2 italic">
-          Este formulario envÃ­a su solicitud y archivos a Anthony por correo. Los archivos se guardan
-          solo para que Anthony pueda revisarlos. No suba informaciÃ³n sensible de pagos ni datos
+          Este formulario envía su solicitud y archivos a Anthony por correo. Los archivos se guardan
+          solo para que Anthony pueda revisarlos. No suba información sensible de pagos ni datos
           personales de clientes.
         </p>
       </div>
     </form>
   );
 }
+
+
