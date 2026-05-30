@@ -177,7 +177,14 @@ export async function POST(request: Request) {
 
   const files = formData
     .getAll("files")
-    .filter((value): value is File => value instanceof File && value.size > 0);
+    .filter(
+      (value): value is File =>
+        typeof value === "object" &&
+        value !== null &&
+        "size" in value &&
+        (value as File).size > 0 &&
+        "name" in value,
+    );
 
   if (files.length > MAX_FILES) {
     return NextResponse.json({ ok: false, reason: "too_many_files" }, { status: 400 });

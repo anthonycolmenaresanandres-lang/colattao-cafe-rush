@@ -1,6 +1,12 @@
 # HANDOFF
 
 ## STARTED
+- [2026-05-30 07:37:53] Session started
+- [2026-05-30 07:36:29] Session started
+- [2026-05-30 07:35:07] Session started
+- [2026-05-30 07:33:08] Session started
+- [2026-05-30 07:28:55] Session started
+- [2026-05-30 07:24:30] Session started
 - [2026-05-23 16:28:01] Session started
 - [2026-05-23 16:22:06] Session started
 - [2026-05-23 16:19:11] Session started
@@ -25,6 +31,7 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-05-30 07:24:45] Pushed cleanup commit 7e2bb74 to origin/main.
 - [2026-05-23 16:24:33] Updated README with demo/deployment/QR instructions and added DEMO_TEST_CHECKLIST.md; verified Next.js build readiness
 - [2026-05-23 16:20:16] Updated CHECKPOINT.md with latest demo loop, asset status, social bonus behavior, build pass, and next phase recommendation
 - [2026-05-23 16:16:39] Added client-side bonus sharing flow to VisualFlashPass using Web Share API with clipboard fallback; kept base reward/cooldown unchanged
@@ -55,6 +62,10 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-05-30 07:37:53] Patch only files filter duck-typing check in owner-requests route, then build/commit/push.
+- [2026-05-30 07:36:29] Inspect frontend fetch headers and backend files filter logic.
+- [2026-05-30 07:28:58] Fetch latest production POST /api/owner-requests logs and extract safe email/blob diagnostics.
+- [2026-05-30 07:24:34] Push local .gitignore cleanup commit to origin/main and wait for manual upload test result.
 - [2026-05-23 16:28:02] Run git hygiene checks and create initial MVP commit for first deployment
 - [2026-05-23 16:19:11] Update CHECKPOINT.md with latest demo readiness/autonomous marketing flow
 - [2026-05-23 16:15:18] Add client-side bonus share flow to VisualFlashPass without changing cooldown logic
