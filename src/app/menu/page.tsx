@@ -69,73 +69,52 @@ export default function MenuPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#1b0e08]/25 via-transparent to-[#1b0e08]/30" />
       </div>
 
-      <header className="relative z-20 overflow-hidden border-b border-[#d2b27a]/35">
-        <div className="pointer-events-none absolute inset-0">
-          <Image
-            src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
-            alt=""
-            aria-hidden="true"
-            fill
-            sizes="470px"
-            className="object-cover object-[center_42%]"
-            priority
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(27,14,8,0.72)_0%,rgba(27,14,8,0.84)_48%,rgba(27,14,8,0.92)_100%)]" />
-          <div className="absolute inset-0 ring-1 ring-inset ring-[#f5c46b]/20" />
+      <header
+        className="sticky top-14 z-20 px-5 pb-4 pt-5 text-center"
+        style={{
+          background:
+            "linear-gradient(180deg, #1B0E08 0%, #1B0E08 70%, rgba(27,14,8,0.92) 100%)",
+          boxShadow: "0 16px 30px -18px rgba(0,0,0,0.75)",
+        }}
+      >
+        <Image
+          src={appTheme.brand.logoPath}
+          alt={appTheme.brand.displayName}
+          width={180}
+          height={70}
+          priority
+          className="mx-auto h-auto w-[150px] select-none drop-shadow-[0_0_18px_rgba(212,162,76,0.20)]"
+        />
+
+        <div className="mt-2 flex items-center justify-center gap-3">
+          <span className="h-px w-8 bg-gradient-to-r from-transparent to-amber-300/55" />
+          <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/80">
+            Digital Menu
+          </span>
+          <span className="h-px w-8 bg-gradient-to-l from-transparent to-amber-300/55" />
         </div>
 
-        <div className="relative z-10 px-5 pb-5 pt-5 text-center">
-          <Image
-            src={appTheme.brand.logoPath}
-            alt={appTheme.brand.displayName}
-            width={180}
-            height={70}
-            priority
-            className="mx-auto h-auto w-[150px] select-none drop-shadow-[0_0_18px_rgba(212,162,76,0.20)]"
-          />
+        <p className="mt-3 text-[11px] text-amber-100/65">
+          1115 Independence Blvd, Virginia Beach, VA 23455
+        </p>
+        <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-amber-200/55">
+          Tue-Fri 7-4 - Sat and Sun 8-4 - Mon Closed
+        </p>
 
-          <div className="mt-2 flex items-center justify-center gap-3">
-            <span className="h-px w-8 bg-gradient-to-r from-transparent to-amber-300/55" />
-            <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/85">
-              DIGITAL MENU
-            </span>
-            <span className="h-px w-8 bg-gradient-to-l from-transparent to-amber-300/55" />
-          </div>
-
-          <p className="mt-3 text-[11px] text-amber-100/70">
-            1115 Independence Blvd, Virginia Beach, VA 23455
-          </p>
-          <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-amber-200/60">
-            Tue-Fri 7-4 - Sat and Sun 8-4 - Mon Closed
-          </p>
-
-          <h1 className="mt-4 font-serif text-[1.75rem] leading-tight text-[#fff3d6]">
-            Slow coffee. Warm pastry.
-          </h1>
-          <p className="mt-2 text-sm text-amber-100/90">Ask what just came out fresh.</p>
-          <p className="mt-2 text-[11px] uppercase tracking-[0.2em] text-[#9eb8d2]">
-            Stay a little longer.
-          </p>
-
-          <nav
-            aria-label="Menu categories"
-            className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1"
-            style={{ scrollbarWidth: "none" }}
-          >
-            {menuCategories.map((c) => (
-              <a
-                key={c.id}
-                href={`#${c.id}`}
-                className="shrink-0 rounded-full border border-[#d2b27a]/65 bg-[#1b0e08]/45 px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-amber-100/90 shadow-[0_8px_16px_-12px_rgba(0,0,0,0.7)] transition-colors hover:bg-[#2a1208]/70"
-              >
-                {c.title}
-              </a>
-            ))}
-          </nav>
-        </div>
+        <nav
+          aria-label="Menu categories"
+          className="-mx-5 mt-4 flex gap-2 overflow-x-auto px-5 pb-1"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {menuCategories.map((c) => (
+            <a key={c.id} href={`#${c.id}`} className="menu-chip shrink-0">
+              {c.title}
+            </a>
+          ))}
+        </nav>
       </header>
 
-      <div className="relative z-10 flex-1 space-y-4 px-4 py-4">
+      <div className="relative z-10 flex-1 space-y-4 px-4 py-5">
         <section className="relative overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 py-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35 sm:px-6 sm:py-6">
           <div className="pointer-events-none absolute inset-0">
             <Image
@@ -146,14 +125,14 @@ export default function MenuPage() {
               sizes="470px"
               className="object-cover opacity-[0.1]"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.08)_0%,rgba(42,18,8,0.82)_52%,rgba(46,90,124,0.18)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.18)_0%,rgba(42,18,8,0.64)_48%,rgba(46,90,124,0.22)_100%)]" />
             <div className="absolute inset-0 ring-1 ring-inset ring-[#4b2412]/16" />
           </div>
           <div className="pointer-events-none absolute left-6 right-6 top-0 h-px bg-gradient-to-r from-transparent via-[#f5c46b]/45 to-transparent" />
 
           <div className="relative z-10 grid items-center gap-5 sm:grid-cols-[1.618fr_1fr]">
             <div className="order-2 sm:order-1">
-              <p className="text-[10px] uppercase tracking-[0.28em] text-amber-200/72">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-amber-200/70">
                 FROM THE COUNTER
               </p>
               <h2 className="mt-2 font-serif text-2xl leading-tight text-[#fff3d6] sm:text-[2rem]">
@@ -171,11 +150,11 @@ export default function MenuPage() {
             <figure className="order-1 sm:order-2">
               <div className="relative h-40 w-full overflow-hidden rounded-[1.15rem] border border-[#d2b27a]/45 shadow-[0_12px_24px_-16px_rgba(27,14,8,0.55)] sm:h-56">
                 <Image
-                  src="/assets/colattao/website-concept/real-cup-cake-pairing.png"
-                  alt="Colattao coffee and pastry pairing on ceramic tableware"
+                  src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
+                  alt="The Colattao lounge — owners and guests gathered by the fireplace, a warm community moment"
                   fill
                   sizes="(max-width: 640px) 100vw, 240px"
-                  className="object-cover object-center"
+                  className="object-cover object-[center_40%]"
                 />
                 <div className="pointer-events-none absolute inset-0 bg-[#1b0e08]/18" />
               </div>
