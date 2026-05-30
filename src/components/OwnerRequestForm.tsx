@@ -1,48 +1,23 @@
-"use client";
+﻿"use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-/**
- * Owner request intake form — Phase 1 (database save).
- *
- * On submit, POSTs to /api/owner-requests which saves the request to a
- * private database (Supabase) when REQUESTS_DB_ENABLED is configured.
- *
- * Graceful degradation:
- *   - If the server reports the persisted flow is not enabled/configured
- *     (HTTP 503), the form falls back to a demo confirmation — nothing is
- *     sent or stored.
- *   - On validation/server errors, a retry message + mailto fallback hint
- *     is shown.
- *
- * No file uploads, no email/SMS, no admin dashboard in this phase.
- * No localStorage / cookies are used.
- */
-
-type Status = "idle" | "submitting" | "success" | "demo" | "error";
-
-// Demo access code. Reads a public env value if provided, else a fallback.
-// NOTE: this is a lightweight client-side gate for the demo only — it is NOT
-// real authentication. The final version must use server-side auth.
-const ACCESS_CODE =
-  process.env.NEXT_PUBLIC_OWNER_REQUEST_DEMO_CODE || "COLATTAO";
+type Status = "idle" | "submitting" | "success" | "error";
 
 const REQUEST_TYPES = [
-  "Menú",
-  "Precio",
-  "Producto",
-  "Foto",
-  "Sticker",
-  "Sitio web",
-  "Juego",
-  "Promoción",
-  "Otro",
+  "Menu update",
+  "Price change",
+  "New item",
+  "Remove item",
+  "Photo/design upload",
+  "Website idea",
+  "Game idea",
+  "Question for Anthony",
 ] as const;
 
-const PRIORITIES = ["Baja", "Normal", "Urgente"] as const;
+const PRIORITIES = ["Low", "Normal", "Urgent"] as const;
 
-type RequestType = (typeof REQUEST_TYPES)[number];
-type Priority = (typeof PRIORITIES)[number];
+const MAX_FILES = 5;
 
 const labelClass =
   "mb-1 block text-[10px] uppercase tracking-[0.22em] text-[var(--col-gold-deep)]";
@@ -50,209 +25,109 @@ const fieldClass =
   "w-full rounded-md border border-[var(--col-gold-deep)]/30 bg-white/70 px-3 py-2 text-[13px] text-[var(--col-espresso)] placeholder:text-[var(--col-espresso-3)]/50 focus:border-[var(--col-gold-deep)]/70 focus:outline-none";
 
 export default function OwnerRequestForm() {
-  const [type, setType] = useState<RequestType>("Menú");
-  const [priority, setPriority] = useState<Priority>("Normal");
-  const [whatChanges, setWhatChanges] = useState("");
-  const [currentSection, setCurrentSection] = useState("");
-  const [newDetail, setNewDetail] = useState("");
-  const [notes, setNotes] = useState("");
-  const [contactName, setContactName] = useState("");
-  const [contact, setContact] = useState("");
-  const [company, setCompany] = useState(""); // honeypot — stays empty for humans
+  const [name, setName] = useState("");
+  const [contactInfo, setContactInfo] = useState("");
+  const [requestType, setRequestType] = useState<(typeof REQUEST_TYPES)[number]>("Menu update");
+  const [priority, setPriority] = useState<(typeof PRIORITIES)[number]>("Normal");
+  const [message, setMessage] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [company, setCompany] = useState("");
   const [status, setStatus] = useState<Status>("idle");
-  const [refId, setRefId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // ── Owner/staff access gate (demo only — not real auth) ──
-  const [unlocked, setUnlocked] = useState(false);
-  const [codeInput, setCodeInput] = useState("");
-  const [codeError, setCodeError] = useState(false);
+  const selectedFileNames = useMemo(() => files.map((file) => file.name), [files]);
 
-  const onUnlock = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Compare trimmed + case-insensitive; code is never stored anywhere.
-    if (codeInput.trim().toLowerCase() === ACCESS_CODE.trim().toLowerCase()) {
-      setUnlocked(true);
-      setCodeError(false);
-      setCodeInput("");
-    } else {
-      setCodeError(true);
-    }
-  };
+  const isValid = name.trim() && contactInfo.trim() && message.trim();
 
   const resetForm = () => {
-    setType("Menú");
+    setName("");
+    setContactInfo("");
+    setRequestType("Menu update");
     setPriority("Normal");
-    setWhatChanges("");
-    setCurrentSection("");
-    setNewDetail("");
-    setNotes("");
-    setContactName("");
-    setContact("");
-    setRefId(null);
+    setMessage("");
+    setFiles([]);
+    setCompany("");
+    setErrorMessage("");
     setStatus("idle");
   };
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (status === "submitting") return;
-    if (!whatChanges.trim()) return;
+  const onFilesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = Array.from(event.target.files ?? []);
+    setFiles(selected.slice(0, MAX_FILES));
+  };
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!isValid || status === "submitting") return;
 
     setStatus("submitting");
+    setErrorMessage("");
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("contactInfo", contactInfo);
+    formData.append("requestType", requestType);
+    formData.append("priority", priority);
+    formData.append("message", message);
+    formData.append("sourcePage", window.location.href);
+    formData.append("company", company);
+
+    for (const file of files) {
+      formData.append("files", file);
+    }
 
     try {
-      const res = await fetch("/api/owner-requests", {
+      const response = await fetch("/api/owner-requests", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          requestType: type,
-          priority,
-          whatChanges,
-          currentSection,
-          newDetail,
-          notes,
-          contactName,
-          contactInfo: contact,
-          sourcePage: "request-update",
-          company, // honeypot
-        }),
+        body: formData,
       });
 
-      // Persisted flow not enabled/configured → graceful demo fallback.
-      if (res.status === 503) {
-        setStatus("demo");
-        return;
-      }
-
-      const data = (await res.json().catch(() => null)) as
-        | { ok?: boolean; id?: string | null }
+      const payload = (await response.json().catch(() => null)) as
+        | { ok?: boolean; reason?: string; detail?: string }
         | null;
 
-      if (res.ok && data?.ok) {
-        setRefId(data.id ?? null);
+      if (response.ok && payload?.ok) {
         setStatus("success");
         return;
       }
 
+      if (response.status === 503) {
+        setErrorMessage(
+          "Service is not configured yet. Please set Blob and Resend environment variables.",
+        );
+      } else {
+        setErrorMessage(payload?.detail || "No se pudo enviar la solicitud. Intente de nuevo.");
+      }
       setStatus("error");
     } catch {
+      setErrorMessage("Network error. Please try again.");
       setStatus("error");
     }
   };
 
-  // ── Access gate (shown first, before the form) ──
-  if (!unlocked) {
-    return (
-      <form onSubmit={onUnlock} className="menu-card px-6 py-8 text-center">
-        <p className="brand-eyebrow text-[var(--col-gold-deep)]">Owner access</p>
-        <h2
-          className="brand-wordmark mt-2 text-[24px] text-[var(--col-espresso)]"
-          style={{ letterSpacing: "0.02em" }}
-        >
-          Acceso de dueño
-        </h2>
-        <div className="ceramic-rule mx-auto my-4 w-2/3" />
-        <p className="mx-auto max-w-sm text-[12px] leading-relaxed text-[var(--col-espresso-3)]/80">
-          Solo para dueños o staff autorizado de Colattao.
-        </p>
-
-        <div className="mx-auto mt-5 max-w-xs text-left">
-          <label htmlFor="rq-code" className={labelClass}>
-            Código de acceso
-          </label>
-          <input
-            id="rq-code"
-            type="password"
-            value={codeInput}
-            onChange={(e) => {
-              setCodeInput(e.target.value);
-              if (codeError) setCodeError(false);
-            }}
-            placeholder="••••••"
-            autoComplete="off"
-            className={fieldClass}
-          />
-        </div>
-
-        {codeError ? (
-          <p className="mt-3 text-[12px] font-semibold text-[var(--col-terracotta-2)]">
-            Código incorrecto. Inténtalo de nuevo.
-          </p>
-        ) : null}
-
-        <button
-          type="submit"
-          className="btn-gold mx-auto mt-5 block rounded-full px-6 py-2.5 text-[12px] font-bold uppercase tracking-[0.18em]"
-        >
-          Entrar · Enter
-        </button>
-
-        <p className="mt-5 text-[11px] italic leading-relaxed text-[var(--col-espresso-3)]/65">
-          Demo access only. Final version should use real authentication.
-        </p>
-      </form>
-    );
-  }
-
-  // ── Success (saved to DB) ──
   if (status === "success") {
     return (
       <section className="menu-card px-6 py-8 text-center">
-        <p className="brand-eyebrow text-[var(--col-gold-deep)]">Solicitud recibida</p>
+        <p className="brand-eyebrow text-[var(--col-gold-deep)]">Solicitud enviada</p>
         <h2
           className="brand-wordmark mt-2 text-[24px] text-[var(--col-espresso)]"
           style={{ letterSpacing: "0.02em" }}
         >
-          ¡Gracias!
+          Request sent
         </h2>
         <div className="ceramic-rule mx-auto my-4 w-2/3" />
         <p className="mx-auto max-w-md text-[13px] leading-relaxed text-[var(--col-espresso-3)]/85">
-          Su solicitud se guardó de forma privada y Anthony le dará seguimiento.
+          Request sent. Anthony will review it.
         </p>
         <p className="mx-auto mt-2 max-w-md text-[12px] italic leading-relaxed text-[var(--col-espresso-3)]/70">
-          Your request was saved privately. Anthony will follow up.
-        </p>
-        {refId ? (
-          <p className="mt-3 font-mono text-[12px] text-[var(--col-espresso)]">
-            Ref: {refId.slice(0, 8).toUpperCase()}
-          </p>
-        ) : null}
-        <button
-          type="button"
-          onClick={resetForm}
-          className="btn-ghost mt-6 rounded-full px-6 py-2.5 text-[12px] font-bold uppercase tracking-[0.18em]"
-        >
-          Enviar otra · Send another
-        </button>
-      </section>
-    );
-  }
-
-  // ── Demo fallback (persisted flow not enabled) ──
-  if (status === "demo") {
-    return (
-      <section className="menu-card px-6 py-8 text-center">
-        <p className="brand-eyebrow text-[var(--col-gold-deep)]">Modo demostración</p>
-        <h2
-          className="brand-wordmark mt-2 text-[24px] text-[var(--col-espresso)]"
-          style={{ letterSpacing: "0.02em" }}
-        >
-          Solicitud capturada
-        </h2>
-        <div className="ceramic-rule mx-auto my-4 w-2/3" />
-        <p className="mx-auto max-w-md text-[13px] leading-relaxed text-[var(--col-espresso-3)]/85">
-          Request captured in demo mode. In the final version, Anthony will receive this instantly
-          and it will be saved in the request dashboard.
-        </p>
-        <p className="mx-auto mt-3 max-w-md text-[12px] italic leading-relaxed text-[var(--col-espresso-3)]/70">
-          Solicitud capturada en modo demostración. En la versión final, Anthony la recibirá al
-          instante y quedará guardada en el panel de solicitudes.
+          Solicitud enviada. Anthony la revisarÃ¡.
         </p>
         <button
           type="button"
           onClick={resetForm}
           className="btn-ghost mt-6 rounded-full px-6 py-2.5 text-[12px] font-bold uppercase tracking-[0.18em]"
         >
-          Enviar otra · Send another
+          Enviar otra Â· Send another
         </button>
       </section>
     );
@@ -262,191 +137,160 @@ export default function OwnerRequestForm() {
     <form onSubmit={onSubmit} className="menu-card px-5 py-6 sm:px-7">
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="rq-type" className={labelClass}>
-            Tipo de solicitud · Request type
+          <label htmlFor="owner-name" className={labelClass}>
+            Nombre Â· Name
           </label>
-          <select
-            id="rq-type"
-            value={type}
-            onChange={(e) => setType(e.target.value as RequestType)}
+          <input
+            id="owner-name"
+            type="text"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
             className={fieldClass}
-          >
-            {REQUEST_TYPES.map((t) => (
-              <option key={t} value={t} className="text-[var(--col-espresso)]">
-                {t}
-              </option>
-            ))}
-          </select>
+            placeholder="Nombre"
+            autoComplete="name"
+            required
+          />
         </div>
 
         <div>
-          <label htmlFor="rq-priority" className={labelClass}>
-            Prioridad · Priority
+          <label htmlFor="owner-contact" className={labelClass}>
+            Correo o telÃ©fono Â· Email or phone
           </label>
-          <select
-            id="rq-priority"
-            value={priority}
-            onChange={(e) => setPriority(e.target.value as Priority)}
+          <input
+            id="owner-contact"
+            type="text"
+            value={contactInfo}
+            onChange={(event) => setContactInfo(event.target.value)}
             className={fieldClass}
-          >
-            {PRIORITIES.map((p) => (
-              <option key={p} value={p} className="text-[var(--col-espresso)]">
-                {p}
-              </option>
-            ))}
-          </select>
+            placeholder="you@email.com / (555) 000-0000"
+            autoComplete="off"
+            required
+          />
         </div>
-      </div>
-
-      <div className="mt-4">
-        <label htmlFor="rq-what" className={labelClass}>
-          Qué necesita cambiar · What needs to change
-        </label>
-        <input
-          id="rq-what"
-          type="text"
-          value={whatChanges}
-          onChange={(e) => setWhatChanges(e.target.value)}
-          placeholder="Ej. Cambiar el precio del Churro Latte"
-          className={fieldClass}
-          autoComplete="off"
-        />
-      </div>
-
-      <div className="mt-4">
-        <label htmlFor="rq-current" className={labelClass}>
-          Ítem o sección actual · Current item or section
-        </label>
-        <input
-          id="rq-current"
-          type="text"
-          value={currentSection}
-          onChange={(e) => setCurrentSection(e.target.value)}
-          placeholder="Ej. Favoritos → Churro Latte"
-          className={fieldClass}
-          autoComplete="off"
-        />
-      </div>
-
-      <div className="mt-4">
-        <label htmlFor="rq-new" className={labelClass}>
-          Nuevo texto, precio o detalle · New text, price, or detail
-        </label>
-        <textarea
-          id="rq-new"
-          value={newDetail}
-          onChange={(e) => setNewDetail(e.target.value)}
-          rows={3}
-          placeholder="Ej. Nuevo precio: $8.50"
-          className={fieldClass}
-        />
-      </div>
-
-      <div className="mt-4">
-        <label htmlFor="rq-notes" className={labelClass}>
-          Notas · Notes
-        </label>
-        <textarea
-          id="rq-notes"
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={3}
-          placeholder="Cualquier detalle adicional…"
-          className={fieldClass}
-        />
       </div>
 
       <div className="mt-4 grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="rq-name" className={labelClass}>
-            Nombre de contacto · Contact name
+          <label htmlFor="owner-type" className={labelClass}>
+            Tipo de solicitud Â· Request type
           </label>
-          <input
-            id="rq-name"
-            type="text"
-            value={contactName}
-            onChange={(e) => setContactName(e.target.value)}
-            placeholder="Su nombre"
+          <select
+            id="owner-type"
+            value={requestType}
+            onChange={(event) => setRequestType(event.target.value as (typeof REQUEST_TYPES)[number])}
             className={fieldClass}
-            autoComplete="off"
-          />
+            required
+          >
+            {REQUEST_TYPES.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
         </div>
+
         <div>
-          <label htmlFor="rq-contact" className={labelClass}>
-            Correo o teléfono · Email or phone
+          <label htmlFor="owner-priority" className={labelClass}>
+            Prioridad Â· Priority
           </label>
-          <input
-            id="rq-contact"
-            type="text"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            placeholder="Para dar seguimiento"
+          <select
+            id="owner-priority"
+            value={priority}
+            onChange={(event) => setPriority(event.target.value as (typeof PRIORITIES)[number])}
             className={fieldClass}
-            autoComplete="off"
-          />
+            required
+          >
+            {PRIORITIES.map((priorityOption) => (
+              <option key={priorityOption} value={priorityOption}>
+                {priorityOption}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
-      {/* Honeypot — hidden from humans; bots that fill it are silently ignored. */}
-      <div aria-hidden="true" className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden">
-        <label htmlFor="rq-company">Company</label>
+      <div className="mt-4">
+        <label htmlFor="owner-message" className={labelClass}>
+          Mensaje Â· Message
+        </label>
+        <textarea
+          id="owner-message"
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          rows={5}
+          className={fieldClass}
+          placeholder="Describa su solicitud aquÃ­â€¦"
+          required
+        />
+      </div>
+
+      <div className="mt-4">
+        <label htmlFor="owner-files" className={labelClass}>
+          Archivos (opcional) Â· Files (optional)
+        </label>
         <input
-          id="rq-company"
+          id="owner-files"
+          type="file"
+          multiple
+          accept="image/*,.pdf"
+          onChange={onFilesChange}
+          className="block w-full rounded-md border border-[var(--col-gold-deep)]/30 bg-white/70 px-3 py-2 text-[12px] text-[var(--col-espresso)] file:mr-3 file:rounded-full file:border-0 file:bg-[var(--col-gold)] file:px-3 file:py-1.5 file:text-[11px] file:font-semibold file:text-[var(--col-espresso)]"
+        />
+        <p className="mt-1 text-[11px] text-[var(--col-espresso-3)]/70">
+          Up to 5 files. Images and PDF only.
+        </p>
+
+        {selectedFileNames.length > 0 ? (
+          <ul className="mt-2 space-y-1 text-[11px] text-[var(--col-espresso-3)]/85">
+            {selectedFileNames.map((filename) => (
+              <li key={filename} className="rounded-md bg-[var(--col-parchment)]/60 px-2 py-1">
+                {filename}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+
+      <div
+        aria-hidden="true"
+        className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden"
+      >
+        <label htmlFor="owner-company">Company</label>
+        <input
+          id="owner-company"
           type="text"
           tabIndex={-1}
           autoComplete="off"
           value={company}
-          onChange={(e) => setCompany(e.target.value)}
+          onChange={(event) => setCompany(event.target.value)}
         />
-      </div>
-
-      {/* ── Future upload area (disabled placeholder) ── */}
-      <div
-        aria-disabled="true"
-        className="mt-5 cursor-not-allowed rounded-xl border border-dashed border-[var(--col-ceramic)]/40 bg-[var(--col-ceramic)]/5 px-4 py-5 text-center opacity-70"
-      >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--col-ceramic)]">
-          File upload coming next
-        </p>
-        <p className="mt-1.5 text-[12px] leading-relaxed text-[var(--col-espresso-3)]/75">
-          Soon you will be able to attach photos, menu screenshots, sticker files, or product
-          references.
-        </p>
-        <p className="mt-1 text-[11px] italic text-[var(--col-espresso-3)]/60">
-          Pronto podrá adjuntar fotos, capturas del menú, archivos de stickers o referencias de
-          producto.
-        </p>
       </div>
 
       <button
         type="submit"
-        disabled={status === "submitting" || !whatChanges.trim()}
+        disabled={status === "submitting" || !isValid}
         className="btn-gold mt-6 w-full rounded-full px-5 py-3 text-[12px] font-bold uppercase tracking-[0.18em] disabled:cursor-not-allowed disabled:opacity-55"
       >
-        {status === "submitting"
-          ? "Enviando… · Sending…"
-          : "Enviar solicitud · Send request"}
+        {status === "submitting" ? "Enviandoâ€¦ Â· Sendingâ€¦" : "Enviar solicitud Â· Send request"}
       </button>
 
       {status === "error" ? (
         <p className="mt-3 rounded-lg border border-[var(--col-terracotta)]/30 bg-[var(--col-terracotta)]/10 px-3 py-2 text-center text-[12px] font-semibold text-[var(--col-terracotta-2)]">
-          No se pudo enviar. Intente de nuevo, o escriba a{" "}
-          <a
-            href="mailto:anthonycolmenares92@gmail.com?subject=Colattao%20Update%20Request"
-            className="underline"
-          >
-            anthonycolmenares92@gmail.com
-          </a>
-          .
-          <span className="mt-1 block font-normal italic text-[var(--col-espresso-3)]/75">
-            Couldn&apos;t send. Please try again, or email us.
-          </span>
+          {errorMessage || "No se pudo enviar la solicitud."}
         </p>
       ) : null}
 
-      <p className="mt-3 text-center text-[11px] italic text-[var(--col-espresso-3)]/65">
-        No se recopila información de pago · No payment information is collected.
-      </p>
+      <div className="mt-4 rounded-lg border border-[var(--col-ceramic)]/25 bg-[var(--col-parchment)]/55 px-3 py-3 text-[11px] leading-relaxed text-[var(--col-espresso-3)]/80">
+        <p>
+          This form sends your request and uploaded files to Anthony by email. Files are stored only so
+          Anthony can review them. Do not upload sensitive payment or personal customer information.
+        </p>
+        <p className="mt-2 italic">
+          Este formulario envÃ­a su solicitud y archivos a Anthony por correo. Los archivos se guardan
+          solo para que Anthony pueda revisarlos. No suba informaciÃ³n sensible de pagos ni datos
+          personales de clientes.
+        </p>
+      </div>
     </form>
   );
 }

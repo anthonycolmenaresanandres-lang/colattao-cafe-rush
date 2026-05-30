@@ -1,145 +1,244 @@
+﻿import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
-import { getSupabaseAdmin, isRequestsDbEnabled } from "@/lib/supabaseServer";
+import { Resend } from "resend";
 
-// This handler performs a DB write — never cache it.
 export const dynamic = "force-dynamic";
 
-// Allowed request types (mirrors the form). Server-side allowlist.
-const ALLOWED_TYPES = new Set([
-  "Menú",
-  "Precio",
-  "Producto",
-  "Foto",
-  "Sticker",
-  "Sitio web",
-  "Juego",
-  "Promoción",
-  "Otro",
+const ALLOWED_REQUEST_TYPES = new Set([
+  "Menu update",
+  "Price change",
+  "New item",
+  "Remove item",
+  "Photo/design upload",
+  "Website idea",
+  "Game idea",
+  "Question for Anthony",
 ]);
 
-// Spanish UI priority label -> canonical enum value.
-const PRIORITY_MAP: Record<string, "low" | "normal" | "urgent"> = {
-  Baja: "low",
-  Normal: "normal",
-  Urgente: "urgent",
-};
+const ALLOWED_PRIORITIES = new Set(["Low", "Normal", "Urgent"]);
 
-const MAX_LEN = 4000;
+const ALLOWED_FILE_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/heic",
+  "image/heif",
+  "application/pdf",
+]);
 
-function clean(value: unknown): string {
+const MAX_TEXT_LEN = 4000;
+const MAX_FILES = 5;
+const MAX_FILE_SIZE_BYTES = 8 * 1024 * 1024;
+
+function cleanText(value: FormDataEntryValue | null, maxLen = MAX_TEXT_LEN) {
   if (typeof value !== "string") return "";
-  return value.trim().slice(0, MAX_LEN);
+  return value.trim().slice(0, maxLen);
 }
 
-type Payload = {
-  requestType?: unknown;
-  priority?: unknown;
-  whatChanges?: unknown;
-  currentSection?: unknown;
-  newDetail?: unknown;
-  notes?: unknown;
-  contactName?: unknown;
-  contactInfo?: unknown;
-  sourcePage?: unknown;
-  /** honeypot — must be empty for a real submission */
-  company?: unknown;
-};
+function sanitizeFilename(filename: string) {
+  return (
+    filename
+      .toLowerCase()
+      .replace(/[^a-z0-9._-]/g, "-")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "") || "upload"
+  );
+}
+
+function escapeHtml(input: string) {
+  return input
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
 
 function envDiagnostics() {
   return {
-    requestsDbEnabled: process.env.REQUESTS_DB_ENABLED === "true",
-    hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
-    hasSupabaseServiceRoleKey: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+    hasBlobToken: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+    hasResendApiKey: Boolean(process.env.RESEND_API_KEY),
+    hasOwnerNotificationEmail: Boolean(process.env.OWNER_NOTIFICATION_EMAIL),
+    hasFromEmail: Boolean(process.env.FROM_EMAIL),
   };
 }
 
+function missingEnvVars() {
+  const missing: string[] = [];
+  if (!process.env.BLOB_READ_WRITE_TOKEN) missing.push("BLOB_READ_WRITE_TOKEN");
+  if (!process.env.RESEND_API_KEY) missing.push("RESEND_API_KEY");
+  if (!process.env.OWNER_NOTIFICATION_EMAIL) missing.push("OWNER_NOTIFICATION_EMAIL");
+  if (!process.env.FROM_EMAIL) missing.push("FROM_EMAIL");
+  return missing;
+}
+
+function validateFile(file: File) {
+  if (!ALLOWED_FILE_TYPES.has(file.type)) {
+    return `Unsupported file type for "${file.name}". Allowed: images and PDF.`;
+  }
+  if (file.size > MAX_FILE_SIZE_BYTES) {
+    return `File "${file.name}" exceeds the 8MB limit.`;
+  }
+  return null;
+}
+
+async function uploadFiles(files: File[]) {
+  const timestamp = Date.now();
+  const uploadedUrls: string[] = [];
+
+  for (let index = 0; index < files.length; index += 1) {
+    const file = files[index];
+    const safeName = sanitizeFilename(file.name || `file-${index + 1}`);
+    const pathname = `owner-requests/${timestamp}-${index + 1}-${safeName}`;
+
+    const blob = await put(pathname, file, {
+      access: "public",
+      addRandomSuffix: true,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    });
+
+    uploadedUrls.push(blob.url);
+  }
+
+  return uploadedUrls;
+}
+
 export async function POST(request: Request) {
-  // If the persisted flow isn't enabled/configured, tell the client to
-  // fall back to demo behavior gracefully (no error noise).
-  if (!isRequestsDbEnabled()) {
-    console.warn("[owner-requests] DB path disabled or not configured", envDiagnostics());
-    return NextResponse.json(
-      { ok: false, reason: "disabled" },
-      { status: 503 },
-    );
+  const missing = missingEnvVars();
+  if (missing.length > 0) {
+    console.warn("[owner-requests] Missing environment variables", {
+      missing,
+      ...envDiagnostics(),
+    });
+    return NextResponse.json({ ok: false, reason: "not_configured" }, { status: 503 });
   }
 
-  let body: Payload;
+  let formData: FormData;
   try {
-    body = (await request.json()) as Payload;
+    formData = await request.formData();
   } catch {
-    return NextResponse.json(
-      { ok: false, reason: "invalid_json" },
-      { status: 400 },
-    );
+    return NextResponse.json({ ok: false, reason: "invalid_form_data" }, { status: 400 });
   }
 
-  // Honeypot: real users never fill this hidden field.
-  if (clean(body.company)) {
-    // Pretend success to avoid tipping off bots; store nothing.
-    return NextResponse.json({ ok: true, id: null });
+  const honeypot = cleanText(formData.get("company"));
+  if (honeypot) {
+    return NextResponse.json({ ok: true, uploadedFileUrls: [] });
   }
 
-  const requestType = clean(body.requestType);
-  const whatChanges = clean(body.whatChanges);
-  const priorityLabel = clean(body.priority);
-  const priority = PRIORITY_MAP[priorityLabel] ?? "normal";
+  const name = cleanText(formData.get("name"), 200);
+  const contactInfo = cleanText(formData.get("contactInfo"), 300);
+  const requestType = cleanText(formData.get("requestType"), 80);
+  const priority = cleanText(formData.get("priority"), 20);
+  const message = cleanText(formData.get("message"));
+  const sourcePage = cleanText(formData.get("sourcePage"), 700) || "request-update";
+  const submittedAt = new Date().toISOString();
 
-  // Validation: required fields + allowed type.
-  if (!requestType || !ALLOWED_TYPES.has(requestType)) {
-    return NextResponse.json(
-      { ok: false, reason: "invalid_request_type" },
-      { status: 400 },
-    );
+  if (!name) {
+    return NextResponse.json({ ok: false, reason: "missing_name" }, { status: 400 });
   }
-  if (!whatChanges) {
-    return NextResponse.json(
-      { ok: false, reason: "missing_what_changes" },
-      { status: 400 },
-    );
+  if (!contactInfo) {
+    return NextResponse.json({ ok: false, reason: "missing_contact" }, { status: 400 });
   }
-
-  const supabase = getSupabaseAdmin();
-  if (!supabase) {
-    console.warn("[owner-requests] Supabase client unavailable", envDiagnostics());
-    return NextResponse.json(
-      { ok: false, reason: "not_configured" },
-      { status: 503 },
-    );
+  if (!ALLOWED_REQUEST_TYPES.has(requestType)) {
+    return NextResponse.json({ ok: false, reason: "invalid_request_type" }, { status: 400 });
+  }
+  if (!ALLOWED_PRIORITIES.has(priority)) {
+    return NextResponse.json({ ok: false, reason: "invalid_priority" }, { status: 400 });
+  }
+  if (!message) {
+    return NextResponse.json({ ok: false, reason: "missing_message" }, { status: 400 });
   }
 
-  const row = {
-    tenant: "colattao",
-    request_type: requestType,
-    priority,
-    what_changes: whatChanges,
-    current_section: clean(body.currentSection) || null,
-    new_detail: clean(body.newDetail) || null,
-    notes: clean(body.notes) || null,
-    contact_name: clean(body.contactName) || null,
-    contact_info: clean(body.contactInfo) || null,
-    source_page: clean(body.sourcePage) || "request-update",
-    user_agent: (request.headers.get("user-agent") ?? "").slice(0, 512) || null,
-  };
+  const files = formData
+    .getAll("files")
+    .filter((value): value is File => value instanceof File && value.size > 0);
 
-  const { data, error } = await supabase
-    .from("owner_requests")
-    .insert(row)
-    .select("id")
-    .single();
+  if (files.length > MAX_FILES) {
+    return NextResponse.json({ ok: false, reason: "too_many_files" }, { status: 400 });
+  }
+
+  for (const file of files) {
+    const validationError = validateFile(file);
+    if (validationError) {
+      return NextResponse.json(
+        { ok: false, reason: "invalid_file", detail: validationError },
+        { status: 400 },
+      );
+    }
+  }
+
+  let uploadedFileUrls: string[] = [];
+  try {
+    uploadedFileUrls = await uploadFiles(files);
+  } catch (error) {
+    console.error("[owner-requests] Blob upload failed", {
+      message: error instanceof Error ? error.message : "unknown_blob_error",
+    });
+    return NextResponse.json({ ok: false, reason: "upload_failed" }, { status: 500 });
+  }
+
+  const ownerEmail = process.env.OWNER_NOTIFICATION_EMAIL!;
+  const fromEmail = process.env.FROM_EMAIL!;
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const subject = `Colattao Owner Request: ${requestType}`;
+
+  const linksBlock =
+    uploadedFileUrls.length > 0
+      ? uploadedFileUrls.map((url) => `- ${url}`).join("\n")
+      : "- No files attached";
+
+  const textBody = [
+    "New Colattao owner request",
+    "",
+    `Name: ${name}`,
+    `Email or phone: ${contactInfo}`,
+    `Request type: ${requestType}`,
+    `Priority: ${priority}`,
+    `Message: ${message}`,
+    "",
+    "Uploaded file links:",
+    linksBlock,
+    "",
+    `Source page URL: ${sourcePage}`,
+    `Timestamp: ${submittedAt}`,
+  ].join("\n");
+
+  const htmlLinks =
+    uploadedFileUrls.length > 0
+      ? `<ul>${uploadedFileUrls
+          .map((url) => `<li><a href="${escapeHtml(url)}">${escapeHtml(url)}</a></li>`)
+          .join("")}</ul>`
+      : "<p>No files attached.</p>";
+
+  const htmlBody = `
+    <h2>New Colattao owner request</h2>
+    <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+    <p><strong>Email or phone:</strong> ${escapeHtml(contactInfo)}</p>
+    <p><strong>Request type:</strong> ${escapeHtml(requestType)}</p>
+    <p><strong>Priority:</strong> ${escapeHtml(priority)}</p>
+    <p><strong>Message:</strong><br/>${escapeHtml(message).replaceAll("\n", "<br/>")}</p>
+    <h3>Uploaded file links</h3>
+    ${htmlLinks}
+    <p><strong>Source page URL:</strong> ${escapeHtml(sourcePage)}</p>
+    <p><strong>Timestamp:</strong> ${escapeHtml(submittedAt)}</p>
+  `;
+
+  const { error } = await resend.emails.send({
+    from: fromEmail,
+    to: ownerEmail,
+    subject,
+    text: textBody,
+    html: htmlBody,
+  });
 
   if (error) {
-    console.error("[owner-requests] Insert failed", {
-      code: error.code,
+    console.error("[owner-requests] Email notification failed", {
+      name: error.name,
       message: error.message,
-      hint: error.hint,
-      details: error.details,
     });
-    return NextResponse.json(
-      { ok: false, reason: "insert_failed" },
-      { status: 500 },
-    );
+    return NextResponse.json({ ok: false, reason: "email_failed" }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, id: data?.id ?? null });
+  return NextResponse.json({ ok: true, uploadedFileUrls });
 }
