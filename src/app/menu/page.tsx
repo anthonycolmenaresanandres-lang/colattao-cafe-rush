@@ -2,8 +2,6 @@
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import FeedbackBox from "@/components/FeedbackBox";
-import MenuLikeButton from "@/components/MenuLikeButton";
-import MenuFavoritesSummary from "@/components/MenuFavoritesSummary";
 import appTheme from "@/config/theme";
 
 export const metadata = {
@@ -164,7 +162,6 @@ export default function MenuPage() {
             </figure>
           </div>
         </section>
-        <MenuFavoritesSummary />
 
         {menuCategories.map((category) => {
           const accent = CATEGORY_ACCENTS[category.id];
@@ -248,7 +245,6 @@ export default function MenuPage() {
                     <span className="shrink-0 pt-[1px] font-mono text-sm font-bold tracking-tight text-[var(--col-gold-deep)]">
                       {item.price ?? "ask"}
                     </span>
-                    <MenuLikeButton itemName={item.name} />
                   </li>
                 ))}
               </ul>
@@ -293,3 +289,4 @@ export default function MenuPage() {
     </main>
   );
 }
+
