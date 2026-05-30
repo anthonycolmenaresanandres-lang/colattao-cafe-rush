@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { GameWonPayload } from "@/types/game";
 import appTheme from "@/config/theme";
@@ -11,20 +11,20 @@ type VisualFlashPassProps = {
 /**
  * Post-win completion card.
  *
- * Visible UI is intentionally minimal for now — Colattao plans to
+ * Visible UI is intentionally minimal for now â€” Colattao plans to
  * configure rewards / promos / share mechanics later. The underlying
  * helper modules (`rewardConfig`, `rewardCooldown`) are preserved on
  * disk so we can re-enable the claim / share / cooldown flow without
  * rewriting it.
  *
  * `payload` is accepted to keep the React/Phaser bridge contract intact;
- * we surface the score so the player feels acknowledged.
+ * we surface the Score so the player feels acknowledged.
  */
 export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPassProps) {
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/65 px-4 py-6 backdrop-blur-sm">
       <section className="coffee-card w-full max-w-sm px-6 pb-7 pt-8 text-center">
-        {/* ── Brand lockup — text-based, premium typography ── */}
+        {/* â”€â”€ Brand lockup â€” text-based, premium typography â”€â”€ */}
         <div className="brand-wordmark text-[34px] leading-none text-[var(--col-espresso)]"
              style={{ letterSpacing: "0.18em" }}>
           COLATTAO
@@ -47,7 +47,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
           {appTheme.game.title} · Round Complete
         </p>
 
-        {/* ── Headline ──────────────────────────────────────── */}
+        {/* â”€â”€ Headline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <h2
           className="brand-wordmark mt-2 text-[30px] leading-tight text-[var(--col-espresso)]"
           style={{ letterSpacing: "0.04em" }}
@@ -57,12 +57,12 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
 
         <div className="ceramic-rule mx-auto my-4 w-3/4" />
 
-        {/* ── Subtext ───────────────────────────────────────── */}
+        {/* â”€â”€ Subtext â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <p className="text-[13px] leading-snug text-[var(--col-espresso-3)]/85">
           {appTheme.game.copy.winMessage}
         </p>
 
-        {/* ── Score acknowledgement ─────────────────────────── */}
+        {/* â”€â”€ Score acknowledgement â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="mt-4 inline-flex items-baseline gap-2 rounded-full border border-[var(--col-gold-deep)]/30 bg-white/55 px-4 py-1.5">
           <span className="text-[10px] uppercase tracking-[0.22em] text-[var(--col-espresso-3)]/75">
             Score
@@ -72,7 +72,7 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
           </span>
         </div>
 
-        {/* ── Single action ─────────────────────────────────── */}
+        {/* â”€â”€ Single action â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <button
           type="button"
           onClick={onPlayAgain}
@@ -84,3 +84,6 @@ export default function VisualFlashPass({ payload, onPlayAgain }: VisualFlashPas
     </div>
   );
 }
+
+
+

@@ -23,14 +23,17 @@ export default function GameCanvas() {
 
       const game = new Phaser.Game({
         type: Phaser.AUTO,
-        parent: hostRef.current,
-        width: 360,
-        height: 640,
+        parent: "game-container",
+        width: "100%",
+        height: "100%",
         backgroundColor: "#1B0E08",
         scene: [BootScene, DemoScene],
         scale: {
-          mode: Phaser.Scale.FIT,
+          mode: Phaser.Scale.RESIZE,
           autoCenter: Phaser.Scale.CENTER_BOTH,
+          parent: "game-container",
+          width: "100%",
+          height: "100%",
         },
       });
 
@@ -50,8 +53,9 @@ export default function GameCanvas() {
   return (
     <div className="game-shell w-full max-w-[460px]">
       <div
+        id="game-container"
         ref={hostRef}
-        className="mx-auto aspect-[9/16] w-full overflow-hidden rounded-[20px]"
+        className="mx-auto h-[calc(100dvh-112px)] max-h-[640px] min-h-[420px] w-full overflow-hidden rounded-[20px]"
         style={{ background: "#1B0E08" }}
       />
     </div>

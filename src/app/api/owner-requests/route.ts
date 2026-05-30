@@ -28,7 +28,7 @@ const ALLOWED_FILE_TYPES = new Set([
 ]);
 
 const MAX_TEXT_LEN = 4000;
-const MAX_FILES = 5;
+const MAX_FILES = 10;
 const MAX_FILE_SIZE_BYTES = 8 * 1024 * 1024;
 
 function cleanText(value: FormDataEntryValue | null, maxLen = MAX_TEXT_LEN) {
@@ -110,23 +110,27 @@ function getResendErrorDiagnostics(error: unknown) {
 
 async function uploadFiles(files: File[]) {
   const timestamp = Date.now();
-  const uploadedUrls: string[] = [];
-
-  for (let index = 0; index < files.length; index += 1) {
-    const file = files[index];
+  const uploads = files.map((file, index) => {
     const safeName = sanitizeFilename(file.name || `file-${index + 1}`);
     const pathname = `owner-requests/${timestamp}-${index + 1}-${safeName}`;
-
-    const blob = await put(pathname, file, {
+    return put(pathname, file, {
       access: "public",
       addRandomSuffix: true,
       token: process.env.BLOB_READ_WRITE_TOKEN,
     });
+  });
 
-    uploadedUrls.push(blob.url);
+  const settled = await Promise.allSettled(uploads);
+  const uploadedUrls = settled
+    .filter((result): result is PromiseFulfilledResult<Awaited<ReturnType<typeof put>>> => result.status === "fulfilled")
+    .map((result) => result.value.url);
+
+  const failedCount = settled.length - uploadedUrls.length;
+  if (failedCount > 0) {
+    console.error("[owner-requests] Blob upload partial failure", { failedCount });
   }
 
-  return uploadedUrls;
+  return { uploadedUrls, failedCount };
 }
 
 export async function POST(request: Request) {
@@ -206,12 +210,9 @@ export async function POST(request: Request) {
   if (files.length > 0 && !process.env.BLOB_READ_WRITE_TOKEN) {
     uploadNote = "File upload was skipped because Blob storage is not configured.";
   } else if (files.length > 0 && process.env.BLOB_READ_WRITE_TOKEN) {
-    try {
-      uploadedFileUrls = await uploadFiles(files);
-    } catch (error) {
-      console.error("[owner-requests] Blob upload failed", {
-        message: error instanceof Error ? error.message : "unknown_blob_error",
-      });
+    const uploadResult = await uploadFiles(files);
+    uploadedFileUrls = uploadResult.uploadedUrls;
+    if (uploadResult.failedCount > 0) {
       uploadNote =
         "Files were attached, but upload failed. Please ask the owner to resend files by email.";
     }
@@ -265,15 +266,20 @@ export async function POST(request: Request) {
     <p><strong>Timestamp:</strong> ${escapeHtml(submittedAt)}</p>
   `;
 
-  const { error } = await resend.emails.send({
-    from: fromEmail,
-    to: ownerEmail,
-    subject,
-    text: textBody,
-    html: htmlBody,
-  });
+  try {
+    const { error } = await resend.emails.send({
+      from: fromEmail,
+      to: ownerEmail,
+      subject,
+      text: textBody,
+      html: htmlBody,
+    });
 
-  if (error) {
+    if (error) {
+      console.error("[owner-requests] Email notification failed", getResendErrorDiagnostics(error));
+      return NextResponse.json({ ok: false, reason: "email_failed" }, { status: 500 });
+    }
+  } catch (error) {
     console.error("[owner-requests] Email notification failed", getResendErrorDiagnostics(error));
     return NextResponse.json({ ok: false, reason: "email_failed" }, { status: 500 });
   }

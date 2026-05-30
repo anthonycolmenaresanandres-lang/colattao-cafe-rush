@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
@@ -17,9 +17,15 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Colattao Café Rush",
+  title: "Colattao Coffee House | Menú y Recompensas",
   description:
-    "A premium mobile café game from Colattao Coffee House — Virginia Beach.",
+    "Explora nuestro menú digital y juega para desbloquear recompensas exclusivas en Colattao.",
+  openGraph: {
+    title: "Colattao Coffee House | Menú y Recompensas",
+    description:
+      "Explora nuestro menú digital y juega para desbloquear recompensas exclusivas en Colattao.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -44,3 +50,4 @@ export default function RootLayout({
     </html>
   );
 }
+

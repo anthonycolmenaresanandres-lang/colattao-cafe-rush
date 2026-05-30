@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import FeedbackBox from "@/components/FeedbackBox";
+import CustomerHeader from "@/components/CustomerHeader";
 import appTheme from "@/config/theme";
 
 export const metadata = {
@@ -39,7 +40,6 @@ const OWNER_UPDATE_MAILTO = `mailto:${OWNER_UPDATE_EMAIL}?subject=${encodeURICom
 // Decorative game-asset accents per category
 const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined> = {
   espresso: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
-  favorites: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
   matcha: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced matcha" },
   tea: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced drink" },
   cocina: { src: "/assets/colattao/items/croissant.png", alt: "Pastry" },
@@ -52,13 +52,13 @@ const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined>
 const CATEGORY_TEXTURES: Record<string, string> = {
   espresso: "/assets/colattao/menu/menu-eldorado-01.png",
   pastries: "/assets/colattao/menu/menu-eldorado-02.png",
-  favorites: "/assets/colattao/menu/menu-eldorado-03.png",
 };
 const DEFAULT_CATEGORY_TEXTURE = "/assets/colattao/menu/menu-eldorado-04.png";
 
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
+      <CustomerHeader />
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
           src="/assets/colattao/menu/menu-eldorado-04.png"
@@ -72,7 +72,7 @@ export default function MenuPage() {
       </div>
 
       <header
-        className="sticky top-0 z-20 px-5 pb-4 pt-5 text-center"
+        className="sticky top-14 z-20 px-5 pb-4 pt-5 text-center"
         style={{
           background:
             "linear-gradient(180deg, #1B0E08 0%, #1B0E08 70%, rgba(27,14,8,0.92) 100%)",
@@ -191,7 +191,7 @@ export default function MenuPage() {
                   className="text-[10px] uppercase text-[var(--col-gold-deep)]"
                   style={{ letterSpacing: "0.32em" }}
                 >
-                  La Carta
+                  Menu
                 </p>
                 {accent && (
                   <Image
@@ -222,7 +222,10 @@ export default function MenuPage() {
                   <li key={item.name} className="flex items-start gap-2 text-[var(--col-espresso)]">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline">
-                        <span className="font-semibold leading-tight">
+                        <span
+                          className="font-semibold leading-tight"
+                          style={{ textShadow: "0 1px 1px rgba(255,245,224,0.28)" }}
+                        >
                           {item.name}
                           {item.needsConfirmation && (
                             <span
@@ -237,12 +240,15 @@ export default function MenuPage() {
                         <span className="dotted-rule" />
                       </div>
                       {item.description && (
-                        <p className="mt-0.5 text-[11px] leading-snug text-[var(--col-espresso-3)]/75">
+                        <p className="mt-0.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
                           {item.description}
                         </p>
                       )}
                     </div>
-                    <span className="shrink-0 pt-[1px] font-mono text-sm font-bold tracking-tight text-[var(--col-gold-deep)]">
+                    <span
+                      className="shrink-0 pt-[1px] font-mono text-sm font-bold tracking-tight text-[var(--col-gold-deep)]"
+                      style={{ textShadow: "0 1px 1px rgba(255,245,224,0.25)" }}
+                    >
                       {item.price ?? "ask"}
                     </span>
                   </li>
@@ -277,13 +283,13 @@ export default function MenuPage() {
           href="/request-update"
           className="mt-2 block text-[10px] tracking-[0.16em] text-amber-200/40 underline decoration-amber-200/25 underline-offset-[3px] transition-colors hover:text-amber-200/70"
         >
-          Probar formulario de cambios
+          Try update request form
         </Link>
         <Link
           href="/website-concept"
           className="mt-2 block text-[10px] tracking-[0.16em] text-amber-200/35 underline decoration-amber-200/20 underline-offset-[3px] transition-colors hover:text-amber-200/60"
         >
-          Ver concepto de website
+          View website concept
         </Link>
       </footer>
     </main>

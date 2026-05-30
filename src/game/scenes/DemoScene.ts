@@ -374,16 +374,35 @@ export class DemoScene extends Phaser.Scene {
     rushTitle.setLetterSpacing(2);
 
     const subtitle = this.add
-      .text(width / 2, brandZone + playZone * 0.16, `Three levels. ${appTheme.game.subtitle}`, {
-        fontFamily: FONT_SANS,
-        fontSize: "12px",
-        color: "#F5E9D0",
-        align: "center",
-        wordWrap: { width: width - 80 },
-      })
+      .text(
+        width / 2,
+        brandZone + playZone * 0.16,
+        "Catch the items ☕🥐🍵\nAvoid the water 💧\n\nTap to start",
+        {
+          fontFamily: FONT_SANS,
+          fontSize: "12px",
+          color: "#F5E9D0",
+          align: "center",
+          wordWrap: { width: width - 100 },
+          lineSpacing: 4,
+        },
+      )
       .setOrigin(0.5)
-      .setAlpha(0.78);
+      .setAlpha(0.9);
     subtitle.setLetterSpacing(0.6);
+
+    const subtitleBounds = subtitle.getBounds();
+    const subtitleBg = this.add
+      .rectangle(
+        subtitleBounds.centerX,
+        subtitleBounds.centerY,
+        subtitleBounds.width + 26,
+        subtitleBounds.height + 20,
+        COLOR_ESPRESSO,
+        0.58,
+      )
+      .setStrokeStyle(1, COLOR_GOLD, 0.28);
+    subtitleBg.setDepth(subtitle.depth - 1);
 
     const ctaY = brandZone + playZone * 0.46;
     const ctaW = 180;
@@ -408,7 +427,7 @@ export class DemoScene extends Phaser.Scene {
     );
 
     const ctaLabel = this.add
-      .text(width / 2, ctaY, "Begin", {
+      .text(width / 2, ctaY, "Comenzar", {
         fontFamily: FONT_SERIF,
         fontSize: "22px",
         color: "#2A1208",
@@ -417,7 +436,7 @@ export class DemoScene extends Phaser.Scene {
     ctaLabel.setLetterSpacing(2);
 
     const ctaHint = this.add
-      .text(width / 2, ctaY + ctaH / 2 + 18, "Tap to start your round", {
+      .text(width / 2, ctaY + ctaH / 2 + 18, "Toca para iniciar la ronda", {
         fontFamily: FONT_SANS,
         fontSize: "10px",
         color: "#E9C988",
@@ -436,12 +455,16 @@ export class DemoScene extends Phaser.Scene {
       ease: "Sine.easeInOut",
     });
 
-    ctaBg.on("pointerdown", () => {
+    let startTriggered = false;
+    const startRoundFromOverlay = () => {
+      if (startTriggered) return;
+      startTriggered = true;
       veil.destroy();
       eyebrow.destroy();
       logo?.destroy();
       rule.destroy();
       rushTitle.destroy();
+      subtitleBg.destroy();
       subtitle.destroy();
       ctaGlow.destroy();
       ctaBg.destroy();
@@ -452,6 +475,11 @@ export class DemoScene extends Phaser.Scene {
       this.statusText?.setVisible(true);
       this.refreshHudForLevel();
       this.startRound();
+    };
+
+    this.input.once("pointerdown", startRoundFromOverlay);
+    ctaBg.on("pointerdown", () => {
+      startRoundFromOverlay();
     });
   }
 

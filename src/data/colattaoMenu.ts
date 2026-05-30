@@ -37,7 +37,7 @@ export const menuCategories: MenuCategory[] = [
     id: "favorites",
     title: "Favorites",
     items: [
-      { name: "Panela Café con Leche", price: "$6" },
+      { name: "Panela Coffee with Milk", price: "$6" },
       { name: "Churro Latte", price: "$8" },
       { name: "Dulce de Coco", price: "$7.50" },
       { name: "Dark Chocolate Habanero", price: "$7.50" },
@@ -70,7 +70,7 @@ export const menuCategories: MenuCategory[] = [
   },
   {
     id: "cocina",
-    title: "La Cocina",
+    title: "Kitchen",
     items: [
       { name: "Bacon Egg & Cheese", price: "$8.60" },
       { name: "California Sandwich", price: "$9.72" },

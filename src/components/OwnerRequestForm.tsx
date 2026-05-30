@@ -17,7 +17,8 @@ const REQUEST_TYPES = [
 
 const PRIORITIES = ["Low", "Normal", "Urgent"] as const;
 
-const MAX_FILES = 5;
+const MAX_FILES = 10;
+const MAX_TOTAL_FILE_SIZE_BYTES = 4 * 1024 * 1024;
 
 const labelClass =
   "mb-1 block text-[10px] uppercase tracking-[0.22em] text-[var(--col-gold-deep)]";
@@ -53,7 +54,20 @@ export default function OwnerRequestForm() {
 
   const onFilesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selected = Array.from(event.target.files ?? []);
-    setFiles(selected.slice(0, MAX_FILES));
+    const limitedSelection = selected.slice(0, MAX_FILES);
+    const totalSize = limitedSelection.reduce((sum, file) => sum + file.size, 0);
+
+    if (totalSize > MAX_TOTAL_FILE_SIZE_BYTES) {
+      setFiles([]);
+      setErrorMessage(
+        "Total file size exceeds 4MB. Please select fewer files or smaller images.",
+      );
+      event.target.value = "";
+      return;
+    }
+
+    setErrorMessage("");
+    setFiles(limitedSelection);
   };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -237,7 +251,7 @@ export default function OwnerRequestForm() {
           className="block w-full rounded-md border border-[var(--col-gold-deep)]/30 bg-white/70 px-3 py-2 text-[12px] text-[var(--col-espresso)] file:mr-3 file:rounded-full file:border-0 file:bg-[var(--col-gold)] file:px-3 file:py-1.5 file:text-[11px] file:font-semibold file:text-[var(--col-espresso)]"
         />
         <p className="mt-1 text-[11px] text-[var(--col-espresso-3)]/70">
-          Up to 5 files. Images and PDF only.
+          Up to 10 files. Max 4MB total.
         </p>
         <p className="mt-1 text-[11px] italic text-[var(--col-espresso-3)]/65">
           Files are optional. If upload fails, Anthony will still receive your message.
