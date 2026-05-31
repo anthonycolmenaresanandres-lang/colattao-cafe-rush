@@ -1,7 +1,6 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
-import CustomerHeader from "@/components/CustomerHeader";
 import appTheme from "@/config/theme";
 
 export const metadata = {
@@ -74,7 +73,23 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
-      <CustomerHeader />
+      <header className="sticky top-0 z-30 px-4 pb-3 pt-3">
+        <nav className="mx-auto flex w-full max-w-[430px] justify-center gap-3 rounded-full border border-[#d2b27a]/35 bg-[#1b0e08]/88 px-3 py-2 shadow-[0_10px_20px_-14px_rgba(0,0,0,0.85)] backdrop-blur-sm">
+          <Link
+            href="/"
+            className="rounded-full border border-[#d2b27a]/55 bg-transparent px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-100/90 transition-colors hover:bg-[#2a150d]/70"
+          >
+            Play
+          </Link>
+          <Link
+            href="/menu"
+            aria-current="page"
+            className="rounded-full border border-[#d2b27a]/80 bg-[#2a150d]/74 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ffe7b8] shadow-[0_8px_18px_-14px_rgba(0,0,0,0.85)]"
+          >
+            Menu
+          </Link>
+        </nav>
+      </header>
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
           src="/assets/colattao/menu/menu-eldorado-04.png"
