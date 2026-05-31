@@ -53,6 +53,24 @@ const CATEGORY_TEXTURES: Record<string, string> = {
 };
 const DEFAULT_CATEGORY_TEXTURE = "/assets/colattao/menu/menu-eldorado-04.png";
 
+type ItemDetail = {
+  flavorNotes?: string;
+  hotIced?: string;
+  milkOptions?: string;
+  pairingSuggestion?: string;
+  cashierNote?: string;
+};
+
+const ITEM_DETAILS: Record<string, ItemDetail> = {
+  // "House Brew": {
+  //   flavorNotes: "Owner to confirm",
+  //   hotIced: "Owner to confirm",
+  //   milkOptions: "Owner to confirm",
+  //   pairingSuggestion: "Owner to confirm",
+  //   cashierNote: "Owner to confirm",
+  // },
+};
+
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
@@ -245,6 +263,46 @@ export default function MenuPage() {
                         <p className="mt-0.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
                           {item.description}
                         </p>
+                      )}
+                      {ITEM_DETAILS[item.name] && (
+                        <details className="mt-1.5 group">
+                          <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/75 transition-colors hover:text-[var(--col-espresso-2)]">
+                            Details
+                            <span className="text-[9px] transition-transform group-open:rotate-180">▾</span>
+                          </summary>
+                          <div className="mt-1.5 rounded-xl border border-[#d2b27a]/45 bg-[#f8edd7]/70 px-2.5 py-2 text-[11px] leading-relaxed text-[var(--col-espresso-3)] shadow-[0_8px_16px_-14px_rgba(27,14,8,0.45)]">
+                            {ITEM_DETAILS[item.name].flavorNotes && (
+                              <p>
+                                <span className="font-semibold text-[var(--col-espresso)]">Flavor notes: </span>
+                                {ITEM_DETAILS[item.name].flavorNotes}
+                              </p>
+                            )}
+                            {ITEM_DETAILS[item.name].hotIced && (
+                              <p>
+                                <span className="font-semibold text-[var(--col-espresso)]">Hot/Iced: </span>
+                                {ITEM_DETAILS[item.name].hotIced}
+                              </p>
+                            )}
+                            {ITEM_DETAILS[item.name].milkOptions && (
+                              <p>
+                                <span className="font-semibold text-[var(--col-espresso)]">Milk options: </span>
+                                {ITEM_DETAILS[item.name].milkOptions}
+                              </p>
+                            )}
+                            {ITEM_DETAILS[item.name].pairingSuggestion && (
+                              <p>
+                                <span className="font-semibold text-[var(--col-espresso)]">Pairing: </span>
+                                {ITEM_DETAILS[item.name].pairingSuggestion}
+                              </p>
+                            )}
+                            {ITEM_DETAILS[item.name].cashierNote && (
+                              <p>
+                                <span className="font-semibold text-[var(--col-espresso)]">Cashier note: </span>
+                                {ITEM_DETAILS[item.name].cashierNote}
+                              </p>
+                            )}
+                          </div>
+                        </details>
                       )}
                     </div>
                     <span
