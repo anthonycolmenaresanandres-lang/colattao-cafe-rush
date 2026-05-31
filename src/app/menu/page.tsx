@@ -162,6 +162,9 @@ export default function MenuPage() {
           </div>
         </section>
 
+        {/* Deep-link target so /menu#menu (e.g. from the R&D lab) lands on the categories. */}
+        <div id="menu" aria-hidden="true" className="scroll-mt-32" />
+
         {menuCategories.map((category) => {
           const accent = CATEGORY_ACCENTS[category.id];
           const texture = CATEGORY_TEXTURES[category.id] ?? DEFAULT_CATEGORY_TEXTURE;

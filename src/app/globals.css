@@ -5,6 +5,20 @@
    Espresso · Cream Parchment · Terracotta · Soft Gold · Ceramic Blue
    ──────────────────────────────────────────────────────────── */
 
+html {
+  scroll-behavior: smooth;
+}
+
+/* R&D: Tap to Explore image button (responsive, aspect-preserving) */
+.tapExploreButton {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  margin: 0 auto;
+  cursor: pointer;
+}
+
 :root {
   /* Brand palette */
   --col-espresso: #1B0E08;
