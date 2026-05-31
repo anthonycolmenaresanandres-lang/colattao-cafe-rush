@@ -68,7 +68,15 @@ const EXPERIMENTS: Experiment[] = [
       "AI produces data (palette, menu, copy), never layout code. Same template + same config = same result every time. API usage stays low but high-impact.",
     outcome:
       "A new café goes from raw brand inputs to a working menu + two-button QR landing with zero hand-written per-client code.",
-    status: "Drafting",
+    status: "Testing live",
+    render: () => (
+      <Link
+        href="/research-and-development/colattao-go"
+        className="inline-flex items-center gap-2 rounded-full border border-[#92aecd66] bg-[#2e5a7c33] px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#dbe7f3] transition hover:bg-[#2e5a7c55] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f5c46b] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1b0e08]"
+      >
+        Abrir demo · Colattao Go
+      </Link>
+    ),
   },
 ];
 
