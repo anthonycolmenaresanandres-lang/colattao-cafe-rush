@@ -87,59 +87,58 @@ export default function MenuPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#1b0e08]/25 via-transparent to-[#1b0e08]/30" />
       </div>
 
-      <section className="relative z-10 overflow-hidden px-4 pb-6 pt-6">
-        <div className="relative overflow-hidden rounded-[1.6rem] border border-[#d2b27a]/35 shadow-[0_20px_40px_-24px_rgba(0,0,0,0.85)]">
+      <section className="relative z-10 overflow-hidden pb-6 pt-6">
+        <div className="pointer-events-none absolute inset-0">
           <Image
             src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
-            alt="Colattao lounge atmosphere"
+            alt=""
+            aria-hidden="true"
             fill
             priority
             sizes="(max-width: 470px) 100vw, 470px"
             className="object-cover object-center"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,6,4,0.42)_0%,rgba(14,6,4,0.84)_50%,rgba(14,6,4,0.93)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_16%,rgba(212,162,76,0.16),transparent_58%)]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,6,4,0.48)_0%,rgba(14,6,4,0.82)_48%,rgba(14,6,4,0.94)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_15%,rgba(212,162,76,0.16),transparent_62%)]" />
+        </div>
 
-          <div className="relative z-10 px-5 pb-6 pt-8 text-center">
-            <Image
-              src={appTheme.brand.logoPath}
-              alt={appTheme.brand.displayName}
-              width={320}
-              height={132}
-              priority
-              className="mx-auto h-auto w-[230px] max-w-full select-none drop-shadow-[0_0_24px_rgba(212,162,76,0.26)]"
-            />
-            <p className="mt-3 text-[10px] uppercase tracking-[0.34em] text-amber-100/85">
-              COLATTAO DIGITAL MENU
-            </p>
-            <h1 className="mt-3 text-balance font-serif text-[1.55rem] leading-tight text-[#fff3d6] sm:text-[1.75rem]">
-              Coffee, pastries, and comfort —
-              <br />
-              made to be enjoyed slowly.
-            </h1>
-            <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-amber-100/75">
-              1115 Independence Blvd, Virginia Beach
-            </p>
-            <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-amber-100/75">
-              Tue–Fri 7–4 · Sat–Sun 8–4 · Monday Closed
-            </p>
+        <div className="relative z-10 px-5 pb-5 pt-10 text-center">
+          <Image
+            src={appTheme.brand.logoPath}
+            alt={appTheme.brand.displayName}
+            width={430}
+            height={176}
+            priority
+            className="mx-auto h-auto w-[300px] max-w-full select-none drop-shadow-[0_0_28px_rgba(212,162,76,0.28)]"
+          />
+          <p className="mt-4 text-[10px] uppercase tracking-[0.34em] text-amber-100/88">
+            COLATTAO DIGITAL MENU
+          </p>
+          <h1 className="mt-3 text-balance font-serif text-[1.5rem] leading-tight text-[#fff3d6] sm:text-[1.68rem]">
+            Coffee, pastries, and comfort — made to be enjoyed slowly.
+          </h1>
+          <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-amber-100/78">
+            1115 Independence Blvd, Virginia Beach
+          </p>
+          <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-amber-100/78">
+            Tue–Fri 7–4 · Sat–Sun 8–4 · Monday Closed
+          </p>
 
-            <nav
-              aria-label="Menu categories"
-              className="mt-5 flex gap-2 overflow-x-auto pb-1"
-              style={{ scrollbarWidth: "none" }}
-            >
-              {menuCategories.map((c) => (
-                <a
-                  key={c.id}
-                  href={`#${c.id}`}
-                  className="shrink-0 rounded-full border border-[#d2b27a]/70 bg-[#2a150d]/52 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#ffe7b8] shadow-[0_8px_18px_-14px_rgba(0,0,0,0.85)] transition-colors hover:bg-[#3a1d12]/65"
-                >
-                  {c.title}
-                </a>
-              ))}
-            </nav>
-          </div>
+          <nav
+            aria-label="Menu categories"
+            className="mt-5 -mx-2 flex gap-2 overflow-x-auto px-3 pb-2"
+            style={{ scrollbarWidth: "none" }}
+          >
+            {menuCategories.map((c) => (
+              <a
+                key={c.id}
+                href={`#${c.id}`}
+                className="shrink-0 rounded-full border border-[#d2b27a]/72 bg-[#2a150d]/55 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#ffe7b8] shadow-[0_8px_18px_-14px_rgba(0,0,0,0.85)] transition-colors hover:bg-[#3a1d12]/66"
+              >
+                {c.title}
+              </a>
+            ))}
+          </nav>
         </div>
       </section>
 
@@ -149,9 +148,7 @@ export default function MenuPage() {
             FROM COLOMBIA, WITH WARMTH.
           </p>
           <h2 className="mt-2 text-balance font-serif text-[1.45rem] leading-tight text-[#fff3d6] sm:text-[1.65rem]">
-            Single-origin coffee,
-            <br />
-            handcrafted drinks, fresh pastries.
+            Single-origin coffee, handcrafted drinks, fresh pastries.
           </h2>
           <p className="mt-3 text-[13px] text-amber-100/90">Ask what came out fresh today.</p>
           <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-[#b5cce7]">STAY A LITTLE LONGER.</p>
