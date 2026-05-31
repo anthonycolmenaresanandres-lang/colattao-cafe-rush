@@ -43,5 +43,7 @@ next-env.d.ts
 _local_secrets/
 .env.local
 .env*.local
+.claude/
+.codex-remote-attachments/
 
 .vercel
