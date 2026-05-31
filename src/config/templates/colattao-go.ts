@@ -12,7 +12,7 @@ import type { SiteConfig } from "./site-template";
  * height) to change the headline typography — no code change required.
  */
 
-const CONCEPT = "/assets/colattao/website-concept";
+const REAL = "/assets/colattao/real-go";
 
 export const colattaoGoConfig: SiteConfig = {
   brand: {
@@ -50,10 +50,10 @@ export const colattaoGoConfig: SiteConfig = {
 
   hero: {
     background: {
-      src: `${CONCEPT}/hero-interior.png`,
-      width: 1672,
-      height: 941,
-      alt: "Warm, plant-filled Colattao café interior at golden hour",
+      src: `${REAL}/hero-brand-lounge.webp`,
+      width: 1122,
+      height: 1402,
+      alt: "A latte in a blue floral cup beside pistachio tres leches under the Colattao Coffee House sign",
     },
     headline: "Colombian coffee, grab-and-go warmth.",
     subhead:
@@ -84,14 +84,14 @@ export const colattaoGoConfig: SiteConfig = {
     },
     {
       type: "image-split",
-      eyebrow: "Our origin",
-      title: "Grown in the Colombian highlands",
-      text: "Every cup traces back to misty hillsides and hands that harvest by sunrise. We roast for balance — bright, smooth, and never bitter — so the fast cup still tastes like craft.",
+      eyebrow: "Our space",
+      title: "A room full of stories",
+      text: "Hand-painted blue-and-white ceramics, warm brick, and little details everywhere you look. We built a space that feels like a Colombian home — somewhere to slow down, even on a grab-and-go morning.",
       image: {
-        src: `${CONCEPT}/origin-coffee-hills.png`,
-        width: 1672,
-        height: 941,
-        alt: "A coffee grower harvesting ripe cherries at sunrise over the misty Colombian highlands",
+        src: `${REAL}/heritage-ceramics.webp`,
+        width: 1122,
+        height: 1402,
+        alt: "A shelf of hand-painted blue-and-white ceramics with a Colattao Coffee House plate",
       },
       imageSide: "left",
     },
@@ -125,43 +125,43 @@ export const colattaoGoConfig: SiteConfig = {
       title: "The Colattao Go experience",
       items: [
         {
-          title: "Signature drinks",
-          text: "Seasonal craft pours you won't find at the chain on the corner.",
+          title: "Signature coffee",
+          text: "House lattes with art in every cup, paired with something sweet.",
           image: {
-            src: `${CONCEPT}/signature-drink.png`,
+            src: `${REAL}/coffee-pairing.webp`,
             width: 1122,
             height: 1402,
-            alt: "A tall iced signature latte with cinnamon-dusted cold foam in warm natural light",
+            alt: "A latte with leaf latte art in a blue floral cup beside a spiced cake slice",
           },
         },
         {
-          title: "Fresh pastries",
-          text: "Buttery, golden, and gone by mid-morning. Get there early.",
+          title: "Pistachio tres leches",
+          text: "Our signature soaked cake, pistachio-crusted and milk-rich.",
           image: {
-            src: `${CONCEPT}/pastry-showcase.png`,
+            src: `${REAL}/pistachio-tres-leches.webp`,
             width: 1122,
             height: 1402,
-            alt: "A flaky croissant with chocolate beside a latte-art cappuccino on a sunlit marble table",
+            alt: "A slice of pistachio tres leches cake on a gold-rimmed plate",
           },
         },
         {
-          title: "Barista craft",
-          text: "Latte art and pour-overs made by people who care about the cup.",
+          title: "Raspberry cheesecake",
+          text: "Creamy and gold-rimmed, finished with fresh raspberries and mint.",
           image: {
-            src: `${CONCEPT}/barista-craft.png`,
+            src: `${REAL}/raspberry-cheesecake.webp`,
             width: 1122,
             height: 1402,
-            alt: "A barista pouring delicate latte art into a handmade ceramic cup",
+            alt: "A raspberry cheesecake topped with berries and mint on a gold-rimmed plate",
           },
         },
         {
-          title: "Community café",
-          text: "A warm, plant-filled room built for catching up over coffee.",
+          title: "The lounge",
+          text: "Fireside seating and chandeliers — room to linger over coffee.",
           image: {
-            src: `${CONCEPT}/community-cafe.png`,
-            width: 1672,
-            height: 941,
-            alt: "Friends laughing together over coffee at a warm, plant-filled Colattao café table",
+            src: `${REAL}/lounge-fireside.webp`,
+            width: 1122,
+            height: 1402,
+            alt: "Guests gathered around a fireplace under a chandelier in the Colattao lounge",
           },
         },
       ],
