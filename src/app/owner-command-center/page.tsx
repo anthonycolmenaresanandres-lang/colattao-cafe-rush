@@ -121,7 +121,17 @@ export default function OwnerCommandCenterPage() {
             >
               Abrir presentación para dueños
             </Link>
+            <Link
+              href={`/get-started?key=${process.env.NEXT_PUBLIC_REP_ACCESS_CODE || "1234"}`}
+              className="rounded-full border border-[#92aecd66] bg-[#2e5a7c44] px-5 py-2 text-xs font-bold uppercase tracking-[0.16em] text-[#dbe7f3] transition hover:bg-[#2e5a7c66]"
+            >
+              Registrar nuevo café (reps)
+            </Link>
           </div>
+          <p className="mt-3 text-[11px] text-[#f4deba]/55">
+            El registro de cafés es una herramienta interna para representantes. No es visible para
+            los clientes.
+          </p>
         </section>
 
         <section className="space-y-3">
