@@ -89,16 +89,19 @@ export default function MenuPage() {
         <div className="mt-2 flex items-center justify-center gap-3">
           <span className="h-px w-8 bg-gradient-to-r from-transparent to-amber-300/55" />
           <span className="text-[10px] uppercase tracking-[0.32em] text-amber-200/80">
-            Digital Menu
+            COLATTAO DIGITAL MENU
           </span>
           <span className="h-px w-8 bg-gradient-to-l from-transparent to-amber-300/55" />
         </div>
 
         <p className="mt-3 text-[11px] text-amber-100/65">
-          1115 Independence Blvd, Virginia Beach, VA 23455
+          Coffee, pastries, and comfort — made to be enjoyed slowly.
         </p>
         <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-amber-200/55">
-          Tue-Fri 7-4 - Sat and Sun 8-4 - Mon Closed
+          1115 Independence Blvd, Virginia Beach
+        </p>
+        <p className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-amber-200/55">
+          Tue–Fri 7–4 · Sat–Sun 8–4 · Monday Closed
         </p>
 
         <nav
@@ -115,35 +118,32 @@ export default function MenuPage() {
       </header>
 
       <div className="relative z-10 flex-1 space-y-4 px-4 py-5">
-        <section className="relative overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 py-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35 sm:px-6 sm:py-6">
+        <section className="relative overflow-hidden px-1 py-2 sm:px-2 sm:py-3">
           <div className="pointer-events-none absolute inset-0">
-            <Image
-              src="/assets/colattao/menu/menu-eldorado-04.png"
-              alt=""
-              aria-hidden="true"
-              fill
-              sizes="470px"
-              className="object-cover opacity-[0.1]"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.18)_0%,rgba(42,18,8,0.64)_48%,rgba(46,90,124,0.22)_100%)]" />
-            <div className="absolute inset-0 ring-1 ring-inset ring-[#4b2412]/16" />
+            <div className="absolute inset-0 bg-[linear-gradient(140deg,rgba(255,243,214,0.04)_0%,rgba(42,18,8,0.58)_48%,rgba(46,90,124,0.16)_100%)]" />
           </div>
-          <div className="pointer-events-none absolute left-6 right-6 top-0 h-px bg-gradient-to-r from-transparent via-[#f5c46b]/45 to-transparent" />
+          <div className="pointer-events-none absolute left-8 right-8 top-0 h-px bg-gradient-to-r from-transparent via-[#f5c46b]/35 to-transparent" />
 
           <div className="relative z-10 grid items-center gap-5 sm:grid-cols-[1.618fr_1fr]">
             <div className="order-2 sm:order-1">
               <p className="text-[10px] uppercase tracking-[0.28em] text-amber-200/70">
-                FROM THE COUNTER
+                From Colombia, with warmth.
               </p>
               <h2 className="mt-2 font-serif text-2xl leading-tight text-[#fff3d6] sm:text-[2rem]">
-                Slow coffee. Warm pastry.
+                Discover single-origin coffee, handcrafted drinks, fresh pastries, and cozy café favorites.
               </h2>
-              <p className="mt-3 text-sm text-amber-100/90">Ask what just came out fresh.</p>
+              <p className="mt-3 text-sm text-amber-100/90">Not sure what to order?</p>
+              <p className="mt-1 text-sm text-amber-100/90">Ask us what came out fresh today.</p>
               <p className="mt-4 text-xs uppercase tracking-[0.2em] text-[#92aecd]">
                 Stay a little longer.
               </p>
+              <p className="mt-2 text-[11px] leading-relaxed text-amber-100/78">
+                Sip, connect, work, read, or just enjoy the room.
+              </p>
               <p className="mt-3 text-[11px] leading-relaxed text-amber-100/70">
-                Milk options available: whole milk, almond, oat, and more. If you do not see your preferred option, ask the cashier.
+                Milk options available: whole, almond, oat, and more.
+                <br />
+                Please ask the cashier if you have a preference or allergy.
               </p>
             </div>
 
