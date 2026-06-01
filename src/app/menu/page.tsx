@@ -56,8 +56,8 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
-      <header className="sticky top-0 z-30 px-4 pb-2 pt-2">
-        <nav className="mx-auto w-full max-w-[386px]">
+      <header className="sticky top-0 z-30 bg-[#1b0e08] px-4 pb-2 pt-2">
+        <nav className="mx-auto w-full max-w-[340px]">
           <Link
             href="/"
             className="block w-full"
