@@ -26,21 +26,31 @@ const CATEGORY_TEXTURES: Record<string, string> = {
 const DEFAULT_CATEGORY_TEXTURE = "/assets/colattao/menu/menu-eldorado-04.png";
 
 type ItemDetail = {
-  flavorNotes?: string;
-  hotIced?: string;
-  milkOptions?: string;
-  pairingSuggestion?: string;
-  cashierNote?: string;
+  imageSrc: string;
+  imageAlt: string;
 };
 
 const ITEM_DETAILS: Record<string, ItemDetail> = {
-  // "House Brew": {
-  //   flavorNotes: "Owner to confirm",
-  //   hotIced: "Owner to confirm",
-  //   milkOptions: "Owner to confirm",
-  //   pairingSuggestion: "Owner to confirm",
-  //   cashierNote: "Owner to confirm",
-  // },
+  "Chocolate Croissant": {
+    imageSrc: "/assets/colattao/menu-items/chocolate-croissant-sticker.webp",
+    imageAlt: "Chocolate Croissant",
+  },
+  "Pan de Bono": {
+    imageSrc: "/assets/colattao/menu-items/pan-de-bono-sticker.webp",
+    imageAlt: "Pan de Bono",
+  },
+  Cookies: {
+    imageSrc: "/assets/colattao/menu-items/chocolate-chip-cookie-sticker.webp",
+    imageAlt: "Cookies",
+  },
+  "Empanadas, Chicken / Beef": {
+    imageSrc: "/assets/colattao/menu-items/empanada-sticker.webp",
+    imageAlt: "Empanadas, Chicken / Beef",
+  },
+  "Almond Croissant": {
+    imageSrc: "/assets/colattao/menu-items/almond-croissant-sticker.webp",
+    imageAlt: "Almond Croissant",
+  },
 };
 
 export default function MenuPage() {
@@ -222,40 +232,17 @@ export default function MenuPage() {
                       {ITEM_DETAILS[item.name] && (
                         <details className="mt-1.5 group">
                           <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/75 transition-colors hover:text-[var(--col-espresso-2)]">
-                            Details
+                            View item
                             <span className="text-[9px] transition-transform group-open:rotate-180">▾</span>
                           </summary>
-                          <div className="mt-1.5 rounded-xl border border-[#d2b27a]/45 bg-[#f8edd7]/70 px-2.5 py-2 text-[11px] leading-relaxed text-[var(--col-espresso-3)] shadow-[0_8px_16px_-14px_rgba(27,14,8,0.45)]">
-                            {ITEM_DETAILS[item.name].flavorNotes && (
-                              <p>
-                                <span className="font-semibold text-[var(--col-espresso)]">Flavor notes: </span>
-                                {ITEM_DETAILS[item.name].flavorNotes}
-                              </p>
-                            )}
-                            {ITEM_DETAILS[item.name].hotIced && (
-                              <p>
-                                <span className="font-semibold text-[var(--col-espresso)]">Hot/Iced: </span>
-                                {ITEM_DETAILS[item.name].hotIced}
-                              </p>
-                            )}
-                            {ITEM_DETAILS[item.name].milkOptions && (
-                              <p>
-                                <span className="font-semibold text-[var(--col-espresso)]">Milk options: </span>
-                                {ITEM_DETAILS[item.name].milkOptions}
-                              </p>
-                            )}
-                            {ITEM_DETAILS[item.name].pairingSuggestion && (
-                              <p>
-                                <span className="font-semibold text-[var(--col-espresso)]">Pairing: </span>
-                                {ITEM_DETAILS[item.name].pairingSuggestion}
-                              </p>
-                            )}
-                            {ITEM_DETAILS[item.name].cashierNote && (
-                              <p>
-                                <span className="font-semibold text-[var(--col-espresso)]">Cashier note: </span>
-                                {ITEM_DETAILS[item.name].cashierNote}
-                              </p>
-                            )}
+                          <div className="mt-1.5 max-w-[220px] overflow-hidden rounded-xl border border-[#d2b27a]/45 bg-[#f8edd7]/55 p-1.5 shadow-[0_8px_16px_-14px_rgba(27,14,8,0.45)]">
+                            <Image
+                              src={ITEM_DETAILS[item.name].imageSrc}
+                              alt={ITEM_DETAILS[item.name].imageAlt}
+                              width={900}
+                              height={900}
+                              className="h-auto w-full rounded-lg object-contain"
+                            />
                           </div>
                         </details>
                       )}
