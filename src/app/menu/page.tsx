@@ -123,15 +123,15 @@ export default function MenuPage() {
 
       <div className="relative z-10 flex-1 space-y-5 px-4 py-2">
         <section className="px-2 py-1 text-center">
-          <p className="text-[10px] uppercase tracking-[0.28em] text-amber-200/80">
-            FROM COLOMBIA, WITH WARMTH.
-          </p>
-          <p className="mt-2 text-[13px] text-amber-100/90">Ask what came out fresh today.</p>
-          <p className="mt-3 text-[11px] uppercase tracking-[0.22em] text-[#b5cce7]">STAY A LITTLE LONGER.</p>
-          <p className="mt-3 text-[11px] leading-relaxed text-amber-100/78">
-            Milk options available: whole, almond, oat, and more.
-            <br />
-            Please ask the cashier if you have a preference or allergy.
+          <Image
+            src="/assets/colattao/ui/menu-origin-milk-header.webp"
+            alt="From Colombia, single-origin. Choose your preferred milk option."
+            width={960}
+            height={955}
+            className="mx-auto h-auto w-full"
+          />
+          <p className="sr-only">
+            FROM COLOMBIA, SINGLE-ORIGIN. CHOOSE YOUR PREFERRED MILK OPTION.
           </p>
         </section>
 
