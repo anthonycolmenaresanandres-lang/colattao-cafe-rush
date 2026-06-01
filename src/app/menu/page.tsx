@@ -74,19 +74,20 @@ export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
       <header className="sticky top-0 z-30 px-4 pb-3 pt-3">
-        <nav className="mx-auto flex w-full max-w-[430px] justify-center gap-3 rounded-full border border-[#d2b27a]/35 bg-[#1b0e08]/88 px-3 py-2 shadow-[0_10px_20px_-14px_rgba(0,0,0,0.85)] backdrop-blur-sm">
+        <nav className="mx-auto w-full max-w-[430px]">
           <Link
             href="/"
-            className="rounded-full border border-[#d2b27a]/55 bg-transparent px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-100/90 transition-colors hover:bg-[#2a150d]/70"
+            className="block w-full"
+            aria-label="Play Colattao Café Rush"
           >
-            Play
-          </Link>
-          <Link
-            href="/menu"
-            aria-current="page"
-            className="rounded-full border border-[#d2b27a]/80 bg-[#2a150d]/74 px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-[#ffe7b8] shadow-[0_8px_18px_-14px_rgba(0,0,0,0.85)]"
-          >
-            Digital Menu
+            <Image
+              src="/assets/colattao/ui/play-colattao-cafe-rush-banner.webp"
+              alt="Play Colattao Café Rush"
+              width={2172}
+              height={724}
+              priority
+              className="h-auto w-full"
+            />
           </Link>
         </nav>
       </header>
@@ -301,6 +302,19 @@ export default function MenuPage() {
       </div>
 
       <footer className="px-5 pb-7 pt-3 text-center">
+        <div className="mx-auto w-full max-w-[430px]">
+          <Image
+            src="/assets/colattao/ui/colattao-fina-calle-footer-banner.webp"
+            alt=""
+            aria-hidden="true"
+            width={2872}
+            height={547}
+            className="h-auto w-full"
+          />
+          <p className="sr-only">
+            Colattao. Copyright 2026 Colattao Coffee House. Fina Calle OS. a.c.s.
+          </p>
+        </div>
 
         <Link
           href="/"
