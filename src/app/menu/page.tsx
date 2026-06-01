@@ -56,8 +56,8 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
-      <header className="sticky top-0 z-30 px-4 pb-3 pt-3">
-        <nav className="mx-auto w-full max-w-[430px]">
+      <header className="sticky top-0 z-30 px-4 pb-2 pt-2">
+        <nav className="mx-auto w-full max-w-[386px]">
           <Link
             href="/"
             className="block w-full"
@@ -66,8 +66,8 @@ export default function MenuPage() {
             <Image
               src="/assets/colattao/ui/play-colattao-cafe-rush-banner.webp"
               alt="Play Colattao Café Rush"
-              width={2192}
-              height={427}
+              width={2172}
+              height={514}
               priority
               className="h-auto w-full"
             />
