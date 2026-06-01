@@ -8,33 +8,6 @@ export const metadata = {
   description: "Digital menu for Colattao Coffee House - Virginia Beach, VA",
 };
 
-// Owner update request mailto
-// See OWNER_UPDATE_PROCESS.md for the full workflow.
-const OWNER_UPDATE_EMAIL = "anthonycolmenares92@gmail.com";
-const OWNER_UPDATE_SUBJECT = "Colattao Update Request";
-const OWNER_UPDATE_BODY = [
-  "Hello Anthony,",
-  "",
-  "Request type:",
-  "Menu / Price / Product / Photo / Game / Promo",
-  "",
-  "What needs to change:",
-  "",
-  "Current item or section:",
-  "",
-  "New text, price, or detail:",
-  "",
-  "Priority:",
-  "Low / Normal / Urgent",
-  "",
-  "Notes:",
-  "",
-].join("\n");
-
-const OWNER_UPDATE_MAILTO = `mailto:${OWNER_UPDATE_EMAIL}?subject=${encodeURIComponent(
-  OWNER_UPDATE_SUBJECT,
-)}&body=${encodeURIComponent(OWNER_UPDATE_BODY)}`;
-
 // Decorative game-asset accents per category
 const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined> = {
   espresso: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
@@ -83,8 +56,8 @@ export default function MenuPage() {
             <Image
               src="/assets/colattao/ui/play-colattao-cafe-rush-banner.webp"
               alt="Play Colattao Café Rush"
-              width={2172}
-              height={724}
+              width={2070}
+              height={448}
               priority
               className="h-auto w-full"
             />
@@ -301,8 +274,8 @@ export default function MenuPage() {
         })}
       </div>
 
-      <footer className="px-5 pb-7 pt-3 text-center">
-        <div className="mx-auto w-full max-w-[430px]">
+      <footer className="px-4 pb-7 pt-3 text-center">
+        <div className="mx-auto w-full">
           <Image
             src="/assets/colattao/ui/colattao-fina-calle-footer-banner.webp"
             alt=""
@@ -315,34 +288,6 @@ export default function MenuPage() {
             Colattao. Copyright 2026 Colattao Coffee House. Fina Calle OS. a.c.s.
           </p>
         </div>
-
-        <Link
-          href="/"
-          className="btn-gold inline-block rounded-full px-6 py-3 text-sm font-bold uppercase tracking-[0.18em]"
-        >
-          ☕ Play Café Rush
-        </Link>
-        <p className="mt-4 text-[10px] uppercase tracking-[0.28em] text-amber-200/45">
-          © {new Date().getFullYear()} Colattao Coffee House
-        </p>
-        <a
-          href={OWNER_UPDATE_MAILTO}
-          className="mt-2 inline-block text-[10px] tracking-[0.18em] text-amber-200/40 underline decoration-amber-200/25 underline-offset-[3px] transition-colors hover:text-amber-200/75"
-        >
-          Need a menu update?
-        </a>
-        <Link
-          href="/request-update"
-          className="mt-2 block text-[10px] tracking-[0.16em] text-amber-200/40 underline decoration-amber-200/25 underline-offset-[3px] transition-colors hover:text-amber-200/70"
-        >
-          Try update request form
-        </Link>
-        <Link
-          href="/website-concept"
-          className="mt-2 block text-[10px] tracking-[0.16em] text-amber-200/35 underline decoration-amber-200/20 underline-offset-[3px] transition-colors hover:text-amber-200/60"
-        >
-          View website concept
-        </Link>
       </footer>
     </main>
   );
