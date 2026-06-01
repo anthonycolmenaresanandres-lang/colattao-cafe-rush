@@ -113,25 +113,7 @@ export default function MenuPage() {
         </div>
       </section>
 
-      <section className="relative z-10 -mt-2 px-3 pb-2">
-        <nav
-          aria-label="Menu categories"
-          className="flex gap-2 overflow-x-auto px-2 pb-2 pt-1"
-          style={{ scrollbarWidth: "none" }}
-        >
-          {menuCategories.map((c) => (
-            <a
-              key={c.id}
-              href={`#${c.id}`}
-              className="shrink-0 rounded-full border border-[#d2b27a]/72 bg-[#2a150d]/62 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#ffe7b8] shadow-[0_8px_18px_-14px_rgba(0,0,0,0.85)] transition-colors hover:bg-[#3a1d12]/66"
-            >
-              {c.title}
-            </a>
-          ))}
-        </nav>
-      </section>
-
-      <div className="relative z-10 flex-1 space-y-5 px-4 py-2">
+      <div className="relative z-10 flex-1 space-y-4 px-4 py-2">
         <section className="px-2 py-1 text-center">
           <Image
             src="/assets/colattao/ui/menu-origin-milk-header.webp"
@@ -147,6 +129,24 @@ export default function MenuPage() {
 
         {/* Deep-link target so /menu#menu (e.g. from the R&D lab) lands on the categories. */}
         <div id="menu" aria-hidden="true" className="scroll-mt-32" />
+        <section className="mx-1 -mt-1 pb-1">
+          <div className="pointer-events-none h-4 bg-gradient-to-b from-[#1b0e08]/0 to-[#1b0e08]/28" />
+          <nav
+            aria-label="Menu categories"
+            className="mt-1 flex gap-2 overflow-x-auto px-1 pb-2 pt-1"
+            style={{ scrollbarWidth: "none" }}
+          >
+            {menuCategories.map((c) => (
+              <a
+                key={c.id}
+                href={`#${c.id}`}
+                className="shrink-0 rounded-full border border-[#d2b27a]/72 bg-[#2a150d]/62 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#ffe7b8] shadow-[0_8px_18px_-14px_rgba(0,0,0,0.85)] transition-colors hover:bg-[#3a1d12]/66"
+              >
+                {c.title}
+              </a>
+            ))}
+          </nav>
+        </section>
 
         {menuCategories.map((category) => {
           const accent = CATEGORY_ACCENTS[category.id];
