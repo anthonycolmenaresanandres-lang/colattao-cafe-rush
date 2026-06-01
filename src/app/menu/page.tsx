@@ -56,8 +56,8 @@ export default function MenuPage() {
             <Image
               src="/assets/colattao/ui/play-colattao-cafe-rush-banner.webp"
               alt="Play Colattao Café Rush"
-              width={2070}
-              height={448}
+              width={2192}
+              height={427}
               priority
               className="h-auto w-full"
             />
