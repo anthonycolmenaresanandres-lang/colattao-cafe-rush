@@ -22,15 +22,17 @@ const navItems = [
 export default function CustomerHeader() {
   const pathname = usePathname();
 
+  // On the game homepage the Play button is redundant — visitor is already there.
+  // Hide it so the only CTA is View Our Menu.
+  const visibleItems = navItems.filter(
+    (item) => !(pathname === "/" && item.href === "/"),
+  );
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-amber-300/20 bg-[#1b0e08]/95 backdrop-blur">
       <div className="mx-auto w-full max-w-[470px] px-4 pb-3 pt-2">
-        <div className="flex justify-center">
-          <p className="font-serif text-[16px] tracking-[0.14em] text-amber-100">COLATTAO</p>
-        </div>
-
-        <nav aria-label="Customer navigation" className="mt-2 flex justify-center gap-2">
-          {navItems.map((item) => {
+        <nav aria-label="Customer navigation" className="flex justify-center gap-2">
+          {visibleItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
