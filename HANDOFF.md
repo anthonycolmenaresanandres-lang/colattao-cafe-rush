@@ -1,6 +1,8 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-02 17:35:13] Session started
+- [2026-06-02 17:21:19] Session started
 - [2026-05-30 13:56:50] Session started
 - [2026-05-30 13:50:59] Session started
 - [2026-05-30 13:41:12] Session started
@@ -59,6 +61,10 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-02 17:36:00] verified footer banner commit scope and npm.cmd run build passed before staging
+- [2026-06-02 17:31:00] build passed after replacing public menu footer with clickable PNG Instagram banner; no commit or push performed
+- [2026-06-02 17:22:43] copied approved attached banner image to public/assets/colattao-instagram-footer-banner.png and replaced menu footer with clickable BottomInstagramBanner
+- [2026-06-02 17:21:32] confirmed scoped footer banner replacement task; protected menu data gameplay theme package API and owner files remain out of scope
 - [2026-05-30 10:08:25] Stashed dirty main tree, attempted merge/push (both already up to date), then restored stash successfully.
 - [2026-05-30 09:29:37] Refactored CustomerHeader to two-row sticky layout with centered brand and top-pinned Play/Menu pill buttons.
 - [2026-05-30 09:29:37] Removed redundant inline game branding from page.tsx and adjusted GameCanvas height compensation to 100dvh-112px.

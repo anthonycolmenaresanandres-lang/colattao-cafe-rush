@@ -25,6 +25,12 @@ const CATEGORY_TEXTURES: Record<string, string> = {
 };
 const DEFAULT_CATEGORY_TEXTURE = "/assets/colattao/menu/menu-eldorado-04.png";
 
+const FOOTER_LINKS = {
+  colattaoSite: "https://colattao.com/",
+  colattaoInstagram: "https://www.instagram.com/colattao/",
+  finaCalle: "https://amma-fina-calle.vercel.app/",
+};
+
 type ItemDetail = {
   imageSrc: string;
   imageAlt: string;
@@ -52,6 +58,45 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
     imageAlt: "Almond Croissant",
   },
 };
+
+function BottomInstagramBanner() {
+  return (
+    <section className="mx-auto mt-10 w-full px-3 pb-8">
+      <div className="relative mx-auto w-full max-w-[340px] overflow-hidden rounded-[28px] sm:max-w-7xl">
+        <img
+          src="/assets/colattao-instagram-footer-banner.png"
+          alt="Follow Colattao Coffee House on Instagram. Powered by Fina Calle."
+          className="block h-auto w-full select-none"
+          loading="lazy"
+        />
+
+        <a
+          href={FOOTER_LINKS.colattaoSite}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit Colattao Coffee House website"
+          className="absolute left-[3%] top-[16%] h-[58%] w-[30%]"
+        />
+
+        <a
+          href={FOOTER_LINKS.colattaoInstagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Follow Colattao Coffee House on Instagram"
+          className="absolute left-[38%] top-[18%] h-[44%] w-[45%]"
+        />
+
+        <a
+          href={FOOTER_LINKS.finaCalle}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Visit Fina Calle"
+          className="absolute left-[48%] top-[62%] h-[24%] w-[42%]"
+        />
+      </div>
+    </section>
+  );
+}
 
 export default function MenuPage() {
   return (
@@ -261,21 +306,7 @@ export default function MenuPage() {
         })}
       </div>
 
-      <footer className="px-4 pb-7 pt-3 text-center">
-        <div className="mx-auto w-full">
-          <Image
-            src="/assets/colattao/ui/colattao-fina-calle-footer-banner.webp"
-            alt=""
-            aria-hidden="true"
-            width={2872}
-            height={547}
-            className="h-auto w-full"
-          />
-          <p className="sr-only">
-            Colattao. Copyright 2026 Colattao Coffee House. Fina Calle OS. a.c.s.
-          </p>
-        </div>
-      </footer>
+      <BottomInstagramBanner />
     </main>
   );
 }
