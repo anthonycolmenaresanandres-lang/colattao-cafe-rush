@@ -1,6 +1,8 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-02 17:53:22] Session started
+- [2026-06-02 17:49:53] Session started
 - [2026-06-02 17:43:18] Session started
 - [2026-06-02 17:40:51] Session started
 - [2026-06-02 17:35:13] Session started
@@ -63,6 +65,8 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-02 17:54:08] verified full-width footer banner layout fix build passed before commit
+- [2026-06-02 17:52:04] replaced approved Instagram footer banner image and updated footer banner to full-screen width
 - [2026-06-02 17:44:12] verified footer layout cleanup scope and npm.cmd run build passed before commit
 - [2026-06-02 17:41:15] updated BottomInstagramBanner layout only: removed small rounded max-width wrapper and kept footer links unchanged
 - [2026-06-02 17:36:00] verified footer banner commit scope and npm.cmd run build passed before staging
@@ -111,6 +115,7 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-06-02 17:52:15] review full-width footer banner visually and commit when approved
 - [2026-05-30 13:41:27] Ask Anthony for Gemini branch name/remote or commit hash before any merge review work.
 - [2026-05-30 10:08:25] Confirm with Anthony that production had no new commits to deploy and decide whether to commit current local UI changes on main.
 - [2026-05-30 10:01:49] Confirm on-device layout and decide whether to tune Menu alignment next.
