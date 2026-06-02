@@ -1,6 +1,8 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-02 17:43:18] Session started
+- [2026-06-02 17:40:51] Session started
 - [2026-06-02 17:35:13] Session started
 - [2026-06-02 17:21:19] Session started
 - [2026-05-30 13:56:50] Session started
@@ -61,6 +63,8 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-02 17:44:12] verified footer layout cleanup scope and npm.cmd run build passed before commit
+- [2026-06-02 17:41:15] updated BottomInstagramBanner layout only: removed small rounded max-width wrapper and kept footer links unchanged
 - [2026-06-02 17:36:00] verified footer banner commit scope and npm.cmd run build passed before staging
 - [2026-06-02 17:31:00] build passed after replacing public menu footer with clickable PNG Instagram banner; no commit or push performed
 - [2026-06-02 17:22:43] copied approved attached banner image to public/assets/colattao-instagram-footer-banner.png and replaced menu footer with clickable BottomInstagramBanner

@@ -61,8 +61,8 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
 
 function BottomInstagramBanner() {
   return (
-    <section className="mx-auto mt-10 w-full px-3 pb-8">
-      <div className="relative mx-auto w-full max-w-[340px] overflow-hidden rounded-[28px] sm:max-w-7xl">
+    <section className="mx-auto mt-8 w-full px-2 pb-8 sm:px-4">
+      <div className="relative mx-auto w-full overflow-visible">
         <img
           src="/assets/colattao-instagram-footer-banner.png"
           alt="Follow Colattao Coffee House on Instagram. Powered by Fina Calle."
