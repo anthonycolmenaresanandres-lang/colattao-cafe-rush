@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import appTheme from "@/config/theme";
+import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
 
 export const metadata = {
   title: "Menu - Colattao Coffee House",
@@ -304,6 +305,8 @@ export default function MenuPage() {
             </section>
           );
         })}
+
+        <ColattaoGuestNoteForm />
       </div>
 
       <BottomInstagramBanner />
