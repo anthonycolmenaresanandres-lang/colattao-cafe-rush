@@ -102,21 +102,24 @@ function BottomInstagramBanner() {
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
-      <header className="sticky top-0 z-30 bg-[#1b0e08] px-4 pb-2 pt-2">
-        <nav className="mx-auto w-full max-w-[340px]">
+      <header className="sticky top-0 z-40 border-b border-[#DAAE4F]/25 bg-[linear-gradient(180deg,#211107_0%,#1D1108_72%,#140A02_100%)] px-3 py-2 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.9)]">
+        <nav className="mx-auto w-full max-w-[360px]">
           <Link
             href="/"
-            className="block w-full"
-            aria-label="Play Colattao Café Rush"
+            className="group relative flex min-h-12 w-full items-center justify-center overflow-hidden rounded-full border border-[#DAAE4F]/75 bg-[linear-gradient(135deg,rgba(218,174,79,0.98)_0%,rgba(248,237,215,0.92)_48%,rgba(218,174,79,0.96)_100%)] px-4 py-2 text-center text-[#1D1108] shadow-[0_10px_26px_-16px_rgba(218,174,79,0.95),inset_0_1px_0_rgba(255,255,255,0.48),inset_0_-2px_0_rgba(29,17,8,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-15px_rgba(218,174,79,1),inset_0_1px_0_rgba(255,255,255,0.55),inset_0_-2px_0_rgba(29,17,8,0.2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
+            aria-label="Play Colattao Rush"
           >
-            <Image
-              src="/assets/colattao/ui/play-colattao-cafe-rush-banner.webp"
-              alt="Play Colattao Café Rush"
-              width={2172}
-              height={514}
-              priority
-              className="h-auto w-full"
-            />
+            <span className="pointer-events-none absolute inset-y-1 left-1 w-3 rounded-l-full border-l border-[#1D1108]/18" />
+            <span className="pointer-events-none absolute inset-y-1 right-1 w-3 rounded-r-full border-r border-[#1D1108]/18" />
+            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.52),transparent_28%),linear-gradient(90deg,transparent_0%,rgba(29,17,8,0.08)_48%,transparent_58%)] opacity-70 transition-opacity group-hover:opacity-90" />
+            <span className="relative flex flex-col items-center leading-none">
+              <span className="text-[9px] font-bold uppercase tracking-[0.24em] text-[#5a330e]/80">
+                Tap to play
+              </span>
+              <span className="mt-1 text-[15px] font-black uppercase tracking-[0.18em] text-[#1D1108]">
+                PLAY COLATTAO RUSH
+              </span>
+            </span>
           </Link>
         </nav>
       </header>
