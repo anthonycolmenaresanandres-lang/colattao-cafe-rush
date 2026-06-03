@@ -99,11 +99,36 @@ export const menuCategories: MenuCategory[] = [
     title: "Kitchen",
     items: [
       { name: "Bacon Egg & Cheese", price: "$8.60" },
-      { name: "California Sandwich", price: "$9.72" },
-      { name: "Cubano", price: "$12" },
-      { name: "Chicken Apricot", price: "$10" },
-      { name: "Montecristo", price: "$8.72" },
-      { name: "Pesto Mozzarella", price: "$7.22" },
+      {
+        name: "California Sandwich",
+        price: "$9.72",
+        description:
+          "Egg, Monterey Jack cheese, queso fresco, avocado, California sauce, and cilantro sauce on a croissant.",
+      },
+      {
+        name: "Cubano",
+        price: "$12",
+        description:
+          "Latin-style roasted pork, ham, Swiss cheese, mustard, and pickles on Cuban bread.",
+      },
+      {
+        name: "Chicken Apricot",
+        price: "$10",
+        description:
+          "Grilled chicken strips, apricot preserves, and cheddar cheese on a croissant.",
+      },
+      {
+        name: "Montecristo",
+        price: "$8.72",
+        description:
+          "Black Forest ham, cream cheese, Swiss cheese, and blackberry preserves on a croissant. Baked and finished with powdered sugar.",
+      },
+      {
+        name: "Pesto Mozzarella",
+        price: "$7.22",
+        description:
+          "Thick-sliced fresh mozzarella and house pesto sauce on a croissant. Served cold.",
+      },
       { name: "Ham & Cheesy", price: "$7.62" },
       { name: "Turkey Egg & Swiss", price: "$8.60" },
     ],

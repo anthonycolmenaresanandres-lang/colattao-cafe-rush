@@ -60,6 +60,14 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
   },
 };
 
+const COLLAPSIBLE_DESCRIPTION_ITEMS = new Set([
+  "California Sandwich",
+  "Cubano",
+  "Chicken Apricot",
+  "Montecristo",
+  "Pesto Mozzarella",
+]);
+
 function BottomInstagramBanner() {
   return (
     <section className="relative left-1/2 right-1/2 mt-8 w-screen -translate-x-1/2 pb-8">
@@ -101,8 +109,8 @@ function BottomInstagramBanner() {
 
 export default function MenuPage() {
   return (
-    <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col overflow-hidden bg-colattao-page text-[var(--col-parchment)]">
-      <header className="sticky top-0 z-40 border-b border-[#DAAE4F]/25 bg-[linear-gradient(180deg,#211107_0%,#1D1108_72%,#140A02_100%)] px-3 py-2 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.9)]">
+    <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]">
+      <header className="sticky top-0 z-50 border-b border-[#DAAE4F]/25 bg-[linear-gradient(180deg,#211107_0%,#1D1108_72%,#140A02_100%)] px-3 py-2 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.9)]">
         <nav className="mx-auto w-full max-w-[360px]">
           <Link
             href="/"
@@ -274,9 +282,21 @@ export default function MenuPage() {
                         <span className="dotted-rule" />
                       </div>
                       {item.description && (
-                        <p className="mt-0.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
-                          {item.description}
-                        </p>
+                        COLLAPSIBLE_DESCRIPTION_ITEMS.has(item.name) ? (
+                          <details className="group mt-1.5">
+                            <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-full border border-[#d2b27a]/45 bg-[#f8edd7]/45 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/80 transition-colors hover:bg-[#f8edd7]/65 hover:text-[var(--col-espresso-2)]">
+                              Details
+                              <span className="text-[9px] transition-transform group-open:rotate-180">▾</span>
+                            </summary>
+                            <p className="mt-1.5 rounded-xl border border-[#d2b27a]/35 bg-[#f8edd7]/40 px-3 py-2 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
+                              {item.description}
+                            </p>
+                          </details>
+                        ) : (
+                          <p className="mt-0.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
+                            {item.description}
+                          </p>
+                        )
                       )}
                       {ITEM_DETAILS[item.name] && (
                         <details className="mt-1.5 group">
