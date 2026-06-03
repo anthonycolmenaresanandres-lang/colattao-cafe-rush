@@ -55,6 +55,18 @@ function escapeHtml(input: string) {
     .replaceAll("'", "&#39;");
 }
 
+function extractGuestNoteField(message: string, label: string) {
+  const line = message.split("\n").find((part) => part.startsWith(`${label}: `));
+  return line?.slice(label.length + 2).trim() || "Not provided";
+}
+
+function extractGuestNoteMessage(message: string) {
+  const marker = "\nMessage:\n";
+  const markerIndex = message.indexOf(marker);
+  if (markerIndex === -1) return message;
+  return message.slice(markerIndex + marker.length).trim() || "Not provided";
+}
+
 function envDiagnostics() {
   return {
     hasBlobToken: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
@@ -221,50 +233,89 @@ export async function POST(request: Request) {
   const ownerEmail = process.env.OWNER_NOTIFICATION_EMAIL!;
   const fromEmail = process.env.FROM_EMAIL!;
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const subject = `Colattao Owner Request: ${requestType}`;
+  const isGuestNote = message.startsWith("Colattao Guest Note");
+  let subject = `Colattao Owner Request: ${requestType}`;
+  let textBody: string;
+  let htmlBody: string;
 
-  const linksBlock =
-    uploadedFileUrls.length > 0
-      ? uploadedFileUrls.map((url) => `- ${url}`).join("\n")
-      : "- No files attached";
+  if (isGuestNote) {
+    const guestNoteType = extractGuestNoteField(message, "Type");
+    const guestName = extractGuestNoteField(message, "Name");
+    const guestContact = extractGuestNoteField(message, "Contact");
+    const guestMayContact = extractGuestNoteField(message, "May contact");
+    const guestMessage = extractGuestNoteMessage(message);
 
-  const textBody = [
-    "New Colattao owner request",
-    "",
-    `Name: ${name}`,
-    `Email or phone: ${contactInfo}`,
-    `Request type: ${requestType}`,
-    `Priority: ${priority}`,
-    `Message: ${message}`,
-    "",
-    "Uploaded file links:",
-    linksBlock,
-    ...(uploadNote ? ["", `Upload note: ${uploadNote}`] : []),
-    "",
-    `Source page URL: ${sourcePage}`,
-    `Timestamp: ${submittedAt}`,
-  ].join("\n");
+    subject = `New Colattao Guest Note — ${guestNoteType}`;
 
-  const htmlLinks =
-    uploadedFileUrls.length > 0
-      ? `<ul>${uploadedFileUrls
-          .map((url) => `<li><a href="${escapeHtml(url)}">${escapeHtml(url)}</a></li>`)
-          .join("")}</ul>`
-      : "<p>No files attached.</p>";
+    textBody = [
+      "New guest note from Colattao menu",
+      "",
+      `Category: ${guestNoteType}`,
+      `Name: ${guestName}`,
+      `Contact: ${guestContact}`,
+      `May contact: ${guestMayContact}`,
+      "",
+      "Message:",
+      guestMessage,
+      "",
+      `Source: ${sourcePage}`,
+      `Timestamp: ${submittedAt}`,
+    ].join("\n");
 
-  const htmlBody = `
-    <h2>New Colattao owner request</h2>
-    <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-    <p><strong>Email or phone:</strong> ${escapeHtml(contactInfo)}</p>
-    <p><strong>Request type:</strong> ${escapeHtml(requestType)}</p>
-    <p><strong>Priority:</strong> ${escapeHtml(priority)}</p>
-    <p><strong>Message:</strong><br/>${escapeHtml(message).replaceAll("\n", "<br/>")}</p>
-    <h3>Uploaded file links</h3>
-    ${htmlLinks}
-    ${uploadNote ? `<p><strong>Upload note:</strong> ${escapeHtml(uploadNote)}</p>` : ""}
-    <p><strong>Source page URL:</strong> ${escapeHtml(sourcePage)}</p>
-    <p><strong>Timestamp:</strong> ${escapeHtml(submittedAt)}</p>
-  `;
+    htmlBody = `
+      <h2>New guest note from Colattao menu</h2>
+      <p><strong>Category:</strong> ${escapeHtml(guestNoteType)}</p>
+      <p><strong>Name:</strong> ${escapeHtml(guestName)}</p>
+      <p><strong>Contact:</strong> ${escapeHtml(guestContact)}</p>
+      <p><strong>May contact:</strong> ${escapeHtml(guestMayContact)}</p>
+      <p><strong>Message:</strong><br/>${escapeHtml(guestMessage).replaceAll("\n", "<br/>")}</p>
+      <p><strong>Source:</strong> ${escapeHtml(sourcePage)}</p>
+      <p><strong>Timestamp:</strong> ${escapeHtml(submittedAt)}</p>
+    `;
+  } else {
+    const linksBlock =
+      uploadedFileUrls.length > 0
+        ? uploadedFileUrls.map((url) => `- ${url}`).join("\n")
+        : "- No files attached";
+
+    textBody = [
+      "New Colattao owner request",
+      "",
+      `Name: ${name}`,
+      `Email or phone: ${contactInfo}`,
+      `Request type: ${requestType}`,
+      `Priority: ${priority}`,
+      `Message: ${message}`,
+      "",
+      "Uploaded file links:",
+      linksBlock,
+      ...(uploadNote ? ["", `Upload note: ${uploadNote}`] : []),
+      "",
+      `Source page URL: ${sourcePage}`,
+      `Timestamp: ${submittedAt}`,
+    ].join("\n");
+
+    const htmlLinks =
+      uploadedFileUrls.length > 0
+        ? `<ul>${uploadedFileUrls
+            .map((url) => `<li><a href="${escapeHtml(url)}">${escapeHtml(url)}</a></li>`)
+            .join("")}</ul>`
+        : "<p>No files attached.</p>";
+
+    htmlBody = `
+      <h2>New Colattao owner request</h2>
+      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+      <p><strong>Email or phone:</strong> ${escapeHtml(contactInfo)}</p>
+      <p><strong>Request type:</strong> ${escapeHtml(requestType)}</p>
+      <p><strong>Priority:</strong> ${escapeHtml(priority)}</p>
+      <p><strong>Message:</strong><br/>${escapeHtml(message).replaceAll("\n", "<br/>")}</p>
+      <h3>Uploaded file links</h3>
+      ${htmlLinks}
+      ${uploadNote ? `<p><strong>Upload note:</strong> ${escapeHtml(uploadNote)}</p>` : ""}
+      <p><strong>Source page URL:</strong> ${escapeHtml(sourcePage)}</p>
+      <p><strong>Timestamp:</strong> ${escapeHtml(submittedAt)}</p>
+    `;
+  }
 
   try {
     const { error } = await resend.emails.send({

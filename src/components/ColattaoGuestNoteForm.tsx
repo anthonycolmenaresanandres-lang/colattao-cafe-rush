@@ -52,7 +52,7 @@ export default function ColattaoGuestNoteForm() {
         message.trim(),
       ].join("\n"),
     );
-    formData.set("sourcePage", currentUrl || "menu-guest-note");
+    formData.set("sourcePage", currentUrl ? `Colattao QR Menu - ${currentUrl}` : "Colattao QR Menu");
     formData.set("company", "");
 
     try {
