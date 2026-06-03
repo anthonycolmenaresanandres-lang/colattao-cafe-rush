@@ -59,6 +59,32 @@ export const menuCategories: MenuCategory[] = [
     ],
   },
   {
+    id: "seasonal-drinks",
+    title: "Seasonal Drinks",
+    items: [
+      {
+        name: "Coco Beach",
+        price: "Ask",
+        description: "Toasted coconut, tropical nuts, cold foam",
+      },
+      {
+        name: "Dolce Banana",
+        price: "Ask",
+        description: "Dulce de leche, banana, cold foam",
+      },
+      {
+        name: "Matcha Lemonade",
+        price: "Ask",
+        description: "Available flavors: original, strawberry, mango",
+      },
+      {
+        name: "Cinnamon Horchata",
+        price: "Ask",
+        description: "House made horchata. Add a double shot +$1.50",
+      },
+    ],
+  },
+  {
     id: "tea",
     title: "Tea & More",
     items: [
