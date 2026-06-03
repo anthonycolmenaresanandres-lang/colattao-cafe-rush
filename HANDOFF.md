@@ -1,6 +1,8 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-02 20:44:35] Session started
+- [2026-06-02 20:36:33] Session started
 - [2026-06-02 20:29:31] Session started
 - [2026-06-02 20:24:59] Session started
 - [2026-06-02 20:19:26] Session started
@@ -68,6 +70,9 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-02 20:45:27] Verified Guest Note style refinement build before commit
+- [2026-06-02 20:38:19] Verified Guest Note restyle with npm.cmd run build
+- [2026-06-02 20:37:41] Restyled Colattao Guest Note form colors only
 - [2026-06-02 20:30:32] Verified Colattao Guest Note form build before commit
 - [2026-06-02 20:27:27] Verified no-upload Guest Note form with npm.cmd run build
 - [2026-06-02 20:26:48] Added no-upload Colattao Guest Note form using existing owner-requests endpoint
@@ -122,6 +127,7 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-06-02 20:38:19] Commit Guest Note color restyle if approved
 - [2026-06-02 20:27:27] Review Guest Note form visually, then commit only approved files if requested
 - [2026-06-02 20:25:23] Add no-upload Colattao Guest Note form on /menu using existing owner-requests endpoint
 - [2026-06-02 20:21:49] Await approval before adding any no-upload Guest Note form
