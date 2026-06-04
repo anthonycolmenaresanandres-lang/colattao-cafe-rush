@@ -176,59 +176,59 @@ function BottomSignature() {
         Colattao. Follow us on Instagram. Powered by Fina Calle.
       </p>
 
-      {/* Centered premium vertical footer — Colattao hero, Fina Calle secondary. No card. */}
+      {/* Centered premium vertical footer — original cream-gold Colattao hero, warm accents. */}
       <div className="mx-auto flex max-w-[260px] items-center gap-3">
-        <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.4))]" />
-        <span className="h-1.5 w-1.5 rotate-45 border border-white/55" />
-        <span className="h-px flex-1 bg-[linear-gradient(90deg,rgba(255,255,255,0.4),transparent)]" />
+        <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(218,174,79,0.45))]" />
+        <span className="h-1.5 w-1.5 rotate-45 border border-[#DAAE4F]/70" />
+        <span className="h-px flex-1 bg-[linear-gradient(90deg,rgba(218,174,79,0.45),transparent)]" />
       </div>
 
       <div className="mt-8 flex flex-col items-center text-center">
-        {/* Colattao logo — hero, centered, largest */}
+        {/* Colattao logo — ORIGINAL cream-gold, hero, largest */}
         <a
           href={FOOTER_LINKS.colattaoSite}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Visit Colattao Coffee House website"
-          className="rounded-2xl transition hover:opacity-90 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          className="rounded-2xl transition hover:opacity-90 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F8EDD7]"
         >
           <Image
             src={appTheme.brand.logoPath}
             alt="Colattao Coffee House"
             width={1024}
             height={341}
-            className="h-auto w-[232px] max-w-full select-none brightness-0 invert drop-shadow-[0_0_24px_rgba(255,255,255,0.18)]"
+            className="h-auto w-[290px] max-w-full select-none drop-shadow-[0_0_28px_rgba(218,174,79,0.3)]"
           />
         </a>
 
-        {/* Colattao Instagram CTA — centered */}
+        {/* Colattao Instagram CTA — warm gold, centered */}
         <a
           href={FOOTER_LINKS.colattaoInstagram}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Follow Colattao Coffee House on Instagram"
-          className="group mt-7 inline-flex items-center gap-2.5 rounded-full border border-white/42 bg-white/[0.06] px-5 py-2.5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] transition duration-200 hover:-translate-y-0.5 hover:border-white/72 hover:bg-white/[0.1] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="group mt-7 inline-flex items-center gap-2.5 rounded-full border border-[#DAAE4F]/55 bg-[#2a150d]/50 px-5 py-2.5 text-[#F8EDD7] shadow-[inset_0_1px_0_rgba(248,237,215,0.1)] transition duration-200 hover:-translate-y-0.5 hover:border-[#DAAE4F]/85 hover:bg-[#3a1d12]/60 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
         >
-          <span className="text-white/82 transition-colors group-hover:text-white">
+          <span className="text-[#DAAE4F] transition-colors group-hover:text-[#F8EDD7]">
             <InstagramGlyph />
           </span>
           <span className="text-[11px] font-black uppercase tracking-[0.16em]">
             Follow us on Instagram
           </span>
         </a>
-        <p className="mt-3 text-[11px] font-semibold tracking-[0.18em] text-white/60">
+        <p className="mt-3 text-[11px] font-semibold tracking-[0.18em] text-[#F8EDD7]/60">
           @colattao
         </p>
 
-        {/* Powered by Fina Calle — secondary, smaller, centered */}
+        {/* Powered by Fina Calle — secondary, smaller, cream */}
         <a
           href={FOOTER_LINKS.finaCalle}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Powered by Fina Calle"
-          className="group mt-10 flex flex-col items-center gap-2 rounded-2xl px-3 py-1.5 transition hover:opacity-90 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="group mt-10 flex flex-col items-center gap-2 rounded-2xl px-3 py-1.5 transition hover:opacity-90 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
         >
-          <span className="text-[8px] font-semibold uppercase tracking-[0.32em] text-white/45">
+          <span className="text-[8px] font-semibold uppercase tracking-[0.32em] text-[#DAAE4F]/70">
             Powered by
           </span>
           <Image
@@ -236,17 +236,17 @@ function BottomSignature() {
             alt="Fina Calle OS"
             width={460}
             height={488}
-            className="h-auto w-[112px] max-w-full select-none brightness-0 invert opacity-70 drop-shadow-[0_0_14px_rgba(255,255,255,0.1)] transition-opacity group-hover:opacity-90"
+            className="h-auto w-[112px] max-w-full select-none opacity-80 drop-shadow-[0_0_14px_rgba(218,174,79,0.16)] transition-opacity group-hover:opacity-100"
           />
         </a>
 
-        {/* Fina Calle Instagram — subtle line below */}
+        {/* Fina Calle Instagram — subtle warm line below */}
         <a
           href={FOOTER_LINKS.finaCalleInstagram}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Follow Fina Calle on Instagram"
-          className="group mt-4 inline-flex items-center gap-1.5 text-white/45 transition hover:text-white/75 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          className="group mt-4 inline-flex items-center gap-1.5 text-[#DAAE4F]/55 transition hover:text-[#DAAE4F]/85 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
         >
           <InstagramGlyph />
           <span className="text-[9px] font-semibold uppercase tracking-[0.18em]">Fina Calle</span>
