@@ -28,6 +28,9 @@ export default function Home() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-parchment">
+      <h1 className="sr-only">
+        Colattao Coffee House — Café Rush game and digital menu in Virginia Beach, VA
+      </h1>
       <CustomerHeader />
 
       <section className="flex flex-1 flex-col items-center justify-start px-2 pb-2 pt-2 sm:px-3">

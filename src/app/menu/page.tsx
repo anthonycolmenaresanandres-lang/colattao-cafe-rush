@@ -1,13 +1,72 @@
-﻿import Image from "next/image";
+﻿import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import appTheme from "@/config/theme";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
+import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
 
-export const metadata = {
-  title: "Menu - Colattao Coffee House",
-  description: "Digital menu for Colattao Coffee House - Virginia Beach, VA",
+export const metadata: Metadata = {
+  title: "Menu — Espresso, Matcha, Lattes & Pastries in Virginia Beach",
+  description:
+    "The full Colattao Coffee House menu in Virginia Beach, VA — espresso and coffee, signature Colombian lattes, matcha, teas, and fresh pastries with prices.",
+  alternates: { canonical: "/menu" },
+  openGraph: {
+    type: "website",
+    url: `${SITE_URL}/menu`,
+    siteName: SITE_NAME,
+    title: "Colattao Coffee House Menu — Virginia Beach, VA",
+    description:
+      "Browse the full Colattao Coffee House menu: espresso, signature Colombian lattes, matcha, teas, and pastries.",
+    images: [{ url: "/assets/colattao/og-colattao.jpg", width: 1200, height: 630 }],
+  },
 };
+
+// schema.org Menu built from the real menu data so Google can read every
+// section and item (improves eligibility for rich "colattao menu" results).
+function parsePrice(price: string | null): string | undefined {
+  if (!price) return undefined;
+  const match = price.match(/([0-9]+(?:\.[0-9]+)?)/);
+  return match ? match[1] : undefined;
+}
+
+function buildMenuJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Menu",
+    name: "Colattao Coffee House Menu",
+    url: `${SITE_URL}/menu`,
+    inLanguage: "en-US",
+    provider: {
+      "@type": "CafeOrCoffeeShop",
+      name: SITE_NAME,
+      url: SITE_URL,
+      sameAs: [BRAND_LINKS.website, BRAND_LINKS.instagram],
+    },
+    hasMenuSection: menuCategories.map((category) => ({
+      "@type": "MenuSection",
+      name: category.title,
+      ...(category.note ? { description: category.note } : {}),
+      hasMenuItem: category.items.map((item) => {
+        const price = parsePrice(item.price);
+        return {
+          "@type": "MenuItem",
+          name: item.name,
+          ...(item.description ? { description: item.description } : {}),
+          ...(price
+            ? {
+                offers: {
+                  "@type": "Offer",
+                  price,
+                  priceCurrency: "USD",
+                },
+              }
+            : {}),
+        };
+      }),
+    })),
+  };
+}
 
 // Decorative game-asset accents per category
 const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined> = {
@@ -173,6 +232,13 @@ function BottomSignature() {
 export default function MenuPage() {
   return (
     <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildMenuJsonLd()) }}
+      />
+      <h1 className="sr-only">
+        Colattao Coffee House Menu — Espresso, Matcha, Lattes &amp; Pastries in Virginia Beach, VA
+      </h1>
       <header className="sticky top-0 z-50 border-b border-[#DAAE4F]/25 bg-[linear-gradient(180deg,#211107_0%,#1D1108_72%,#140A02_100%)] px-3 py-2 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.9)]">
         <nav className="mx-auto w-full max-w-[360px]">
           <Link
