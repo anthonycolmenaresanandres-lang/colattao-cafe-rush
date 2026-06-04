@@ -210,8 +210,8 @@ function BottomSignature() {
           @colattao
         </p>
 
-        {/* Powered by Fina Calle — eyebrow + real Fina Calle wordmark logo.
-            Width 116px ≈ 188 ÷ φ (golden ratio against the Colattao mark). */}
+        {/* Powered by Fina Calle — eyebrow + full Fina Calle OS emblem,
+            recolored cream/transparent to stay uniform with the espresso plate. */}
         <a
           href={FOOTER_LINKS.finaCalle}
           target="_blank"
@@ -223,11 +223,11 @@ function BottomSignature() {
             Powered by
           </span>
           <Image
-            src="/assets/colattao/ui/fina-calle-wordmark.webp"
-            alt="Fina Calle"
-            width={260}
-            height={154}
-            className="h-auto w-[116px] max-w-full select-none opacity-90 drop-shadow-[0_0_18px_rgba(218,174,79,0.16)] transition-opacity group-hover:opacity-100"
+            src="/assets/colattao/ui/fina-calle-os-emblem.webp"
+            alt="Fina Calle OS"
+            width={460}
+            height={488}
+            className="h-auto w-[150px] max-w-full select-none opacity-90 drop-shadow-[0_0_18px_rgba(218,174,79,0.16)] transition-opacity group-hover:opacity-100"
           />
           <span className="sr-only">Powered by Fina Calle</span>
         </a>
