@@ -51,11 +51,11 @@ export default function GameCanvas() {
   }, []);
 
   return (
-    <div className="game-shell w-full max-w-[460px]">
+    <div className="game-shell flex min-h-0 w-full max-w-[460px] flex-1">
       <div
         id="game-container"
         ref={hostRef}
-        className="mx-auto h-[calc(100dvh-112px)] max-h-[640px] min-h-[420px] w-full overflow-hidden rounded-[20px]"
+        className="mx-auto h-full min-h-0 w-full overflow-hidden rounded-[20px]"
         style={{ background: "#1B0E08" }}
       />
     </div>
