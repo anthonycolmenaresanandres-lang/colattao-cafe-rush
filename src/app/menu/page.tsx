@@ -68,40 +68,103 @@ const COLLAPSIBLE_DESCRIPTION_ITEMS = new Set([
   "Pesto Mozzarella",
 ]);
 
-function BottomInstagramBanner() {
+function InstagramGlyph() {
   return (
-    <section className="relative left-1/2 right-1/2 mt-8 w-screen -translate-x-1/2 pb-8">
-      <div className="relative w-screen overflow-visible">
-        <img
-          src="/assets/colattao-instagram-footer-banner.png"
-          alt="Follow Colattao Coffee House on Instagram. Powered by Fina Calle."
-          className="block h-auto w-screen max-w-none select-none"
-          loading="lazy"
-        />
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.6}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-[18px] w-[18px]"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
 
+function BottomSignature() {
+  return (
+    <section className="mt-10 px-6 pb-12">
+      {/* Open signature — no box. Sits directly on the espresso page. */}
+      <p className="sr-only">
+        Colattao Coffee House. Follow us on Instagram. Powered by Fina Calle.
+      </p>
+
+      {/* Top hairline separates the signature from the content above */}
+      <div className="mx-auto flex max-w-[260px] items-center gap-3">
+        <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(218,174,79,0.45))]" />
+        <span className="h-1.5 w-1.5 rotate-45 bg-[#DAAE4F]/70" />
+        <span className="h-px flex-1 bg-[linear-gradient(90deg,rgba(218,174,79,0.45),transparent)]" />
+      </div>
+
+      <div className="mt-8 flex flex-col items-center text-center">
+        {/* Colattao logo (transparent) — golden-ratio base width 188px */}
         <a
           href={FOOTER_LINKS.colattaoSite}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Visit Colattao Coffee House website"
-          className="absolute left-[3%] top-[16%] h-[58%] w-[30%]"
-        />
+          className="rounded-2xl transition focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F8EDD7]"
+        >
+          <Image
+            src={appTheme.brand.logoPath}
+            alt="Colattao Coffee House"
+            width={1024}
+            height={341}
+            className="h-auto w-[188px] max-w-full select-none drop-shadow-[0_0_22px_rgba(218,174,79,0.22)]"
+          />
+        </a>
 
+        <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.34em] text-[#DAAE4F]/85">
+          Coffee House
+        </p>
+
+        {/* Instagram CTA — kept as a pill button (affordance), 32px golden-rhythm gap */}
         <a
           href={FOOTER_LINKS.colattaoInstagram}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Follow Colattao Coffee House on Instagram"
-          className="absolute left-[38%] top-[18%] h-[44%] w-[45%]"
-        />
+          className="group mt-8 inline-flex items-center gap-2.5 rounded-full border border-[#DAAE4F]/55 bg-[#2a150d]/55 px-5 py-2.5 text-[#F8EDD7] shadow-[inset_0_1px_0_rgba(248,237,215,0.12)] transition duration-200 hover:-translate-y-0.5 hover:border-[#DAAE4F]/85 hover:bg-[#3a1d12]/65 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
+        >
+          <span className="text-[#DAAE4F] transition-colors group-hover:text-[#F8EDD7]">
+            <InstagramGlyph />
+          </span>
+          <span className="text-[12px] font-bold uppercase tracking-[0.18em]">
+            Follow us on Instagram
+          </span>
+        </a>
 
+        <p className="mt-3 text-[11px] font-medium tracking-wide text-[#F8EDD7]/55">
+          @colattao
+        </p>
+
+        {/* Powered by Fina Calle — eyebrow + real Fina Calle wordmark logo.
+            Width 116px ≈ 188 ÷ φ (golden ratio against the Colattao mark). */}
         <a
           href={FOOTER_LINKS.finaCalle}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Visit Fina Calle"
-          className="absolute left-[48%] top-[62%] h-[24%] w-[42%]"
-        />
+          aria-label="Powered by Fina Calle"
+          className="group mt-8 inline-flex flex-col items-center gap-2 rounded-2xl px-3 py-1.5 transition hover:-translate-y-0.5 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
+        >
+          <span className="text-[9px] font-semibold uppercase tracking-[0.32em] text-[#DAAE4F]/70 transition-colors group-hover:text-[#DAAE4F]">
+            Powered by
+          </span>
+          <Image
+            src="/assets/colattao/ui/fina-calle-wordmark.webp"
+            alt="Fina Calle"
+            width={260}
+            height={154}
+            className="h-auto w-[116px] max-w-full select-none opacity-90 drop-shadow-[0_0_18px_rgba(218,174,79,0.16)] transition-opacity group-hover:opacity-100"
+          />
+          <span className="sr-only">Powered by Fina Calle</span>
+        </a>
       </div>
     </section>
   );
@@ -332,7 +395,7 @@ export default function MenuPage() {
         <ColattaoGuestNoteForm />
       </div>
 
-      <BottomInstagramBanner />
+      <BottomSignature />
     </main>
   );
 }
