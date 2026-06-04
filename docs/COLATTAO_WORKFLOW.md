@@ -34,6 +34,19 @@ Use these destinations:
 
 Do not park concepts only in chat. If an idea affects future Colattao work, record it in one of the destinations above.
 
+## Game Background Protocol
+
+Colattao game background replacements must use `PRODUCT_MODULES/COLATTAO_GAME_BACKGROUND_PROTOCOL.md` as the source of truth.
+
+Reusable references:
+
+- `PRODUCT_MODULES/COLATTAO_GAME_BACKGROUND_PROTOCOL.md`
+- `src/config/colattaoGameBackgroundProtocol.ts`
+- `public/assets/colattao/backgrounds/README.md`
+- `PROMPTS/COLATTAO_BG_SWAP_PROMPT.md`
+
+Core rule: swap theme, preserve geometry. Background swaps should keep the `941x1672` canvas, clear gameplay lane `x225-725 y100-1450`, and perimeter-only props so gameplay remains readable without code changes.
+
 ## Seasonal Drink Asset Provenance
 
 For the reusable seasonal drink image and banner workflow, use

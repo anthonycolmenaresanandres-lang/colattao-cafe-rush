@@ -1,6 +1,8 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-04 14:28:25] Session started
+- [2026-06-04 13:52:01] Session started
 - [2026-06-04 10:49:17] Session started
 - [2026-06-04 10:17:39] Session started
 - [2026-06-04 09:56:23] Session started
@@ -76,6 +78,8 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-04 14:32:15] Verified Colattao game background protocol config and docs with npm.cmd run build
+- [2026-06-04 14:30:23] Created Colattao game background protocol docs, reusable prompt, background asset README, and typed config reference
 - [2026-06-04 10:54:49] Committed seasonal drink asset protocol documentation
 - [2026-06-04 10:54:09] Staged scoped seasonal protocol documentation files for commit
 - [2026-06-04 10:53:17] Cleaned a stray HANDOFF.md trailing fragment from handoff log maintenance
@@ -146,6 +150,8 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-06-04 14:32:15] Await approval before staging or committing Colattao game background protocol documentation
+- [2026-06-04 14:30:23] Run build check, verify no gameplay or menu data changed, and report without committing
 - [2026-06-04 10:54:49] Push seasonal protocol documentation commit to origin main
 - [2026-06-04 10:54:16] Commit seasonal protocol documentation, push to origin main, then report results
 - [2026-06-04 10:53:27] Review scoped diff, stage documentation and handoff files, commit, then push
