@@ -34,6 +34,36 @@ Use these destinations:
 
 Do not park concepts only in chat. If an idea affects future Colattao work, record it in one of the destinations above.
 
+## Seasonal Drink Asset Provenance
+
+Matcha Lemonade banner source images were found in:
+
+`C:\Users\antho\OneDrive\Desktop\Fina Calle Brand images CODEX`
+
+Selected source files:
+
+- Original: `ChatGPT Image 4 jun 2026, 10_14_00 a.m. (1).png`
+- Strawberry: `ChatGPT Image 4 jun 2026, 10_14_00 a.m. (2).png`
+- Mango: `ChatGPT Image 4 jun 2026, 10_14_01 a.m. (3).png`
+
+Repo asset destination:
+
+`public/assets/colattao/menu/seasonal/`
+
+Stored source-poster copies:
+
+- `matcha-lemonade-original-poster.png`
+- `matcha-lemonade-strawberry-poster.png`
+- `matcha-lemonade-mango-poster.png`
+
+Derived wide banner variants:
+
+- `matcha-lemonade-original-banner.png`
+- `matcha-lemonade-strawberry-banner.png`
+- `matcha-lemonade-mango-banner.png`
+
+The derived banner variants preserve the full poster without distortion inside a wide espresso/parchment display frame. No AI regeneration was needed.
+
 ## Future Task Prompt Requirement
 
 Every future Colattao task should end with the best next Codex prompt, ready to paste.
