@@ -94,7 +94,7 @@ export default function SeasonalFeatureBanner() {
     >
       <div className="relative overflow-hidden rounded-[28px] border border-[#d9b36a]/70 bg-[linear-gradient(145deg,#1d1008_0%,#2b170d_48%,#110905_100%)] p-[1px] shadow-[0_18px_34px_-24px_rgba(0,0,0,0.95),0_0_28px_-20px_rgba(218,174,79,0.9)]">
         <div
-          className="relative aspect-[4/5] touch-pan-y select-none overflow-hidden rounded-[27px] bg-[#150a05]"
+          className="relative aspect-[16/9] touch-pan-y select-none overflow-hidden rounded-[27px] bg-[#150a05]"
           role="group"
           aria-roledescription="carousel"
           tabIndex={0}
@@ -122,11 +122,8 @@ export default function SeasonalFeatureBanner() {
             );
           })}
 
-          {/* Top row: seasonal eyebrow + indicator dots */}
-          <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-between">
-            <span className="rounded-full border border-[#f8edd7]/22 bg-[#1d1008]/55 px-3 py-1.5 text-[8px] font-bold uppercase tracking-[0.24em] text-[#daae4f] backdrop-blur-[2px]">
-              Seasonal Window
-            </span>
+          {/* Indicator dots (top-right) */}
+          <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex items-start justify-end">
             <div className="pointer-events-auto flex gap-1.5 rounded-full border border-[#f8edd7]/20 bg-[#1d1008]/45 px-2 py-1.5 backdrop-blur-[2px]">
               {FEATURED_FLAVORS.map((flavor, index) => (
                 <button
