@@ -12,7 +12,7 @@ Players catch Colattao items, avoid chain coffee, win a pass, claim a base disco
 npm install
 npm run dev
 ```
-Open `http://localhost:3000`.
+Local routes are for Codex verification only. Anthony reviews deployed Vercel preview or production URLs, not local routes.
 
 ## Build
 ```bash
@@ -41,7 +41,11 @@ npm run build
 3. Framework preset: `Next.js` (auto-detected).
 4. Build command: `npm run build`.
 5. Output: use Vercel default Next.js output.
-6. Deploy and copy the production URL.
+6. Deploy and copy the preview or production URL.
+7. Include the deployed Vercel preview or production URL in the final report when available.
+
+## Workflow Notes
+Review and concept-handling rules live in `docs/COLATTAO_WORKFLOW.md`.
 
 ## Deployment (Other Next.js Hosts)
 Any host that supports standard Next.js App Router deployments can run this app using:

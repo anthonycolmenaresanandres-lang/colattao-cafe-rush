@@ -55,7 +55,18 @@ Future clients can reuse this same route structure with their own:
 
 This keeps delivery consistent while allowing each brand to feel custom.
 
-## 6. Owner Command Center Constraints
+## 6. Ideas, Research, and Development Destination
+Use `docs/COLATTAO_WORKFLOW.md` as the workflow rulebook for Colattao review, deployment, and parked concepts.
+
+Use this map to decide where a concept belongs:
+- Route or customer experience concept: record the route relationship here.
+- Reusable client pattern: record it in `WHITE_LABEL_GUIDE.md`.
+- Current milestone or parked work: record it in `CHECKPOINT.md`.
+- Ready-to-build R&D surface: implement under `src/app/research-and-development/` only when approved.
+
+Anthony reviews deployed Vercel preview or production URLs, not local routes.
+
+## 7. Owner Command Center Constraints
 - Static/mock-only interface.
 - No backend.
 - No auth.

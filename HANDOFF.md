@@ -1,6 +1,7 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-04 09:56:23] Session started
 - [2026-06-04 09:41:56] Session started
 - [2026-06-02 20:54:38] Session started
 - [2026-06-02 20:51:36] Session started
@@ -73,6 +74,8 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-04 09:59:24] Verified Colattao workflow documentation build passed with npm.cmd run build
+- [2026-06-04 09:57:58] Documented Colattao deployed-URL review workflow and concept routing destinations
 - [2026-06-04 09:46:54] Added SeasonalFeatureBanner and wired it below the play banner with Matcha Lemonade flavor reveal
 - [2026-06-02 20:55:31] Verified Guest Note email refinement build before commit
 - [2026-06-02 20:53:24] Improved Colattao Guest Note owner email formatting and verified build
@@ -133,6 +136,8 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-06-04 09:59:24] Commit and push the Colattao deployment review workflow documentation
+- [2026-06-04 09:57:58] Use deployed Vercel preview or production URLs in final reports and include the best next Codex prompt for future Colattao tasks
 - [2026-06-04 09:48:26] Commit and push the Matcha Lemonade seasonal banner update
 - [2026-06-02 20:53:24] Review Guest Note email formatting and commit if approved
 - [2026-06-02 20:38:19] Commit Guest Note color restyle if approved
@@ -207,6 +212,7 @@
 - [2026-05-23 08:36:23] handoff show failed due to utf-8 BOM in console encoding
 
 ## NOTES
+- [2026-06-04 09:57:58] Decision: Anthony reviews Colattao work through deployed Vercel preview or production URLs only; local routes are for Codex verification, and future Colattao concepts should be routed through docs/COLATTAO_WORKFLOW.md plus ECOSYSTEM_MAP.md, WHITE_LABEL_GUIDE.md, or CHECKPOINT.md as appropriate.
 - [2026-05-23 08:41:04] Phaser mounts once in GameCanvas via refs and useEffect empty deps; React only subscribes to EventBus
 - [2026-05-23 08:37:07] create-next-app cannot use folder name with spaces/caps as package name; using temporary child folder then moving files to canonical root
 
