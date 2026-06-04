@@ -9,6 +9,7 @@ import {
   SITE_REGION,
   SITE_COUNTRY,
   BRAND_LINKS,
+  GOOGLE_SITE_VERIFICATION,
 } from "@/config/site";
 
 const inter = Inter({
@@ -84,6 +85,10 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+  // Emitted only when a verification code is set in the active client config.
+  ...(GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 // Site-wide structured data: ties this digital menu to the real Colattao brand
