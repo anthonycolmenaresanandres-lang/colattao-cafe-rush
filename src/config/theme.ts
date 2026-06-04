@@ -111,9 +111,9 @@ export const appTheme: ThemeConfig = {
       // current build uses tap-on-falling-items mechanics without an avatar.
       player: "/assets/colattao/logo/colattao-logo.png",
       goodItems: [
-        "/assets/colattao/items/coffee-cup.png",
-        "/assets/colattao/items/croissant.png",
-        "/assets/colattao/items/matcha-iced.png",
+        "/assets/colattao/game/stickers/original-sticker.png",
+        "/assets/colattao/game/stickers/strawberry-sticker.png",
+        "/assets/colattao/game/stickers/mango-sticker.png",
       ],
       badItems: [
         "/assets/colattao/items/seafarers-bad.png",
