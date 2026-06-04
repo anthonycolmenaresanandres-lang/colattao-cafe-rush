@@ -307,6 +307,17 @@ export default function MenuPage() {
         </div>
       </section>
 
+      <section className="relative z-10 px-4 pt-4">
+        <Image
+          src="/assets/colattao/menu/seasonal/featured-seasonal-plates-banner.png"
+          alt="Featured Seasonal Plates: Waffle Breakfast and Tuna Salad Sandwich"
+          width={1672}
+          height={941}
+          sizes="(max-width: 470px) calc(100vw - 32px), 438px"
+          className="h-auto w-full rounded-[22px] shadow-[0_18px_36px_-22px_rgba(0,0,0,0.82),0_0_0_1px_rgba(218,174,79,0.24)]"
+        />
+      </section>
+
       <div className="relative z-10 flex-1 space-y-4 px-4 py-2">
         <section className="px-2 py-1 text-center">
           <Image
