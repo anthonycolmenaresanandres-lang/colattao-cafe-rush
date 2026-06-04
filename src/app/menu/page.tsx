@@ -319,19 +319,6 @@ export default function MenuPage() {
       </section>
 
       <div className="relative z-10 flex-1 space-y-4 px-4 py-2">
-        <section className="px-2 py-1 text-center">
-          <Image
-            src="/assets/colattao/ui/menu-origin-milk-header.webp"
-            alt="From Colombia, single-origin. Choose your preferred milk option."
-            width={960}
-            height={955}
-            className="mx-auto h-auto w-full"
-          />
-          <p className="sr-only">
-            FROM COLOMBIA, SINGLE-ORIGIN. CHOOSE YOUR PREFERRED MILK OPTION.
-          </p>
-        </section>
-
         {/* Deep-link target so /menu#menu (e.g. from the R&D lab) lands on the categories. */}
         <div id="menu" aria-hidden="true" className="scroll-mt-32" />
         <section className="mx-1 -mt-1 pb-1">
