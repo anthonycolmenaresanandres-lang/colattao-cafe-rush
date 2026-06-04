@@ -1,6 +1,7 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-04 09:41:56] Session started
 - [2026-06-02 20:54:38] Session started
 - [2026-06-02 20:51:36] Session started
 - [2026-06-02 20:44:35] Session started
@@ -72,6 +73,7 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-04 09:46:54] Added SeasonalFeatureBanner and wired it below the play banner with Matcha Lemonade flavor reveal
 - [2026-06-02 20:55:31] Verified Guest Note email refinement build before commit
 - [2026-06-02 20:53:24] Improved Colattao Guest Note owner email formatting and verified build
 - [2026-06-02 20:45:27] Verified Guest Note style refinement build before commit
@@ -131,6 +133,7 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-06-04 09:48:26] Commit and push the Matcha Lemonade seasonal banner update
 - [2026-06-02 20:53:24] Review Guest Note email formatting and commit if approved
 - [2026-06-02 20:38:19] Commit Guest Note color restyle if approved
 - [2026-06-02 20:27:27] Review Guest Note form visually, then commit only approved files if requested
@@ -214,3 +217,4 @@
 - **Security:** The `/owner-command-center` is protected by a client-side PIN gate (currently `1234`).
 - **Canvas Scaling:** The Phaser game canvas dynamically resizes using `calc(100dvh - 56px)` to compensate for the unified customer header.
  unified customer header.
+customer header.

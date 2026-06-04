@@ -4,6 +4,7 @@ import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import appTheme from "@/config/theme";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
+import SeasonalFeatureBanner from "@/components/SeasonalFeatureBanner";
 import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -126,6 +127,12 @@ const COLLAPSIBLE_DESCRIPTION_ITEMS = new Set([
   "Montecristo",
   "Pesto Mozzarella",
 ]);
+
+const MATCHA_LEMONADE_FLAVORS = [
+  "Original - bright lemonade and smooth matcha.",
+  "Strawberry - fresh berry sweetness with a matcha finish.",
+  "Mango - tropical mango layered with citrus and matcha.",
+];
 
 function InstagramGlyph() {
   return (
@@ -260,6 +267,7 @@ export default function MenuPage() {
           </Link>
         </nav>
       </header>
+      <SeasonalFeatureBanner />
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
           src="/assets/colattao/menu/menu-eldorado-04.png"
@@ -411,7 +419,30 @@ export default function MenuPage() {
                         <span className="dotted-rule" />
                       </div>
                       {item.description && (
-                        COLLAPSIBLE_DESCRIPTION_ITEMS.has(item.name) ? (
+                        category.id === "seasonal-drinks" && item.name === "Matcha Lemonade" ? (
+                          <details
+                            id="matcha-lemonade-flavors"
+                            className="group mt-1.5 rounded-2xl border border-[#d2b27a]/45 bg-[#f8edd7]/42 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.36)]"
+                          >
+                            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--col-espresso-3)]/85 transition-colors hover:text-[var(--col-espresso-2)]">
+                              <span>View Matcha Lemonade flavors</span>
+                              <span className="text-[10px] transition-transform group-open:rotate-180">▾</span>
+                            </summary>
+                            <p className="mt-1.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
+                              {item.description}
+                            </p>
+                            <ul className="mt-2 space-y-1.5">
+                              {MATCHA_LEMONADE_FLAVORS.map((flavor) => (
+                                <li
+                                  key={flavor}
+                                  className="rounded-xl border border-[#d2b27a]/35 bg-[#fff6df]/50 px-3 py-2 text-[12px] font-semibold leading-snug text-[var(--col-espresso)]"
+                                >
+                                  {flavor}
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        ) : COLLAPSIBLE_DESCRIPTION_ITEMS.has(item.name) ? (
                           <details className="group mt-1.5">
                             <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-full border border-[#d2b27a]/45 bg-[#f8edd7]/45 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/80 transition-colors hover:bg-[#f8edd7]/65 hover:text-[var(--col-espresso-2)]">
                               Details
@@ -465,5 +496,4 @@ export default function MenuPage() {
     </main>
   );
 }
-
 
