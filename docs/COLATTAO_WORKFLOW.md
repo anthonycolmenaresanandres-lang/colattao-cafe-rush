@@ -36,6 +36,9 @@ Do not park concepts only in chat. If an idea affects future Colattao work, reco
 
 ## Seasonal Drink Asset Provenance
 
+For the reusable seasonal drink image and banner workflow, use
+`docs/COLATTAO_SEASONAL_ASSET_PROTOCOL.md`.
+
 Matcha Lemonade banner source images were found in:
 
 `C:\Users\antho\OneDrive\Desktop\Fina Calle Brand images CODEX`

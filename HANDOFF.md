@@ -1,6 +1,7 @@
 # HANDOFF
 
 ## STARTED
+- [2026-06-04 10:49:17] Session started
 - [2026-06-04 10:17:39] Session started
 - [2026-06-04 09:56:23] Session started
 - [2026-06-04 09:41:56] Session started
@@ -75,6 +76,12 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-06-04 10:54:49] Committed seasonal drink asset protocol documentation
+- [2026-06-04 10:54:09] Staged scoped seasonal protocol documentation files for commit
+- [2026-06-04 10:53:17] Cleaned a stray HANDOFF.md trailing fragment from handoff log maintenance
+- [2026-06-04 10:52:37] Verified seasonal asset protocol documentation with npm.cmd run build
+- [2026-06-04 10:51:47] Created docs/COLATTAO_SEASONAL_ASSET_PROTOCOL.md and linked it from docs/COLATTAO_WORKFLOW.md
+- [2026-06-04 10:49:47] Read HANDOFF.md, ran start/show, confirmed scope, and checked relevant Colattao memory constraints
 - [2026-06-04 10:25:19] Verified real Matcha Lemonade seasonal asset banner build passed with npm.cmd run build
 - [2026-06-04 10:23:40] Replaced Matcha Lemonade banner fallback visuals with real seasonal drink assets and documented asset provenance
 - [2026-06-04 09:59:24] Verified Colattao workflow documentation build passed with npm.cmd run build
@@ -139,6 +146,10 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-06-04 10:54:49] Push seasonal protocol documentation commit to origin main
+- [2026-06-04 10:54:16] Commit seasonal protocol documentation, push to origin main, then report results
+- [2026-06-04 10:53:27] Review scoped diff, stage documentation and handoff files, commit, then push
+- [2026-06-04 10:49:48] Inspect only SeasonalFeatureBanner, menu page, seasonal assets, workflow docs, and git status before writing the protocol doc
 - [2026-06-04 10:25:19] Commit and push the real Matcha Lemonade seasonal drink asset banner update
 - [2026-06-04 10:23:40] Build, commit, push, and report deployed Vercel URL for the real Matcha Lemonade banner asset update
 - [2026-06-04 09:59:24] Commit and push the Colattao deployment review workflow documentation
@@ -217,6 +228,7 @@
 - [2026-05-23 08:36:23] handoff show failed due to utf-8 BOM in console encoding
 
 ## NOTES
+- [2026-06-04 10:51:48] Decision: Future Colattao seasonal drink banners must follow docs/COLATTAO_SEASONAL_ASSET_PROTOCOL.md for source selection, poster/banner asset outputs, UI behavior, deployed-URL review, and final reporting.
 - [2026-06-04 09:57:58] Decision: Anthony reviews Colattao work through deployed Vercel preview or production URLs only; local routes are for Codex verification, and future Colattao concepts should be routed through docs/COLATTAO_WORKFLOW.md plus ECOSYSTEM_MAP.md, WHITE_LABEL_GUIDE.md, or CHECKPOINT.md as appropriate.
 - [2026-05-23 08:41:04] Phaser mounts once in GameCanvas via refs and useEffect empty deps; React only subscribes to EventBus
 - [2026-05-23 08:37:07] create-next-app cannot use folder name with spaces/caps as package name; using temporary child folder then moving files to canonical root
