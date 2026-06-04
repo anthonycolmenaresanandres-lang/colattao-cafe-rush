@@ -130,10 +130,25 @@ const COLLAPSIBLE_DESCRIPTION_ITEMS = new Set([
 ]);
 
 const MATCHA_LEMONADE_FLAVORS = [
-  "Original - bright lemonade and smooth matcha.",
-  "Strawberry - fresh berry sweetness with a matcha finish.",
-  "Mango - tropical mango layered with citrus and matcha.",
-];
+  {
+    name: "Original",
+    description: "Bright lemonade and smooth matcha.",
+    imageSrc: "/assets/colattao/menu/seasonal/matcha-original-thumb.png",
+    imageAlt: "Original Matcha Lemonade",
+  },
+  {
+    name: "Strawberry",
+    description: "Fresh berry sweetness with a matcha finish.",
+    imageSrc: "/assets/colattao/menu/seasonal/matcha-strawberry-thumb.png",
+    imageAlt: "Strawberry Matcha Lemonade",
+  },
+  {
+    name: "Mango",
+    description: "Tropical mango layered with citrus and matcha.",
+    imageSrc: "/assets/colattao/menu/seasonal/matcha-mango-thumb.png",
+    imageAlt: "Mango Matcha Lemonade",
+  },
+] as const;
 
 function InstagramGlyph() {
   return (
@@ -443,10 +458,27 @@ export default function MenuPage() {
                             <ul className="mt-2 space-y-1.5">
                               {MATCHA_LEMONADE_FLAVORS.map((flavor) => (
                                 <li
-                                  key={flavor}
-                                  className="rounded-xl border border-[#d2b27a]/35 bg-[#fff6df]/50 px-3 py-2 text-[12px] font-semibold leading-snug text-[var(--col-espresso)]"
+                                  key={flavor.name}
+                                  className="flex items-center gap-3 rounded-xl border border-[#d2b27a]/35 bg-[#fff6df]/56 px-2.5 py-2 text-[var(--col-espresso)] shadow-[inset_0_1px_0_rgba(255,255,255,0.38)]"
                                 >
-                                  {flavor}
+                                  <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#f8edd7]/58 ring-1 ring-[#d2b27a]/30">
+                                    <Image
+                                      src={flavor.imageSrc}
+                                      alt={flavor.imageAlt}
+                                      width={72}
+                                      height={72}
+                                      sizes="64px"
+                                      className="h-14 w-14 object-contain drop-shadow-[0_5px_7px_rgba(75,36,18,0.18)]"
+                                    />
+                                  </span>
+                                  <span className="min-w-0">
+                                    <span className="block text-[12px] font-bold leading-tight text-[var(--col-espresso)]">
+                                      {flavor.name}
+                                    </span>
+                                    <span className="mt-0.5 block text-[11px] font-medium leading-snug text-[var(--col-espresso-3)]/86">
+                                      {flavor.description}
+                                    </span>
+                                  </span>
                                 </li>
                               ))}
                             </ul>
