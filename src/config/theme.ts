@@ -45,6 +45,12 @@ export interface GameAssetsConfig {
   badItems: string[];
   /** Background scene image used inside the Phaser canvas. */
   background: string;
+  /**
+   * Reference-only: seasonal drink sticker collectibles (placeholders until
+   * final art). NOT wired into live gameplay — see
+   * public/assets/colattao/game/stickers/README.md.
+   */
+  seasonalStickers?: string[];
 }
 
 export interface GameCopyConfig {
@@ -113,6 +119,12 @@ export const appTheme: ThemeConfig = {
         "/assets/colattao/items/seafarers-bad.png",
       ],
       background: "/assets/colattao/backgrounds/colattao-bg.png",
+      // Reference-only — placeholders, not active in gameplay yet.
+      seasonalStickers: [
+        "/assets/colattao/game/stickers/original-sticker.png",
+        "/assets/colattao/game/stickers/strawberry-sticker.png",
+        "/assets/colattao/game/stickers/mango-sticker.png",
+      ],
     },
     copy: {
       winMessage: "You brewed greatness.",
