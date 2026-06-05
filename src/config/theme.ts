@@ -46,6 +46,11 @@ export interface GameAssetsConfig {
   /** Background scene image used inside the Phaser canvas. */
   background: string;
   /**
+   * Active seasonal theme label. Drives which background art is in use so it
+   * can be swapped per season (e.g. "summer" -> colattao-bg-summer.png).
+   */
+  season?: "default" | "summer" | "fall" | "winter" | "spring";
+  /**
    * Reference-only: seasonal drink sticker collectibles (placeholders until
    * final art). NOT wired into live gameplay — see
    * public/assets/colattao/game/stickers/README.md.
@@ -118,7 +123,8 @@ export const appTheme: ThemeConfig = {
       badItems: [
         "/assets/colattao/items/seafarers-bad.png",
       ],
-      background: "/assets/colattao/backgrounds/colattao-bg.png",
+      background: "/assets/colattao/backgrounds/colattao-bg-summer.png",
+      season: "summer",
       // Reference-only — placeholders, not active in gameplay yet.
       seasonalStickers: [
         "/assets/colattao/game/stickers/original-sticker.png",

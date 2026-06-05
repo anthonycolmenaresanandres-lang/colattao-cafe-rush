@@ -234,6 +234,7 @@
 - [2026-05-23 08:36:23] handoff show failed due to utf-8 BOM in console encoding
 
 ## NOTES
+- [2026-06-04] Decision: Promotional games for Fina Calle, AMMA, Colattao, and future client projects must follow PRODUCT_MODULES/PROMOTIONAL_GAME_POLICY.md. Core rule: every game must entertain first, but sell quietly through repetition, reward, product visibility, and menu conversion.
 - [2026-06-04 10:51:48] Decision: Future Colattao seasonal drink banners must follow docs/COLATTAO_SEASONAL_ASSET_PROTOCOL.md for source selection, poster/banner asset outputs, UI behavior, deployed-URL review, and final reporting.
 - [2026-06-04 09:57:58] Decision: Anthony reviews Colattao work through deployed Vercel preview or production URLs only; local routes are for Codex verification, and future Colattao concepts should be routed through docs/COLATTAO_WORKFLOW.md plus ECOSYSTEM_MAP.md, WHITE_LABEL_GUIDE.md, or CHECKPOINT.md as appropriate.
 - [2026-05-23 08:41:04] Phaser mounts once in GameCanvas via refs and useEffect empty deps; React only subscribes to EventBus

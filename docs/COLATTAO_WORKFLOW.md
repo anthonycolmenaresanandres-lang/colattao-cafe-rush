@@ -47,6 +47,18 @@ Reusable references:
 
 Core rule: swap theme, preserve geometry. Background swaps should keep the `941x1672` canvas, clear gameplay lane `x225-725 y100-1450`, and perimeter-only props so gameplay remains readable without code changes.
 
+## Promotional Game Policy
+
+Colattao game and campaign work must use `PRODUCT_MODULES/PROMOTIONAL_GAME_POLICY.md` as the company-level policy for promotional game decisions.
+
+Core rule: every game must entertain first, but sell quietly through repetition, reward, product visibility, and menu conversion.
+
+Reusable prompt:
+
+- `PROMPTS/PROMOTIONAL_GAME_CAMPAIGN_PROMPT.md`
+
+Use this policy before changing or planning game campaigns so seasonal product visibility, menu conversion, Instagram follow loops, and reward language stay intentional without adding fake features or changing mechanics outside an approved gameplay task.
+
 ## Seasonal Drink Asset Provenance
 
 For the reusable seasonal drink image and banner workflow, use
