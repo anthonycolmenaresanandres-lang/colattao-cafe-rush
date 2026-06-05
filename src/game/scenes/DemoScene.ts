@@ -291,7 +291,7 @@ export class DemoScene extends Phaser.Scene {
 
     // Status line under HUD
     this.statusText = this.add
-      .text(width / 2, 112, "Catch Colombian treats. Avoid chain coffee.", {
+      .text(width / 2, 112, "Real Colombian coffee — not the chain.", {
         fontFamily: FONT_SANS,
         fontSize: "11px",
         color: "#F5E9D0",
@@ -377,7 +377,7 @@ export class DemoScene extends Phaser.Scene {
       .text(
         width / 2,
         brandZone + playZone * 0.16,
-        "Catch the items ☕🥐🍵\nAvoid the water 💧\n\nTap to start",
+        "Catch Colattao's drinks & treats 🍓🥭🍵\nDodge the chain coffee 💧\n\nTap to play",
         {
           fontFamily: FONT_SANS,
           fontSize: "12px",
@@ -744,7 +744,7 @@ export class DemoScene extends Phaser.Scene {
     this.currentLevelIndex += 1;
     this.resetLevelState();
     this.refreshHudForLevel();
-    this.statusText?.setText("Catch Colombian treats. Avoid chain coffee.");
+    this.statusText?.setText("Real Colombian coffee — not the chain.");
     this.statusText?.setVisible(true);
     this.startRound();
   }
