@@ -72,8 +72,8 @@ export default function Home() {
       <section className="relative flex min-h-0 flex-1 flex-col px-1 pb-1 pt-1 sm:px-2">
         <GameCanvas />
 
-        {/* Promo banner floats over the top of the game, staying on top like a website ad. */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center px-3 pt-2">
+        {/* Promo banner pinned to the bottom of the game, like a website ad bar. */}
+        <div className="absolute inset-x-0 bottom-0 z-30 flex justify-center px-3 pb-2">
           <SeasonalPromoBanner />
         </div>
       </section>
