@@ -1,6 +1,7 @@
 ﻿import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { insertRequest } from "@/lib/supabaseServer";
 
 export const dynamic = "force-dynamic";
 
@@ -334,6 +335,15 @@ export async function POST(request: Request) {
     console.error("[owner-requests] Email notification failed", getResendErrorDiagnostics(error));
     return NextResponse.json({ ok: false, reason: "email_failed" }, { status: 500 });
   }
+
+  // Best-effort CRM persistence — never blocks or fails the response.
+  void insertRequest({
+    request_type: requestType,
+    priority,
+    message,
+    contact: contactInfo,
+    blob_url: uploadedFileUrls[0] ?? null,
+  });
 
   return NextResponse.json({ ok: true, uploadedFileUrls });
 }

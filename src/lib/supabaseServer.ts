@@ -41,3 +41,113 @@ export function isRequestsDbEnabled(): boolean {
     Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY)
   );
 }
+
+/** Sales lead row (mirrors public.leads in supabase/migrations/0001_crm.sql). */
+export interface LeadRow {
+  cafe_name: string;
+  contact?: string | null;
+  contact_method?: string | null;
+  plan_type?: string | null;
+  city?: string | null;
+  notes?: string | null;
+  source?: string | null;
+  rep_id?: string | null;
+  missing_fields?: string[] | null;
+  blob_url?: string | null;
+  client_slug?: string;
+}
+
+/** Client request row (mirrors public.requests in supabase/migrations/0001_crm.sql). */
+export interface RequestRow {
+  request_type?: string | null;
+  priority?: string | null;
+  message?: string | null;
+  contact?: string | null;
+  blob_url?: string | null;
+  client_slug?: string;
+}
+
+/**
+ * Best-effort lead insert. Returns true only on a confirmed write. No-ops
+ * (returns false) when the CRM flow is disabled/unconfigured, and SWALLOWS all
+ * errors — it must NEVER throw or block the calling Route Handler's response.
+ */
+export async function insertLead(row: LeadRow): Promise<boolean> {
+  if (!isRequestsDbEnabled()) return false;
+  const db = getSupabaseAdmin();
+  if (!db) return false;
+  try {
+    const { error } = await db.from("leads").insert(row);
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Best-effort request insert. Same contract as insertLead: never throws, never
+ * blocks; returns false when disabled/unconfigured or on any error.
+ */
+export async function insertRequest(row: RequestRow): Promise<boolean> {
+  if (!isRequestsDbEnabled()) return false;
+  const db = getSupabaseAdmin();
+  if (!db) return false;
+  try {
+    const { error } = await db.from("requests").insert(row);
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
+/** Stored lead (LeadRow + DB-generated columns). */
+export interface LeadRecord extends LeadRow {
+  id: string;
+  created_at: string;
+  status: string;
+}
+
+/** Stored request (RequestRow + DB-generated columns). */
+export interface RequestRecord extends RequestRow {
+  id: string;
+  created_at: string;
+  status: string;
+}
+
+/**
+ * Read helpers for the internal /crm dashboard. Server-only (service-role).
+ * Return [] when disabled/unconfigured or on any error — never throw.
+ */
+export async function fetchLeads(limit = 200): Promise<LeadRecord[]> {
+  if (!isRequestsDbEnabled()) return [];
+  const db = getSupabaseAdmin();
+  if (!db) return [];
+  try {
+    const { data, error } = await db
+      .from("leads")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (error || !data) return [];
+    return data as LeadRecord[];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchRequests(limit = 200): Promise<RequestRecord[]> {
+  if (!isRequestsDbEnabled()) return [];
+  const db = getSupabaseAdmin();
+  if (!db) return [];
+  try {
+    const { data, error } = await db
+      .from("requests")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(limit);
+    if (error || !data) return [];
+    return data as RequestRecord[];
+  } catch {
+    return [];
+  }
+}

@@ -1,6 +1,7 @@
 import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { insertLead } from "@/lib/supabaseServer";
 
 export const dynamic = "force-dynamic";
 
@@ -344,6 +345,20 @@ export async function POST(request: Request) {
     console.error("[onboarding] Email notification failed", error);
     return NextResponse.json({ ok: false, reason: "email_failed" }, { status: 500 });
   }
+
+  // Best-effort CRM persistence — never blocks or fails the response.
+  void insertLead({
+    cafe_name: cafeName,
+    contact: contactInfo,
+    contact_method: null,
+    plan_type: planType || null,
+    city: addresses ? addresses.split("\n")[0].trim() : null,
+    notes: notes || null,
+    source: "rep-intake",
+    rep_id: repId || repName || null,
+    missing_fields: missingPieces.length ? missingPieces : null,
+    blob_url: uploadedGroups[0]?.urls[0] ?? null,
+  });
 
   return NextResponse.json({
     ok: true,
