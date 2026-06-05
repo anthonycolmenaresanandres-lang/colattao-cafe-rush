@@ -69,13 +69,8 @@ export default function Home() {
       </h1>
       <CustomerHeader />
 
-      <style>{`@keyframes crRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}`}</style>
-      <section className="flex min-h-0 flex-1 flex-col items-center justify-start px-2 pb-1 pt-1.5">
-        <div className="relative h-full w-full overflow-hidden rounded-2xl border border-[#DAAE4F]/40 shadow-[0_18px_44px_-26px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(248,237,215,0.08)] motion-safe:[animation:crRise_.6s_ease-out_both]">
-          <span className="pointer-events-none absolute inset-0 z-10 rounded-2xl ring-1 ring-inset ring-[#DAAE4F]/15" />
-          <span className="pointer-events-none absolute inset-x-6 top-0 z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(218,174,79,0.6),transparent)]" />
-          <GameCanvas />
-        </div>
+      <section className="flex min-h-0 flex-1 flex-col items-center justify-start px-1 pb-1 pt-1 sm:px-2">
+        <GameCanvas />
       </section>
 
       <SeasonalPromoBanner />
