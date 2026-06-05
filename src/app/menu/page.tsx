@@ -271,17 +271,24 @@ export default function MenuPage() {
         <nav className="mx-auto w-full max-w-[360px]">
           <Link
             href="/"
-            className="group relative flex min-h-12 w-full items-center justify-center overflow-hidden rounded-full border border-[#DAAE4F]/75 bg-[linear-gradient(135deg,rgba(218,174,79,0.98)_0%,rgba(248,237,215,0.92)_48%,rgba(218,174,79,0.96)_100%)] px-4 py-2 text-center text-[#1D1108] shadow-[0_10px_26px_-16px_rgba(218,174,79,0.95),inset_0_1px_0_rgba(255,255,255,0.48),inset_0_-2px_0_rgba(29,17,8,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-15px_rgba(218,174,79,1),inset_0_1px_0_rgba(255,255,255,0.55),inset_0_-2px_0_rgba(29,17,8,0.2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
+            className="group relative flex min-h-[52px] w-full items-center justify-center overflow-hidden rounded-2xl border border-[#DAAE4F]/75 bg-[linear-gradient(135deg,rgba(218,174,79,0.98)_0%,rgba(248,237,215,0.94)_48%,rgba(218,174,79,0.96)_100%)] px-4 py-2 text-center shadow-[0_10px_26px_-16px_rgba(218,174,79,0.95),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-2px_0_rgba(29,17,8,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-15px_rgba(218,174,79,1)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
             aria-label="Play Colattao Rush"
           >
-            <span className="pointer-events-none absolute inset-y-1 left-1 w-3 rounded-l-full border-l border-[#1D1108]/18" />
-            <span className="pointer-events-none absolute inset-y-1 right-1 w-3 rounded-r-full border-r border-[#1D1108]/18" />
-            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.52),transparent_28%),linear-gradient(90deg,transparent_0%,rgba(29,17,8,0.08)_48%,transparent_58%)] opacity-70 transition-opacity group-hover:opacity-90" />
+            {/* Golden-ticket side notches */}
+            <span className="pointer-events-none absolute -left-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08]" />
+            <span className="pointer-events-none absolute -right-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08]" />
+
+            {/* White shine */}
+            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.55),transparent_45%)] opacity-80" />
+
+            {/* Inner dark hairline */}
+            <span className="pointer-events-none absolute inset-[3px] rounded-xl ring-1 ring-inset ring-[#1D1108]/18" />
+
             <span className="relative flex flex-col items-center leading-none">
-              <span className="text-[9px] font-bold uppercase tracking-[0.24em] text-[#5a330e]/80">
+              <span className="text-[8px] font-bold uppercase tracking-[0.22em] text-[#5a330e]/80">
                 Tap to play
               </span>
-              <span className="mt-1 text-[15px] font-black uppercase tracking-[0.18em] text-[#1D1108]">
+              <span className="mt-1 text-[13px] font-black uppercase tracking-[0.16em] text-[#1D1108]">
                 PLAY COLATTAO RUSH
               </span>
             </span>
