@@ -407,30 +407,56 @@ export class DemoScene extends Phaser.Scene {
     const ctaY = brandZone + playZone * 0.46;
     const ctaW = 180;
     const ctaH = 50;
+    const ctaRadius = 16;
+    const halfW = ctaW / 2;
+    const halfH = ctaH / 2;
 
     const ctaGlow = this.add
       .rectangle(width / 2, ctaY + 6, ctaW + 18, ctaH + 14, COLOR_GOLD, 0.18)
       .setAlpha(0.55);
 
+    // Premium golden-ticket face — drawn on a Graphics positioned at its own
+    // centre so the pulse tween below scales it cleanly. Matches the web gold CTA:
+    // gold gradient body, dark text, white gloss, espresso ticket notches,
+    // inner dark hairline ring.
+    const ctaFace = this.add.graphics();
+    ctaFace.setPosition(width / 2, ctaY);
+    // Gold gradient body (cream → gold → cream, top-left to bottom-right).
+    ctaFace.fillGradientStyle(0xf3e4c2, COLOR_GOLD, COLOR_GOLD, 0xf3e4c2, 1, 1, 1, 1);
+    ctaFace.fillRoundedRect(-halfW, -halfH, ctaW, ctaH, ctaRadius);
+    // Top gloss (white fading down).
+    ctaFace.fillGradientStyle(0xffffff, 0xffffff, 0xffffff, 0xffffff, 0.32, 0.32, 0, 0);
+    ctaFace.fillRoundedRect(-halfW + 4, -halfH + 4, ctaW - 8, halfH, ctaRadius - 6);
+    // Outer warm rim.
+    ctaFace.lineStyle(1, 0x4b2412, 0.5);
+    ctaFace.strokeRoundedRect(-halfW, -halfH, ctaW, ctaH, ctaRadius);
+    // Inner dark hairline ring.
+    ctaFace.lineStyle(1, COLOR_ESPRESSO, 0.18);
+    ctaFace.strokeRoundedRect(-halfW + 3, -halfH + 3, ctaW - 6, ctaH - 6, ctaRadius - 4);
+    // Golden-ticket side notches (espresso cutouts on the edges).
+    ctaFace.fillStyle(COLOR_ESPRESSO, 1);
+    ctaFace.fillCircle(-halfW, 0, 7);
+    ctaFace.fillCircle(halfW, 0, 7);
+
+    // Invisible hit area on top — preserves the original interaction/logic.
     const ctaBg = this.add
-      .rectangle(width / 2, ctaY, ctaW, ctaH, COLOR_GOLD_SOFT)
-      .setStrokeStyle(1, 0x4b2412, 0.55)
+      .rectangle(width / 2, ctaY, ctaW, ctaH, COLOR_GOLD_SOFT, 0)
       .setInteractive({ useHandCursor: true });
 
     const ctaHighlight = this.add.rectangle(
       width / 2,
       ctaY - ctaH / 2 + 6,
-      ctaW - 18,
+      ctaW - 30,
       2,
       0xffffff,
-      0.55,
+      0.5,
     );
 
     const ctaLabel = this.add
       .text(width / 2, ctaY, "Start", {
         fontFamily: FONT_SERIF,
         fontSize: "22px",
-        color: "#2A1208",
+        color: "#1D1108",
       })
       .setOrigin(0.5);
     ctaLabel.setLetterSpacing(2);
@@ -446,7 +472,7 @@ export class DemoScene extends Phaser.Scene {
     ctaHint.setLetterSpacing(1.5);
 
     this.tweens.add({
-      targets: [ctaBg, ctaLabel, ctaHighlight],
+      targets: [ctaFace, ctaBg, ctaLabel, ctaHighlight],
       scaleX: 1.025,
       scaleY: 1.025,
       duration: 1100,
@@ -467,6 +493,7 @@ export class DemoScene extends Phaser.Scene {
       subtitleBg.destroy();
       subtitle.destroy();
       ctaGlow.destroy();
+      ctaFace.destroy();
       ctaBg.destroy();
       ctaHighlight.destroy();
       ctaLabel.destroy();
