@@ -61,9 +61,8 @@ export default function CustomerHeader() {
                 <span className="pointer-events-none absolute -left-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08] ring-1 ring-[#DAAE4F]/35" />
                 <span className="pointer-events-none absolute -right-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08] ring-1 ring-[#DAAE4F]/35" />
 
-                {/* Gold glow — hover lift + gentle continuous breath */}
+                {/* Subtle gold glow sweep on hover */}
                 <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(218,174,79,0.22),transparent_62%)] opacity-70 transition-opacity duration-200 group-hover:opacity-100" />
-                <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_125%,rgba(218,174,79,0.2),transparent_58%)] opacity-55 motion-safe:animate-pulse" />
 
                 {/* Inner hairline frame */}
                 <span className="pointer-events-none absolute inset-[3px] rounded-xl ring-1 ring-inset ring-[#DAAE4F]/22" />
