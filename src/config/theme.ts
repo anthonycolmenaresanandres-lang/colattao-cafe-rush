@@ -68,6 +68,13 @@ export interface GameCopyConfig {
 }
 
 export interface GameConfig {
+  /**
+   * Which catalog title is active for this tenant. Drives the boot path once
+   * GameCanvas reads the catalog. Authoritative id list lives in
+   * src/game/catalog/types.ts (GameId) — keep this union in sync.
+   * Defaults to "colattao-rush" when omitted.
+   */
+  gameId?: "colattao-rush" | "penalty-shootout";
   /** Hero title rendered on the game screen. */
   title: string;
   /** Subtitle / tagline rendered under the title. */
@@ -109,6 +116,7 @@ export const appTheme: ThemeConfig = {
   },
 
   game: {
+    gameId: "colattao-rush",
     title: "Café Rush",
     subtitle: "Catch the treats. Avoid the chain.",
     assets: {
