@@ -7,13 +7,13 @@ import CustomerHeader from "@/components/CustomerHeader";
 import { EventBus } from "@/game/events/EventBus";
 import type { GameWonPayload } from "@/types/game";
 
-// Static premium banner pinned to the bottom — promotes the new seasonal menu.
+// Premium promo banner that floats over the top of the game like a website ad.
 function SeasonalPromoBanner() {
   return (
     <a
       href="/menu#seasonal-drinks"
       aria-label="New seasonal Matcha Lemonade — view flavors"
-      className="group mx-2 mb-2 mt-1 flex shrink-0 items-center gap-3 overflow-hidden rounded-2xl border border-[#DAAE4F]/45 bg-[linear-gradient(135deg,#241405_0%,#170d05_100%)] px-3 py-2.5 shadow-[0_14px_30px_-22px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(248,237,215,0.08)] transition hover:border-[#DAAE4F]/80"
+      className="group pointer-events-auto flex w-full items-center gap-3 overflow-hidden rounded-2xl border border-[#DAAE4F]/55 bg-[linear-gradient(135deg,#241405_0%,#170d05_100%)] px-3 py-2.5 shadow-[0_18px_38px_-18px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(248,237,215,0.1)] ring-1 ring-black/20 backdrop-blur-sm transition hover:border-[#DAAE4F]/85"
     >
       <div className="flex shrink-0 -space-x-3">
         {["original", "strawberry", "mango"].map((f) => (
@@ -69,11 +69,14 @@ export default function Home() {
       </h1>
       <CustomerHeader />
 
-      <section className="flex min-h-0 flex-1 flex-col items-center justify-start px-1 pb-1 pt-1 sm:px-2">
+      <section className="relative flex min-h-0 flex-1 flex-col px-1 pb-1 pt-1 sm:px-2">
         <GameCanvas />
-      </section>
 
-      <SeasonalPromoBanner />
+        {/* Promo banner floats over the top of the game, staying on top like a website ad. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-30 flex justify-center px-3 pt-2">
+          <SeasonalPromoBanner />
+        </div>
+      </section>
 
       {showReward && lastWin ? (
         <VisualFlashPass payload={lastWin} onPlayAgain={handlePlayAgain} />

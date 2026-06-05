@@ -240,12 +240,12 @@ function BottomSignature() {
           />
         </a>
 
-        {/* Fina Calle Instagram — subtle warm line below */}
+        {/* Fina Calle — subtle warm line below, routes to the Fina Calle landing page */}
         <a
-          href={FOOTER_LINKS.finaCalleInstagram}
+          href={FOOTER_LINKS.finaCalle}
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Follow Fina Calle on Instagram"
+          aria-label="Visit Fina Calle"
           className="group mt-4 inline-flex items-center gap-1.5 text-[#DAAE4F]/55 transition hover:text-[#DAAE4F]/85 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
         >
           <InstagramGlyph />
