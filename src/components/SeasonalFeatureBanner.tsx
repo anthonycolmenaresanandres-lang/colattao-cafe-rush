@@ -87,14 +87,14 @@ export default function SeasonalFeatureBanner() {
 
   return (
     <section
-      className="relative z-20 px-3 py-3"
+      className="relative z-20 px-0 py-2"
       aria-label="Seasonal Matcha Lemonade feature — swipe to change flavor"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="relative overflow-hidden rounded-[28px] border border-[#d9b36a]/70 bg-[linear-gradient(145deg,#1d1008_0%,#2b170d_48%,#110905_100%)] p-[1px] shadow-[0_18px_34px_-24px_rgba(0,0,0,0.95),0_0_28px_-20px_rgba(218,174,79,0.9)]">
+      <div className="relative">
         <div
-          className="relative aspect-[16/9] touch-pan-y select-none overflow-hidden rounded-[27px] bg-[#150a05]"
+          className="relative aspect-[16/9] touch-pan-y select-none overflow-hidden bg-[#150a05]"
           role="group"
           aria-roledescription="carousel"
           tabIndex={0}

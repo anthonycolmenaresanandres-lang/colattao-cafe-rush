@@ -24,8 +24,8 @@ const navItems: readonly NavItem[] = [
   {
     href: "/menu",
     label: "Menu",
-    eyebrow: "Colattao Coffee House",
-    cta: "VIEW OUR MENU",
+    eyebrow: "Hungry?",
+    cta: "TASTE IT",
     ariaLabel: "View our menu",
   },
 ] as const;
@@ -51,27 +51,23 @@ export default function CustomerHeader() {
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
                 aria-label={item.ariaLabel}
-                className={`group relative flex min-h-[52px] flex-1 items-center justify-center overflow-hidden rounded-2xl border bg-[linear-gradient(165deg,#2a1710_0%,#1d1108_52%,#140a02_100%)] px-4 py-2 text-center transition duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7] ${
-                  isActive
-                    ? "border-[#DAAE4F]/85 shadow-[0_12px_30px_-16px_rgba(218,174,79,0.9),inset_0_1px_0_rgba(248,237,215,0.16)]"
-                    : "border-[#DAAE4F]/55 shadow-[0_10px_24px_-18px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(248,237,215,0.12)] hover:border-[#DAAE4F]/85 hover:shadow-[0_14px_30px_-15px_rgba(218,174,79,0.85),inset_0_1px_0_rgba(248,237,215,0.16)]"
-                }`}
+                className="group relative flex min-h-[52px] flex-1 items-center justify-center overflow-hidden rounded-2xl border border-[#DAAE4F]/75 bg-[linear-gradient(135deg,rgba(218,174,79,0.98)_0%,rgba(248,237,215,0.94)_48%,rgba(218,174,79,0.96)_100%)] px-4 py-2 text-center shadow-[0_10px_26px_-16px_rgba(218,174,79,0.95),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-2px_0_rgba(29,17,8,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-15px_rgba(218,174,79,1)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
               >
                 {/* Golden-ticket side notches */}
-                <span className="pointer-events-none absolute -left-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08] ring-1 ring-[#DAAE4F]/35" />
-                <span className="pointer-events-none absolute -right-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08] ring-1 ring-[#DAAE4F]/35" />
+                <span className="pointer-events-none absolute -left-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08]" />
+                <span className="pointer-events-none absolute -right-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08]" />
 
-                {/* Subtle gold glow sweep on hover */}
-                <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(218,174,79,0.22),transparent_62%)] opacity-70 transition-opacity duration-200 group-hover:opacity-100" />
+                {/* White shine */}
+                <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.55),transparent_45%)] opacity-80" />
 
-                {/* Inner hairline frame */}
-                <span className="pointer-events-none absolute inset-[3px] rounded-xl ring-1 ring-inset ring-[#DAAE4F]/22" />
+                {/* Inner dark hairline */}
+                <span className="pointer-events-none absolute inset-[3px] rounded-xl ring-1 ring-inset ring-[#1D1108]/18" />
 
                 <span className="relative flex flex-col items-center leading-none">
-                  <span className="text-[8px] font-bold uppercase tracking-[0.22em] text-[#DAAE4F]/80">
+                  <span className="text-[8px] font-bold uppercase tracking-[0.22em] text-[#5a330e]/80">
                     {item.eyebrow}
                   </span>
-                  <span className="mt-1 bg-[linear-gradient(180deg,#F8EDD7_0%,#EAD09A_55%,#DAAE4F_100%)] bg-clip-text text-[13px] font-black uppercase tracking-[0.16em] text-transparent drop-shadow-[0_1px_0_rgba(0,0,0,0.35)]">
+                  <span className="mt-1 text-[13px] font-black uppercase tracking-[0.16em] text-[#1D1108]">
                     {item.cta}
                   </span>
                 </span>
