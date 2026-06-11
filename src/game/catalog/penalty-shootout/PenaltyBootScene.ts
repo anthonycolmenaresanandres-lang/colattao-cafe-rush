@@ -13,10 +13,38 @@ export const PENALTY_ASSETS = {
     key: "penalty-bg-winner",
     url: "/assets/colattao/penalty/background-cafe-stadium-winner-v1.webp",
   },
+  bgCappuccino: {
+    key: "penalty-bg-cappuccino",
+    url: "/assets/colattao/penalty/background-cappuccino-v1.webp",
+  },
+  bgMatcha: {
+    key: "penalty-bg-matcha",
+    url: "/assets/colattao/penalty/background-matcha-v1.webp",
+  },
   keeper: { key: "penalty-keeper", url: "/assets/colattao/penalty/keeper-colattao-v1.webp" },
   ball: { key: "penalty-ball", url: "/assets/colattao/penalty/ball-colattao-v1.webp" },
   kicker: { key: "penalty-kicker", url: "/assets/colattao/penalty/kicker-colattao-v1.webp" },
-  logo: { key: "penalty-logo", url: "/assets/colattao/penalty/logo.png" },
+  kickerCappuccino: {
+    key: "penalty-kicker-cappuccino",
+    url: "/assets/colattao/penalty/cappuccino-colattao-v1.webp",
+  },
+  kickerMatcha: {
+    key: "penalty-kicker-matcha",
+    url: "/assets/colattao/penalty/matcha-colattao-v1.webp",
+  },
+  selectChurro: {
+    key: "penalty-select-churro",
+    url: "/assets/colattao/penalty/select-churro-v1.webp",
+  },
+  selectCappuccino: {
+    key: "penalty-select-cappuccino",
+    url: "/assets/colattao/penalty/select-cappuccino-v1.webp",
+  },
+  selectMatcha: {
+    key: "penalty-select-matcha",
+    url: "/assets/colattao/penalty/select-matcha-v1.webp",
+  },
+  logo: { key: "penalty-logo", url: "/assets/colattao/penalty/logo-640.webp" },
 } as const;
 
 export class PenaltyBootScene extends Phaser.Scene {
