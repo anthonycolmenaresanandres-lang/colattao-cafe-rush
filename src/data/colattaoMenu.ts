@@ -139,7 +139,8 @@ export const menuCategories: MenuCategory[] = [
     note: "Ask staff for today's selection",
     items: [
       { name: "Babka", price: "$3.85", needsConfirmation: true },
-      { name: "Danish, Cherry / Lemon", price: "$6.00", needsConfirmation: true },
+      { name: "Cheese Danish", price: "$6.00", needsConfirmation: true },
+      { name: "Spinach & Feta", price: null, needsConfirmation: true },
       { name: "Chocolate Croissant", price: "$3.95", needsConfirmation: true },
       { name: "Pan de Bono", price: "$2.95", needsConfirmation: true },
       { name: "Cookies", price: "$3.50", needsConfirmation: true },

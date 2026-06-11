@@ -100,12 +100,20 @@ type ItemDetail = {
 
 const ITEM_DETAILS: Record<string, ItemDetail> = {
   "Chocolate Croissant": {
-    imageSrc: "/assets/colattao/menu-items/chocolate-croissant-sticker.webp",
+    imageSrc: "/assets/colattao/menu-items/chocolate-croissant-photo.jpg",
     imageAlt: "Chocolate Croissant",
   },
   "Pan de Bono": {
-    imageSrc: "/assets/colattao/menu-items/pan-de-bono-sticker.webp",
+    imageSrc: "/assets/colattao/menu-items/pan-de-bono-photo.jpg",
     imageAlt: "Pan de Bono",
+  },
+  "Cheese Danish": {
+    imageSrc: "/assets/colattao/menu-items/cheese-danish-photo.jpg",
+    imageAlt: "Cheese Danish",
+  },
+  "Spinach & Feta": {
+    imageSrc: "/assets/colattao/menu-items/spinach-feta-photo.jpg",
+    imageAlt: "Spinach and Feta pastry",
   },
   Cookies: {
     imageSrc: "/assets/colattao/menu-items/chocolate-chip-cookie-sticker.webp",
@@ -116,7 +124,7 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
     imageAlt: "Empanadas, Chicken / Beef",
   },
   "Almond Croissant": {
-    imageSrc: "/assets/colattao/menu-items/almond-croissant-sticker.webp",
+    imageSrc: "/assets/colattao/menu-items/almond-croissant-photo.jpg",
     imageAlt: "Almond Croissant",
   },
 };
