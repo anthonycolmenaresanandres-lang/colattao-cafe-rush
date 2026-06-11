@@ -103,7 +103,7 @@ export const menuCategories: MenuCategory[] = [
         name: "California Sandwich",
         price: "$9.85",
         description:
-          "Sausage, egg and Monterey cheese, avocado, cilantro sauce on a croissant.",
+          "Sausage, egg, Monterey cheese, avocado, and cilantro sauce on a croissant.",
       },
       {
         name: "Cubano",
