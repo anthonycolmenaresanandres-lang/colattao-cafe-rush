@@ -101,9 +101,9 @@ export const menuCategories: MenuCategory[] = [
       { name: "Bacon Egg & Cheese", price: "$8.60" },
       {
         name: "California Sandwich",
-        price: "$9.72",
+        price: "$9.85",
         description:
-          "Egg, Monterey Jack cheese, queso fresco, avocado, California sauce, and cilantro sauce on a croissant.",
+          "Sausage, egg and Monterey cheese, avocado, cilantro sauce on a croissant.",
       },
       {
         name: "Cubano",
@@ -129,8 +129,8 @@ export const menuCategories: MenuCategory[] = [
         description:
           "Thick-sliced fresh mozzarella and house pesto sauce on a croissant. Served cold.",
       },
-      { name: "Ham & Cheesy", price: "$7.62" },
-      { name: "Turkey Egg & Swiss", price: "$8.60" },
+      { name: "Ham & Cheesy", price: "$7.85" },
+      { name: "Turkey Egg & Swiss", price: "$8.75" },
     ],
   },
   {
@@ -138,16 +138,16 @@ export const menuCategories: MenuCategory[] = [
     title: "Pastries & Sweets",
     note: "Ask staff for today's selection",
     items: [
-      { name: "Babka", price: "$3.75", needsConfirmation: true },
-      { name: "Danish, Cherry / Lemon", price: "$3.95", needsConfirmation: true },
+      { name: "Babka", price: "$3.85", needsConfirmation: true },
+      { name: "Danish, Cherry / Lemon", price: "$6.00", needsConfirmation: true },
       { name: "Chocolate Croissant", price: "$3.95", needsConfirmation: true },
-      { name: "Pan de Bono", price: "$2.25", needsConfirmation: true },
+      { name: "Pan de Bono", price: "$2.95", needsConfirmation: true },
       { name: "Cookies", price: "$3.50", needsConfirmation: true },
-      { name: "Empanadas, Chicken / Beef", price: "$4.50", needsConfirmation: true },
+      { name: "Empanadas, Chicken / Beef", price: "$6.50", needsConfirmation: true },
       { name: "Cruffin", price: "$6.50", needsConfirmation: true },
-      { name: "Lemon Blueberry Mascarpone", price: "$8.50", needsConfirmation: true },
-      { name: "Royal Cheesecake", price: "$4", needsConfirmation: true },
-      { name: "Almond Croissant", price: null, needsConfirmation: true },
+      { name: "Lemon Blueberry Mascarpone", price: "$8.75", needsConfirmation: true },
+      { name: "Royal Cheesecake", price: "$12.00", needsConfirmation: true },
+      { name: "Almond Croissant", price: "$4.95", needsConfirmation: true },
     ],
   },
 ];

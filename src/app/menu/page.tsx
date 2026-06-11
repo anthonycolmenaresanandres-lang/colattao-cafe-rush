@@ -351,21 +351,42 @@ export default function MenuPage() {
         <div id="menu" aria-hidden="true" className="scroll-mt-32" />
         <section className="mx-1 -mt-1 pb-1">
           <div className="pointer-events-none h-4 bg-gradient-to-b from-[#1b0e08]/0 to-[#1b0e08]/28" />
-          <nav
-            aria-label="Menu categories"
-            className="mt-1 flex gap-2 overflow-x-auto px-1 pb-2 pt-1"
-            style={{ scrollbarWidth: "none" }}
-          >
-            {menuCategories.map((c) => (
-              <a
-                key={c.id}
-                href={`#${c.id}`}
-                className="shrink-0 rounded-full border border-[#d2b27a]/72 bg-[#2a150d]/62 px-4 py-2 text-[10px] uppercase tracking-[0.2em] text-[#ffe7b8] shadow-[0_8px_18px_-14px_rgba(0,0,0,0.85)] transition-colors hover:bg-[#3a1d12]/66"
+          <details className="group mt-1 overflow-hidden rounded-[22px] border border-[#d2b27a]/60 bg-[linear-gradient(180deg,rgba(42,21,13,0.88),rgba(24,11,6,0.92))] shadow-[0_16px_30px_-22px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,231,184,0.12)]">
+            <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-[#ffe7b8] transition duration-200 hover:bg-[#3a1d12]/45 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f8edd7]">
+              <span className="flex flex-col">
+                <span className="text-[8px] font-bold uppercase tracking-[0.26em] text-[#daae4f]/78">
+                  Browse menu
+                </span>
+                <span className="mt-0.5 text-[13px] font-black uppercase tracking-[0.12em]">
+                  Jump to section
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="grid h-8 w-8 place-items-center rounded-full border border-[#daae4f]/45 bg-[#f8edd7]/8 text-[13px] text-[#daae4f] transition duration-300 group-open:rotate-180 group-hover:border-[#daae4f]/75"
               >
-                {c.title}
-              </a>
-            ))}
-          </nav>
+                ▾
+              </span>
+            </summary>
+            <nav
+              aria-label="Menu categories"
+              className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr]"
+            >
+              <div className="min-h-0 overflow-hidden">
+                <div className="grid gap-2 border-t border-[#d2b27a]/18 px-3 pb-3 pt-2">
+                  {menuCategories.map((c) => (
+                    <a
+                      key={c.id}
+                      href={`#${c.id}`}
+                      className="rounded-2xl border border-[#d2b27a]/32 bg-[#f8edd7]/7 px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#f8edd7]/90 transition duration-200 hover:border-[#daae4f]/68 hover:bg-[#daae4f]/12 hover:text-[#fff6df] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f8edd7]"
+                    >
+                      {c.title}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </nav>
+          </details>
         </section>
 
         {menuCategories.map((category) => {
