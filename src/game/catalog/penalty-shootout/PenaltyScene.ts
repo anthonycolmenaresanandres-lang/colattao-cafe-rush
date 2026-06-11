@@ -74,6 +74,7 @@ export class PenaltyScene extends Phaser.Scene {
   private selectCards: Phaser.GameObjects.Image[] = [];
   private selectLabels: Phaser.GameObjects.Text[] = [];
   private selectPromptText!: Phaser.GameObjects.Text;
+  private cupText!: Phaser.GameObjects.Text;
   private hasCharacterSelect = false;
   private isStartingRound = false;
   private currentBgKey: string = PENALTY_ASSETS.bg.key;
@@ -171,6 +172,10 @@ export class PenaltyScene extends Phaser.Scene {
     this.startTitleText = this.makeText("Penalty Rush", 34, "#F8EDD7", "bold", "serif")
       .setAlpha(0)
       .setDepth(50);
+    // Tournament-summer nod (no federation marks — our own cup).
+    this.cupText = this.makeText("SUMMER CUP 2026", 12, "#DAAE4F", "bold")
+      .setAlpha(0)
+      .setDepth(50);
 
     // Character select: needs every front-facing sticker plus the matching
     // back-view kicker sprite. Missing any -> classic "tap to start" screen.
@@ -200,7 +205,7 @@ export class PenaltyScene extends Phaser.Scene {
 
     this.startBodyText = this.makeText(
       this.hasCharacterSelect
-        ? "Beat the keeper. Score 3 of 5 to win."
+        ? "Beat the keeper. Score 3 of 5 to lift the cup."
         : "Tap a gold zone in the goal.\nBeat the keeper. Avoid the red edges.\nScore 3 of 5 to win.",
       this.hasCharacterSelect ? 13 : 15,
       "#F8EDD7",
@@ -328,11 +333,12 @@ export class PenaltyScene extends Phaser.Scene {
     this.resultText.setPosition(w / 2, h * 0.5);
     this.subResultText.setPosition(w / 2, h * 0.5 + 46);
     if (this.hasCharacterSelect) {
-      this.logo?.setPosition(w / 2, h * 0.16);
-      this.startTitleText.setPosition(w / 2, h * 0.275);
-      this.selectPromptText.setPosition(w / 2, h * 0.345);
+      this.cupText.setPosition(w / 2, h * 0.105);
+      this.logo?.setPosition(w / 2, h * 0.19);
+      this.startTitleText.setPosition(w / 2, h * 0.305);
+      this.selectPromptText.setPosition(w / 2, h * 0.365);
       const cardH = Math.min(h * 0.24, 175);
-      const cardBottomY = h * 0.40 + cardH;
+      const cardBottomY = h * 0.405 + cardH;
       const spacing = Math.min(w * 0.3, 145);
       this.selectCards.forEach((card, idx) => {
         const tex = this.textures.get(CHARACTERS[idx].selectKey).getSourceImage();
@@ -343,6 +349,7 @@ export class PenaltyScene extends Phaser.Scene {
       this.startBodyText.setPosition(w / 2, cardBottomY + 48);
     } else {
       this.logo?.setPosition(w / 2, h * 0.215);
+      this.cupText.setPosition(w / 2, h * 0.315);
       this.startTitleText.setPosition(w / 2, h * 0.38);
       this.startBodyText.setPosition(w / 2, h * 0.49);
     }
@@ -384,7 +391,8 @@ export class PenaltyScene extends Phaser.Scene {
       this.kicker.setPosition(this.ballStartX - w * 0.22, this.ballStartY + 40);
     }
     if (this.logo) {
-      const logoW = Math.min(w * 0.5, 220);
+      // Slightly smaller so the cup banner above it has room to breathe.
+      const logoW = Math.min(w * 0.42, 185);
       this.logo.setDisplaySize(logoW, logoW * (884 / 1600));
     }
   }
@@ -501,6 +509,7 @@ export class PenaltyScene extends Phaser.Scene {
     }
     this.overlayGfx.clear();
     this.startTitleText.setAlpha(0);
+    this.cupText.setAlpha(0);
     this.startBodyText.setAlpha(0);
     this.startCtaText.setAlpha(0);
     this.logo?.setAlpha(0);
@@ -662,6 +671,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.ball.setPosition(this.ballStartX, this.ballStartY);
     this.drawStartOverlay();
     this.startTitleText.setAlpha(1);
+    this.cupText.setAlpha(1);
     this.startBodyText.setAlpha(1);
     this.startCtaText.setAlpha(this.hasCharacterSelect ? 0 : 1);
     this.setSelectUiAlpha(1);
@@ -674,6 +684,28 @@ export class PenaltyScene extends Phaser.Scene {
     this.overlayGfx.clear();
     this.overlayGfx.fillStyle(ESPRESSO_DEEP, this.hasCharacterSelect ? 0.78 : 0.72);
     this.overlayGfx.fillRect(0, 0, w, h);
+
+    // Tournament bunting: alternating pennants strung across the top.
+    const stringY = h * 0.055;
+    this.overlayGfx.lineStyle(2, CREAM, 0.5);
+    this.overlayGfx.lineBetween(0, stringY, w, stringY);
+    const pennantW = 26;
+    const pennantColors = [GOLD, CREAM, 0xc96f4a];
+    for (let x = pennantW / 2; x < w; x += pennantW + 8) {
+      this.overlayGfx.fillStyle(pennantColors[Math.floor(x / (pennantW + 8)) % 3], 0.85);
+      this.overlayGfx.fillTriangle(
+        x - pennantW / 2, stringY,
+        x + pennantW / 2, stringY,
+        x, stringY + 20,
+      );
+    }
+
+    // Twin trophies flanking the cup banner line.
+    const cupY = this.cupText.y;
+    const cupOffset = this.cupText.width / 2 + 24;
+    this.drawTrophy(w / 2 - cupOffset, cupY);
+    this.drawTrophy(w / 2 + cupOffset, cupY);
+
     if (!this.hasCharacterSelect) {
       // Classic flow keeps its "Tap to start" pill.
       this.overlayGfx.fillStyle(CREAM, 0.96);
@@ -682,6 +714,18 @@ export class PenaltyScene extends Phaser.Scene {
       this.overlayGfx.strokeRoundedRect(w / 2 - 74, h * 0.65 - 19, 148, 38, 18);
     }
     this.overlayGfx.setDepth(45);
+  }
+
+  /** Small golden trophy, drawn into the start overlay. `y` is its center. */
+  private drawTrophy(x: number, y: number) {
+    const g = this.overlayGfx;
+    g.fillStyle(GOLD, 1);
+    g.fillRoundedRect(x - 7, y - 9, 14, 10, { tl: 2, tr: 2, bl: 6, br: 6 });
+    g.lineStyle(2, GOLD, 1);
+    g.strokeCircle(x - 9, y - 5, 3.5);
+    g.strokeCircle(x + 9, y - 5, 3.5);
+    g.fillRect(x - 1.5, y + 1, 3, 5);
+    g.fillRoundedRect(x - 5.5, y + 6, 11, 3, 1);
   }
 
   private drawRestartButton() {
