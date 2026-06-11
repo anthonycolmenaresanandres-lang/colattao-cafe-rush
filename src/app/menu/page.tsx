@@ -461,15 +461,6 @@ export default function MenuPage() {
                           style={{ textShadow: "0 1px 1px rgba(255,245,224,0.28)" }}
                         >
                           {item.name}
-                          {item.needsConfirmation && (
-                            <span
-                              aria-label="Needs confirmation"
-                              title="Item details may vary - please ask staff"
-                              className="ml-1.5 align-[0.05em] text-[9px] uppercase tracking-[0.18em] text-[var(--col-terracotta-2)]"
-                            >
-                              • verify
-                            </span>
-                          )}
                         </span>
                         <span className="dotted-rule" />
                       </div>
