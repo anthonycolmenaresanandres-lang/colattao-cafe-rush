@@ -19,7 +19,7 @@
 - blocked: None.
 
 ## 2026-06-11 17:08:29 -04:00 OUT
-- did: Verified the scoped Kitchen copy change with `npm.cmd run build` in an isolated `origin/main` worktree.
+- did: Pushed verified Kitchen copy commit to `origin/main` and confirmed the live Vercel `/menu` page contains the requested California Sandwich wording.
 - state: Prod publish commit contains only `src/data/colattaoMenu.ts` and `OPERATIONS/HANDOFF_LOG.md`; unrelated penalty-game changes were not included.
-- next: Push verified commit to `origin/main` so Vercel can auto-deploy the live menu.
+- next: No further action for this Kitchen copy task.
 - blocked: None.
