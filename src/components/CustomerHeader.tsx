@@ -30,13 +30,18 @@ const navItems: readonly NavItem[] = [
   },
 ] as const;
 
+// Routes where the visitor is already inside a game: hide the Play button
+// and turn the Menu button into a plain way back.
+const GAME_PATHS = ["/", "/penalty"];
+
 export default function CustomerHeader() {
   const pathname = usePathname();
+  const onGamePage = GAME_PATHS.includes(pathname);
 
-  // On the game homepage the Play button is redundant — visitor is already there.
-  // Hide it so the only CTA is View Our Menu.
+  // On a game page the Play button is redundant — visitor is already playing.
+  // Hide it so the only CTA is the way back to the menu.
   const visibleItems = navItems.filter(
-    (item) => !(pathname === "/" && item.href === "/"),
+    (item) => !(onGamePage && item.href === "/"),
   );
 
   return (
@@ -45,6 +50,11 @@ export default function CustomerHeader() {
         <nav aria-label="Customer navigation" className="flex justify-center gap-2.5">
           {visibleItems.map((item) => {
             const isActive = pathname === item.href;
+            // Inside a game the menu button is a way back, not a teaser —
+            // label it plainly so players know it returns to the menu.
+            const isBackToMenu = onGamePage && item.href === "/menu";
+            const eyebrow = isBackToMenu ? "Back to the" : item.eyebrow;
+            const cta = isBackToMenu ? "MENU" : item.cta;
             return (
               <Link
                 key={item.href}
@@ -65,10 +75,10 @@ export default function CustomerHeader() {
 
                 <span className="relative flex flex-col items-center leading-none">
                   <span className="text-[8px] font-bold uppercase tracking-[0.22em] text-[#5a330e]/80">
-                    {item.eyebrow}
+                    {eyebrow}
                   </span>
                   <span className="mt-1 text-[13px] font-black uppercase tracking-[0.16em] text-[#1D1108]">
-                    {item.cta}
+                    {cta}
                   </span>
                 </span>
                 <span className="sr-only">{item.label}</span>

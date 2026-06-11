@@ -1,10 +1,16 @@
 import Phaser from "phaser";
+import { PENALTY_ASSETS } from "./PenaltyBootScene";
 
 /**
- * Colattao Penalty Shootout - R&D alpha.
+ * Colattao Penalty Rush.
  *
- * Asset-free mini-game for the isolated R&D harness. It draws the pitch, goal,
- * keeper, ball, aim zones, and overlays with Phaser primitives only.
+ * Uses the branded art set preloaded by PenaltyBootScene (crowd backdrop,
+ * coffee-bean keeper, branded ball, Churro Latte #10 kicker, logo). Any
+ * texture that failed to load degrades to the original primitive-drawn
+ * shape, so the game never renders broken.
+ *
+ * No reward flow by design: this title is play-for-fun only (owner decision,
+ * 2026-06-11). Do not wire GAME_WON / VisualFlashPass here.
  */
 
 const ESPRESSO = 0x1b0e08;
@@ -15,13 +21,17 @@ const CREAM = 0xf8edd7;
 const NET = 0xffffff;
 const GRASS = 0x244a2a;
 const GRASS_DEEP = 0x17351f;
-const SUCCESS = 0x8ccf88;
-const WARNING = 0xf0b46a;
 const DANGER = 0xe37260;
 
 const TOTAL_SHOTS = 5;
 const WIN_THRESHOLD = 3;
 const ZONES = 5;
+
+// Source art dimensions (background-crowd-signs-v1.webp) and where the
+// crowd/pitch boundary sits inside it. Used to plant the goal on the grass.
+const BG_W = 941;
+const BG_H = 1672;
+const BG_PITCH_LINE = 0.485;
 
 type GameState = "start" | "playing" | "complete";
 type ShotOutcome = "goal" | "saved" | "miss";
@@ -32,8 +42,15 @@ export class PenaltyScene extends Phaser.Scene {
   private zoneGfx!: Phaser.GameObjects.Graphics;
   private uiGfx!: Phaser.GameObjects.Graphics;
   private overlayGfx!: Phaser.GameObjects.Graphics;
-  private keeper!: Phaser.GameObjects.Graphics;
-  private ball!: Phaser.GameObjects.Graphics;
+
+  private bg: Phaser.GameObjects.Image | null = null;
+  private logo: Phaser.GameObjects.Image | null = null;
+  private kicker: Phaser.GameObjects.Image | null = null;
+  private keeper!: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
+  private ball!: Phaser.GameObjects.Image | Phaser.GameObjects.Graphics;
+  private keeperIsSprite = false;
+  private ballIsSprite = false;
+  private ballBaseScale = 1;
 
   private scoreText!: Phaser.GameObjects.Text;
   private shotText!: Phaser.GameObjects.Text;
@@ -68,13 +85,48 @@ export class PenaltyScene extends Phaser.Scene {
   }
 
   create() {
-    this.pitchGfx = this.add.graphics();
-    this.goalGfx = this.add.graphics();
-    this.zoneGfx = this.add.graphics();
-    this.uiGfx = this.add.graphics();
+    if (this.textures.exists(PENALTY_ASSETS.bg.key)) {
+      this.bg = this.add.image(0, 0, PENALTY_ASSETS.bg.key).setOrigin(0, 0).setDepth(0);
+    }
+
+    this.pitchGfx = this.add.graphics().setDepth(1);
+    this.goalGfx = this.add.graphics().setDepth(2);
+    this.zoneGfx = this.add.graphics().setDepth(3);
+    this.uiGfx = this.add.graphics().setDepth(18);
     this.overlayGfx = this.add.graphics();
-    this.keeper = this.add.graphics();
-    this.ball = this.add.graphics();
+
+    if (this.textures.exists(PENALTY_ASSETS.kicker.key)) {
+      this.kicker = this.add
+        .image(0, 0, PENALTY_ASSETS.kicker.key)
+        .setOrigin(0.5, 1)
+        .setDepth(11);
+    }
+
+    this.keeperIsSprite = this.textures.exists(PENALTY_ASSETS.keeper.key);
+    if (this.keeperIsSprite) {
+      this.keeper = this.add
+        .image(0, 0, PENALTY_ASSETS.keeper.key)
+        .setOrigin(0.5, 0.86)
+        .setDepth(9);
+    } else {
+      this.keeper = this.add.graphics();
+      this.drawKeeperShape();
+    }
+
+    this.ballIsSprite = this.textures.exists(PENALTY_ASSETS.ball.key);
+    if (this.ballIsSprite) {
+      this.ball = this.add.image(0, 0, PENALTY_ASSETS.ball.key).setDepth(12);
+    } else {
+      this.ball = this.add.graphics();
+      this.drawBallShape();
+    }
+
+    if (this.textures.exists(PENALTY_ASSETS.logo.key)) {
+      this.logo = this.add
+        .image(0, 0, PENALTY_ASSETS.logo.key)
+        .setAlpha(0)
+        .setDepth(50);
+    }
 
     this.scoreText = this.makeText("", 20, "#F8EDD7", "bold").setDepth(20);
     this.shotText = this.makeText("", 12, "#DAAE4F", "bold").setDepth(20);
@@ -85,7 +137,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.subResultText = this.makeText("", 15, "#F8EDD7", "normal")
       .setAlpha(0)
       .setDepth(40);
-    this.startTitleText = this.makeText("Penalty Shootout", 34, "#F8EDD7", "bold", "serif")
+    this.startTitleText = this.makeText("Penalty Rush", 34, "#F8EDD7", "bold", "serif")
       .setAlpha(0)
       .setDepth(50);
     this.startBodyText = this.makeText(
@@ -103,8 +155,6 @@ export class PenaltyScene extends Phaser.Scene {
       .setAlpha(0)
       .setDepth(51);
 
-    this.drawKeeperShape();
-    this.drawBallShape();
     this.layout();
     this.showStartScreen();
 
@@ -140,34 +190,38 @@ export class PenaltyScene extends Phaser.Scene {
   }
 
   private drawKeeperShape() {
+    if (this.keeperIsSprite) return;
+    const gfx = this.keeper as Phaser.GameObjects.Graphics;
     const w = 54;
     const h = 70;
-    this.keeper.clear();
-    this.keeper.fillStyle(GOLD, 1);
-    this.keeper.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
-    this.keeper.lineStyle(4, ESPRESSO, 1);
-    this.keeper.strokeRoundedRect(-w / 2, -h / 2, w, h, 12);
-    this.keeper.fillStyle(CREAM, 1);
-    this.keeper.fillCircle(-w / 2 - 3, 0, 9);
-    this.keeper.fillCircle(w / 2 + 3, 0, 9);
-    this.keeper.fillStyle(ESPRESSO, 1);
-    this.keeper.fillCircle(-9, -14, 3);
-    this.keeper.fillCircle(9, -14, 3);
-    this.keeper.setDepth(9);
+    gfx.clear();
+    gfx.fillStyle(GOLD, 1);
+    gfx.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
+    gfx.lineStyle(4, ESPRESSO, 1);
+    gfx.strokeRoundedRect(-w / 2, -h / 2, w, h, 12);
+    gfx.fillStyle(CREAM, 1);
+    gfx.fillCircle(-w / 2 - 3, 0, 9);
+    gfx.fillCircle(w / 2 + 3, 0, 9);
+    gfx.fillStyle(ESPRESSO, 1);
+    gfx.fillCircle(-9, -14, 3);
+    gfx.fillCircle(9, -14, 3);
+    gfx.setDepth(9);
   }
 
   private drawBallShape() {
+    if (this.ballIsSprite) return;
+    const gfx = this.ball as Phaser.GameObjects.Graphics;
     const r = 17;
-    this.ball.clear();
-    this.ball.fillStyle(CREAM, 1);
-    this.ball.fillCircle(0, 0, r);
-    this.ball.lineStyle(4, GOLD, 1);
-    this.ball.strokeCircle(0, 0, r);
-    this.ball.fillStyle(ESPRESSO, 1);
-    this.ball.fillCircle(0, 0, r * 0.42);
-    this.ball.lineStyle(2, ESPRESSO, 0.6);
-    this.ball.lineBetween(-8, -5, 8, 5);
-    this.ball.setDepth(12);
+    gfx.clear();
+    gfx.fillStyle(CREAM, 1);
+    gfx.fillCircle(0, 0, r);
+    gfx.lineStyle(4, GOLD, 1);
+    gfx.strokeCircle(0, 0, r);
+    gfx.fillStyle(ESPRESSO, 1);
+    gfx.fillCircle(0, 0, r * 0.42);
+    gfx.lineStyle(2, ESPRESSO, 0.6);
+    gfx.lineBetween(-8, -5, 8, 5);
+    gfx.setDepth(12);
   }
 
   private layout() {
@@ -196,10 +250,12 @@ export class PenaltyScene extends Phaser.Scene {
     this.ballStartX = w / 2;
     this.ballStartY = h * (compact ? 0.82 : 0.8);
 
+    this.layoutBackground(w, h);
     this.drawPitch(w, h);
     this.drawGoal();
     this.drawZones();
     this.drawScorePanel(w);
+    this.layoutSprites(w, h);
 
     if (!this.isShooting) {
       this.keeper.setPosition(w / 2, this.goalLineY);
@@ -215,13 +271,51 @@ export class PenaltyScene extends Phaser.Scene {
     this.startBodyText.setPosition(w / 2, h * 0.49);
     this.startCtaText.setPosition(w / 2, h * 0.65);
     this.restartText.setPosition(w / 2, h * 0.64);
+    this.logo?.setPosition(w / 2, h * 0.215);
 
     if (this.state === "start") this.drawStartOverlay();
     if (this.state === "complete") this.drawRestartButton();
   }
 
+  /** Cover-fit the crowd backdrop and plant the goal mouth on its grass line. */
+  private layoutBackground(w: number, h: number) {
+    if (!this.bg) return;
+    const scale = Math.max(w / BG_W, h / BG_H);
+    const dispW = BG_W * scale;
+    const dispH = BG_H * scale;
+    const desiredPitchY = this.goalTop + this.goalHeight * 0.55;
+    const rawY = desiredPitchY - BG_PITCH_LINE * dispH;
+    const y = Phaser.Math.Clamp(rawY, h - dispH, 0);
+    this.bg.setDisplaySize(dispW, dispH);
+    this.bg.setPosition((w - dispW) / 2, y);
+  }
+
+  private layoutSprites(w: number, h: number) {
+    if (this.keeperIsSprite) {
+      const keeperImg = this.keeper as Phaser.GameObjects.Image;
+      const keeperH = this.goalHeight * 0.92;
+      keeperImg.setDisplaySize(keeperH * (876 / 880), keeperH);
+    }
+    if (this.ballIsSprite) {
+      const ballImg = this.ball as Phaser.GameObjects.Image;
+      const ballW = Math.max(30, Math.min(40, w * 0.085));
+      this.ballBaseScale = ballW / ballImg.width;
+      if (!this.isShooting) ballImg.setScale(this.ballBaseScale);
+    }
+    if (this.kicker) {
+      const kickerH = Math.min(h * 0.15, 120);
+      this.kicker.setDisplaySize(kickerH * (789 / 880), kickerH);
+      this.kicker.setPosition(this.ballStartX - w * 0.22, this.ballStartY + 40);
+    }
+    if (this.logo) {
+      const logoW = Math.min(w * 0.5, 220);
+      this.logo.setDisplaySize(logoW, logoW * (884 / 1600));
+    }
+  }
+
   private drawPitch(w: number, h: number) {
     this.pitchGfx.clear();
+    if (this.bg) return; // photo backdrop covers the pitch
     this.pitchGfx.fillStyle(ESPRESSO_DEEP, 1);
     this.pitchGfx.fillRect(0, 0, w, h);
     this.pitchGfx.fillStyle(GRASS_DEEP, 1);
@@ -289,10 +383,14 @@ export class PenaltyScene extends Phaser.Scene {
     this.state = "playing";
     this.shotsTaken = 0;
     this.goals = 0;
+    if (this.bg && this.textures.exists(PENALTY_ASSETS.bg.key)) {
+      this.bg.setTexture(PENALTY_ASSETS.bg.key);
+    }
     this.overlayGfx.clear();
     this.startTitleText.setAlpha(0);
     this.startBodyText.setAlpha(0);
     this.startCtaText.setAlpha(0);
+    this.logo?.setAlpha(0);
     this.resultText.setAlpha(0);
     this.subResultText.setAlpha(0);
     this.restartText.setAlpha(0);
@@ -321,11 +419,12 @@ export class PenaltyScene extends Phaser.Scene {
       ease: "Quad.easeOut",
     });
 
+    const flightScale = (outcome === "miss" ? 0.86 : 0.72) * this.ballBaseScale;
     this.tweens.add({
       targets: this.ball,
       x: targetX,
       y: finalY,
-      scale: outcome === "miss" ? 0.86 : 0.72,
+      scale: flightScale,
       duration: 420,
       ease: "Quad.easeIn",
       onComplete: () => this.resolveShot(outcome),
@@ -384,7 +483,7 @@ export class PenaltyScene extends Phaser.Scene {
 
   private resetForNextShot() {
     this.isShooting = false;
-    this.ball.setScale(1);
+    this.ball.setScale(this.ballIsSprite ? this.ballBaseScale : 1);
     this.ball.setPosition(this.ballStartX, this.ballStartY);
     this.keeper.setPosition(this.scale.width / 2, this.goalLineY);
     this.instructionText.setText("Tap the gold zones. Red edges miss.");
@@ -394,8 +493,11 @@ export class PenaltyScene extends Phaser.Scene {
     const won = this.goals >= WIN_THRESHOLD;
     this.state = "complete";
     this.isShooting = false;
-    this.ball.setScale(1);
+    this.ball.setScale(this.ballIsSprite ? this.ballBaseScale : 1);
     this.instructionText.setText("");
+    if (won && this.bg && this.textures.exists(PENALTY_ASSETS.bgWinner.key)) {
+      this.bg.setTexture(PENALTY_ASSETS.bgWinner.key);
+    }
     this.overlayGfx.clear();
     this.drawRestartButton();
     this.resultText
@@ -431,6 +533,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.startTitleText.setAlpha(1);
     this.startBodyText.setAlpha(1);
     this.startCtaText.setAlpha(1);
+    this.logo?.setAlpha(1);
   }
 
   private drawStartOverlay() {
