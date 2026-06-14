@@ -33,6 +33,11 @@ const BG_W = 941;
 const BG_H = 1672;
 const BG_PITCH_LINE = 0.485;
 
+// Keeper sprite height as a fraction of the goal height (smaller => more open
+// net above the keeper's head). Referenced in both layout() — to keep the feet
+// planted on the ground line — and layoutSprites() — to size the sprite.
+const KEEPER_GOAL_FILL = 0.7;
+
 // Selectable kickers. `selectKey` is the front-facing die-cut sticker shown on
 // the home screen; `kickerKey` is the matching back-view sprite at the spot;
 // `bgKey` is the character's own crowd backdrop (falls back to the default bg
@@ -303,10 +308,10 @@ export class PenaltyScene extends Phaser.Scene {
     // the posts rise from the turf instead of hovering above it.
     const groundY = h * BG_PITCH_LINE;
     this.goalTop = groundY - this.goalHeight;
-    // The keeper sprite is anchored at 0.86 of its height (≈ the feet), and the
-    // sprite stands 0.92 of the goal height tall. Put the feet on the ground
-    // line so the keeper plants on the grass instead of floating above it.
-    this.goalLineY = groundY - this.goalHeight * 0.92 * 0.14;
+    // The keeper sprite is anchored at 0.86 of its height (≈ the feet) and
+    // stands KEEPER_GOAL_FILL of the goal height tall. Put the feet on the
+    // ground line so the keeper plants on the grass instead of floating above it.
+    this.goalLineY = groundY - this.goalHeight * KEEPER_GOAL_FILL * 0.14;
 
     this.zoneWidth = goalWidth / ZONES;
     const edgeDanger = Math.max(18, this.zoneWidth * 0.28);
@@ -382,17 +387,17 @@ export class PenaltyScene extends Phaser.Scene {
   private layoutSprites(w: number, h: number) {
     if (this.keeperIsSprite) {
       const keeperImg = this.keeper as Phaser.GameObjects.Image;
-      const keeperH = this.goalHeight * 0.92;
+      const keeperH = this.goalHeight * KEEPER_GOAL_FILL;
       keeperImg.setDisplaySize(keeperH * (876 / 880), keeperH);
     }
     if (this.ballIsSprite) {
       const ballImg = this.ball as Phaser.GameObjects.Image;
-      const ballW = Math.max(44, Math.min(58, w * 0.12));
+      const ballW = Math.max(80, Math.min(108, w * 0.23));
       this.ballBaseScale = ballW / ballImg.width;
       if (!this.isShooting) ballImg.setScale(this.ballBaseScale);
     }
     if (this.kicker) {
-      const kickerH = Math.min(h * 0.2, 150);
+      const kickerH = Math.min(h * 0.34, 240);
       this.kicker.setDisplaySize(kickerH * (789 / 880), kickerH);
       this.kicker.setPosition(this.ballStartX - w * 0.22, this.ballStartY + 40);
     }
