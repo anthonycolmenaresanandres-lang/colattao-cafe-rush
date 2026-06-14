@@ -387,12 +387,12 @@ export class PenaltyScene extends Phaser.Scene {
     }
     if (this.ballIsSprite) {
       const ballImg = this.ball as Phaser.GameObjects.Image;
-      const ballW = Math.max(30, Math.min(40, w * 0.085));
+      const ballW = Math.max(44, Math.min(58, w * 0.12));
       this.ballBaseScale = ballW / ballImg.width;
       if (!this.isShooting) ballImg.setScale(this.ballBaseScale);
     }
     if (this.kicker) {
-      const kickerH = Math.min(h * 0.15, 120);
+      const kickerH = Math.min(h * 0.2, 150);
       this.kicker.setDisplaySize(kickerH * (789 / 880), kickerH);
       this.kicker.setPosition(this.ballStartX - w * 0.22, this.ballStartY + 40);
     }
