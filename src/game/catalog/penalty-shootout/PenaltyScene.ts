@@ -298,9 +298,15 @@ export class PenaltyScene extends Phaser.Scene {
     const goalWidth = Math.min(w * 0.9, 430);
     this.goalLeft = (w - goalWidth) / 2;
     this.goalRight = this.goalLeft + goalWidth;
-    this.goalTop = h * (compact ? 0.18 : 0.17);
     this.goalHeight = Math.min(h * (compact ? 0.25 : 0.23), 160);
-    this.goalLineY = this.goalTop + this.goalHeight * 0.64;
+    // The backdrop's grass line is the ground. Plant the goal's base on it so
+    // the posts rise from the turf instead of hovering above it.
+    const groundY = h * BG_PITCH_LINE;
+    this.goalTop = groundY - this.goalHeight;
+    // The keeper sprite is anchored at 0.86 of its height (≈ the feet), and the
+    // sprite stands 0.92 of the goal height tall. Put the feet on the ground
+    // line so the keeper plants on the grass instead of floating above it.
+    this.goalLineY = groundY - this.goalHeight * 0.92 * 0.14;
 
     this.zoneWidth = goalWidth / ZONES;
     const edgeDanger = Math.max(18, this.zoneWidth * 0.28);
@@ -366,7 +372,7 @@ export class PenaltyScene extends Phaser.Scene {
     const scale = Math.max(w / BG_W, h / BG_H);
     const dispW = BG_W * scale;
     const dispH = BG_H * scale;
-    const desiredPitchY = this.goalTop + this.goalHeight * 0.55;
+    const desiredPitchY = this.goalTop + this.goalHeight; // grass meets the base of the posts
     const rawY = desiredPitchY - BG_PITCH_LINE * dispH;
     const y = Phaser.Math.Clamp(rawY, h - dispH, 0);
     this.bg.setDisplaySize(dispW, dispH);
@@ -405,7 +411,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.pitchGfx.fillStyle(GRASS_DEEP, 1);
     this.pitchGfx.fillRect(0, this.goalTop - 18, w, h);
     this.pitchGfx.fillStyle(GRASS, 1);
-    this.pitchGfx.fillRect(0, this.goalTop + this.goalHeight * 0.55, w, h);
+    this.pitchGfx.fillRect(0, this.goalTop + this.goalHeight, w, h);
     this.pitchGfx.lineStyle(2, CREAM, 0.22);
     this.pitchGfx.strokeCircle(w / 2, this.ballStartY, 34);
     this.pitchGfx.lineStyle(2, CREAM, 0.14);
