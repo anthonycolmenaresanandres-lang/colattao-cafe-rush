@@ -397,9 +397,13 @@ export class PenaltyScene extends Phaser.Scene {
       if (!this.isShooting) ballImg.setScale(this.ballBaseScale);
     }
     if (this.kicker) {
-      const kickerH = Math.min(h * 0.34, 240);
+      // Fill the green foreground: the striker rises from the bottom of the
+      // screen up to the grass line, framed toward the left so the ball and the
+      // goal mouth stay readable.
+      const groundLineY = h * BG_PITCH_LINE;
+      const kickerH = h - groundLineY;
       this.kicker.setDisplaySize(kickerH * (789 / 880), kickerH);
-      this.kicker.setPosition(this.ballStartX - w * 0.22, this.ballStartY + 40);
+      this.kicker.setPosition(this.ballStartX - w * 0.18, h);
     }
     if (this.logo) {
       // Slightly smaller so the cup banner above it has room to breathe.
