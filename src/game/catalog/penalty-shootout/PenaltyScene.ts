@@ -543,6 +543,14 @@ export class PenaltyScene extends Phaser.Scene {
 
     const targetX = this.zoneCenters[playerZone];
     const keeperTargetX = this.zoneCenters[keeperZone];
+    // Vary the shot height so shots don't all hug the goal line. Goals can fly
+    // into the upper/mid net; saves stay within the keeper's vertical reach so
+    // the keeper visibly stops them.
+    const heightFrac =
+      outcome === "goal"
+        ? Phaser.Math.FloatBetween(0.18, 0.5)
+        : Phaser.Math.FloatBetween(0.36, 0.58);
+    const targetY = this.goalTop + this.goalHeight * heightFrac;
 
     this.isShooting = true;
     this.instructionText.setText("Shot in motion...");
@@ -559,7 +567,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.tweens.add({
       targets: this.ball,
       x: targetX,
-      y: this.goalLineY,
+      y: targetY,
       scale: 0.72 * this.ballBaseScale,
       duration: 420,
       ease: "Quad.easeIn",
