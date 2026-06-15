@@ -323,7 +323,7 @@ export class PenaltyScene extends Phaser.Scene {
       (_, i) => this.goalLeft + this.zoneWidth * (i + 0.5),
     );
 
-    this.ballStartX = w / 2;
+    this.ballStartX = w * 0.7;
     this.ballStartY = h * (compact ? 0.82 : 0.8);
 
     this.layoutBackground(w, h);
@@ -398,12 +398,12 @@ export class PenaltyScene extends Phaser.Scene {
     }
     if (this.kicker) {
       // Fill the green foreground: the striker rises from the bottom of the
-      // screen up to the grass line, framed toward the left so the ball and the
-      // goal mouth stay readable.
+      // screen up to the grass line, anchored toward the left (independent of
+      // the ball's spot) so the ball and the goal mouth stay readable.
       const groundLineY = h * BG_PITCH_LINE;
       const kickerH = h - groundLineY;
       this.kicker.setDisplaySize(kickerH * (789 / 880), kickerH);
-      this.kicker.setPosition(this.ballStartX - w * 0.18, h);
+      this.kicker.setPosition(w * 0.32, h);
     }
     if (this.logo) {
       // Slightly smaller so the cup banner above it has room to breathe.
