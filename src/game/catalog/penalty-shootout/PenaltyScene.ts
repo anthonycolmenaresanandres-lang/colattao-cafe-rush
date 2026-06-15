@@ -629,9 +629,9 @@ export class PenaltyScene extends Phaser.Scene {
     this.isShooting = false;
     this.ball.setScale(this.ballIsSprite ? this.ballBaseScale : 1);
     this.instructionText.setText("");
-    if (won && this.bg && this.textures.exists(PENALTY_ASSETS.bgWinner.key)) {
-      this.bg.setTexture(PENALTY_ASSETS.bgWinner.key);
-    }
+    // Keep the stadium crowd backdrop on the win screen. (Previously this
+    // swapped to the dark café "winner" art, which read as reverting to the
+    // original Colattao design — the win is marked by the YOU WIN text instead.)
     this.overlayGfx.clear();
     this.drawRestartButton();
     this.resultText
