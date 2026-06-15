@@ -21,7 +21,6 @@ const CREAM = 0xf8edd7;
 const NET = 0xffffff;
 const GRASS = 0x244a2a;
 const GRASS_DEEP = 0x17351f;
-const DANGER = 0xe37260;
 
 const TOTAL_SHOTS = 5;
 const WIN_THRESHOLD = 3;
@@ -64,7 +63,7 @@ const CHARACTERS = [
 ] as const;
 
 type GameState = "start" | "playing" | "complete";
-type ShotOutcome = "goal" | "saved" | "miss";
+type ShotOutcome = "goal" | "saved";
 
 export class PenaltyScene extends Phaser.Scene {
   private pitchGfx!: Phaser.GameObjects.Graphics;
@@ -104,9 +103,6 @@ export class PenaltyScene extends Phaser.Scene {
   private goalTop = 0;
   private goalHeight = 0;
   private goalLineY = 0;
-  private safeLeft = 0;
-  private safeRight = 0;
-  private keeperReach = 0;
   private zoneWidth = 0;
   private zoneCenters: number[] = [];
   private ballStartX = 0;
@@ -211,7 +207,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.startBodyText = this.makeText(
       this.hasCharacterSelect
         ? "Beat the keeper. Score 3 of 5 to lift the cup."
-        : "Tap a gold zone in the goal.\nBeat the keeper. Avoid the red edges.\nScore 3 of 5 to win.",
+        : "Tap a zone in the goal to shoot.\nOutguess the keeper's dive.\nScore 3 of 5 to win.",
       this.hasCharacterSelect ? 13 : 15,
       "#F8EDD7",
       "normal",
@@ -314,10 +310,6 @@ export class PenaltyScene extends Phaser.Scene {
     this.goalLineY = groundY - this.goalHeight * KEEPER_GOAL_FILL * 0.14;
 
     this.zoneWidth = goalWidth / ZONES;
-    const edgeDanger = Math.max(18, this.zoneWidth * 0.28);
-    this.safeLeft = this.goalLeft + edgeDanger;
-    this.safeRight = this.goalRight - edgeDanger;
-    this.keeperReach = this.zoneWidth * 0.48;
     this.zoneCenters = Array.from(
       { length: ZONES },
       (_, i) => this.goalLeft + this.zoneWidth * (i + 0.5),
@@ -440,19 +432,16 @@ export class PenaltyScene extends Phaser.Scene {
       const y = this.goalTop + (this.goalHeight / 5) * i;
       this.goalGfx.lineBetween(this.goalLeft, y, this.goalRight, y);
     }
-    this.goalGfx.lineStyle(3, GOLD, 0.85);
-    this.goalGfx.lineBetween(this.safeLeft, this.goalTop + 5, this.safeLeft, this.goalTop + this.goalHeight - 5);
-    this.goalGfx.lineBetween(this.safeRight, this.goalTop + 5, this.safeRight, this.goalTop + this.goalHeight - 5);
   }
 
   private drawZones() {
     this.zoneGfx.clear();
     for (let i = 0; i < ZONES; i += 1) {
       const x = this.goalLeft + this.zoneWidth * i;
-      const isEdge = i === 0 || i === ZONES - 1;
-      this.zoneGfx.fillStyle(isEdge ? DANGER : GOLD, isEdge ? 0.2 : 0.16);
+      // Every zone is an equal, tappable target — no risky edges anymore.
+      this.zoneGfx.fillStyle(GOLD, 0.16);
       this.zoneGfx.fillRect(x + 3, this.goalTop + 4, this.zoneWidth - 6, this.goalHeight - 8);
-      this.zoneGfx.lineStyle(1, isEdge ? DANGER : GOLD, isEdge ? 0.55 : 0.45);
+      this.zoneGfx.lineStyle(1, GOLD, 0.45);
       this.zoneGfx.strokeRect(x + 3, this.goalTop + 4, this.zoneWidth - 6, this.goalHeight - 8);
     }
   }
@@ -540,10 +529,20 @@ export class PenaltyScene extends Phaser.Scene {
   }
 
   private shoot(rawTargetX: number) {
-    const targetX = Phaser.Math.Clamp(rawTargetX, this.goalLeft - 28, this.goalRight + 28);
-    const keeperTargetX = this.zoneCenters[Phaser.Math.Between(0, ZONES - 1)];
-    const outcome = this.pickOutcome(targetX, keeperTargetX);
-    const finalY = outcome === "miss" ? this.goalTop + this.goalHeight + 26 : this.goalLineY;
+    // Discrete, consistent mechanic: the tap picks one of the goal zones (taps
+    // outside the frame snap to the nearest end zone, so there are no misses),
+    // the keeper dives to a random zone, and you score unless you picked the
+    // keeper's zone.
+    const playerZone = Phaser.Math.Clamp(
+      Math.floor((rawTargetX - this.goalLeft) / this.zoneWidth),
+      0,
+      ZONES - 1,
+    );
+    const keeperZone = Phaser.Math.Between(0, ZONES - 1);
+    const outcome: ShotOutcome = playerZone === keeperZone ? "saved" : "goal";
+
+    const targetX = this.zoneCenters[playerZone];
+    const keeperTargetX = this.zoneCenters[keeperZone];
 
     this.isShooting = true;
     this.instructionText.setText("Shot in motion...");
@@ -557,24 +556,15 @@ export class PenaltyScene extends Phaser.Scene {
       ease: "Quad.easeOut",
     });
 
-    const flightScale = (outcome === "miss" ? 0.86 : 0.72) * this.ballBaseScale;
     this.tweens.add({
       targets: this.ball,
       x: targetX,
-      y: finalY,
-      scale: flightScale,
+      y: this.goalLineY,
+      scale: 0.72 * this.ballBaseScale,
       duration: 420,
       ease: "Quad.easeIn",
       onComplete: () => this.resolveShot(outcome),
     });
-  }
-
-  private pickOutcome(targetX: number, keeperTargetX: number): ShotOutcome {
-    const outsideGoal = targetX < this.goalLeft || targetX > this.goalRight;
-    const unsafeEdge = targetX < this.safeLeft || targetX > this.safeRight;
-    if (outsideGoal || unsafeEdge) return "miss";
-    if (Math.abs(targetX - keeperTargetX) <= this.keeperReach) return "saved";
-    return "goal";
   }
 
   private resolveShot(outcome: ShotOutcome) {
@@ -582,14 +572,12 @@ export class PenaltyScene extends Phaser.Scene {
     if (outcome === "goal") this.goals += 1;
     this.updateScore();
 
-    const text = outcome === "goal" ? "GOAL!" : outcome === "saved" ? "SAVED!" : "MISS!";
-    const color = outcome === "goal" ? "#8CCF88" : outcome === "saved" ? "#F0B46A" : "#E37260";
-    const subtext =
-      outcome === "goal"
-        ? "Clean strike. The keeper guessed wrong."
-        : outcome === "saved"
-          ? "Keeper read the shot."
-          : "Too close to the edge. Keep it on frame.";
+    const scored = outcome === "goal";
+    const text = scored ? "GOAL!" : "SAVED!";
+    const color = scored ? "#8CCF88" : "#F0B46A";
+    const subtext = scored
+      ? "Clean strike. The keeper guessed wrong."
+      : "Keeper guessed your zone.";
 
     this.flashResult(text, color, subtext);
 
@@ -624,7 +612,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.ball.setScale(this.ballIsSprite ? this.ballBaseScale : 1);
     this.ball.setPosition(this.ballStartX, this.ballStartY);
     this.keeper.setPosition(this.scale.width / 2, this.goalLineY);
-    this.instructionText.setText("Tap the gold zones. Red edges miss.");
+    this.instructionText.setText("Tap a zone to shoot. Outguess the keeper!");
   }
 
   private endGame() {
