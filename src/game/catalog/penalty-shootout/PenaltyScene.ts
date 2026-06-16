@@ -112,6 +112,7 @@ export class PenaltyScene extends Phaser.Scene {
   private goals = 0;
   private isShooting = false;
   private state: GameState = "start";
+  private keeperSway?: Phaser.Tweens.Tween;
 
   constructor() {
     super("PenaltyScene");
@@ -230,6 +231,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.input.off("pointerdown", this.onPointerDown, this);
       this.scale.off("resize", this.layout, this);
+      this.stopKeeperSway();
     });
   }
 
@@ -326,7 +328,12 @@ export class PenaltyScene extends Phaser.Scene {
     this.layoutSprites(w, h);
 
     if (!this.isShooting) {
-      this.keeper.setPosition(w / 2, this.goalLineY);
+      if (this.state === "playing") {
+        this.startKeeperSway();
+      } else {
+        this.stopKeeperSway();
+        this.keeper.setPosition(w / 2, this.goalLineY);
+      }
       this.ball.setPosition(this.ballStartX, this.ballStartY);
     }
 
@@ -557,6 +564,22 @@ export class PenaltyScene extends Phaser.Scene {
     this.resultText.setAlpha(0);
     this.subResultText.setAlpha(0);
 
+    // Kicker recoils with a quick shake on the strike (pivots at the feet).
+    if (this.kicker) {
+      this.kicker.setAngle(0);
+      this.tweens.add({
+        targets: this.kicker,
+        angle: { from: -3.5, to: 3.5 },
+        duration: 40,
+        yoyo: true,
+        repeat: 3,
+        ease: "Sine.easeInOut",
+        onComplete: () => this.kicker?.setAngle(0),
+      });
+    }
+
+    // Keeper stops its idle sway and dives to the chosen zone.
+    this.stopKeeperSway();
     this.tweens.add({
       targets: this.keeper,
       x: keeperTargetX,
@@ -615,11 +638,32 @@ export class PenaltyScene extends Phaser.Scene {
     });
   }
 
+  /** Goalkeeper idle bob: sways side to side along the line between shots. */
+  private startKeeperSway() {
+    this.stopKeeperSway();
+    const centerX = this.scale.width / 2;
+    const amp = this.zoneWidth * 0.7;
+    this.keeper.setPosition(centerX - amp, this.goalLineY);
+    this.keeperSway = this.tweens.add({
+      targets: this.keeper,
+      x: centerX + amp,
+      duration: 800,
+      yoyo: true,
+      repeat: -1,
+      ease: "Sine.easeInOut",
+    });
+  }
+
+  private stopKeeperSway() {
+    this.keeperSway?.stop();
+    this.keeperSway = undefined;
+  }
+
   private resetForNextShot() {
     this.isShooting = false;
     this.ball.setScale(this.ballIsSprite ? this.ballBaseScale : 1);
     this.ball.setPosition(this.ballStartX, this.ballStartY);
-    this.keeper.setPosition(this.scale.width / 2, this.goalLineY);
+    this.startKeeperSway();
     this.instructionText.setText("Tap a zone to shoot. Outguess the keeper!");
   }
 
@@ -677,6 +721,7 @@ export class PenaltyScene extends Phaser.Scene {
     this.keeper.setAlpha(0.9);
     this.ball.setAlpha(0.9);
     // Returning from a finished round: clear the last shot's frozen pose.
+    this.stopKeeperSway();
     this.keeper.setPosition(this.scale.width / 2, this.goalLineY);
     this.ball.setScale(this.ballIsSprite ? this.ballBaseScale : 1);
     this.ball.setPosition(this.ballStartX, this.ballStartY);
