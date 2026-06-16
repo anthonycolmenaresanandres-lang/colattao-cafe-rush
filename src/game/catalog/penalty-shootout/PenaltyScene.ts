@@ -569,10 +569,10 @@ export class PenaltyScene extends Phaser.Scene {
       this.kicker.setAngle(0);
       this.tweens.add({
         targets: this.kicker,
-        angle: { from: -3.5, to: 3.5 },
-        duration: 40,
+        angle: { from: -1.5, to: 1.5 },
+        duration: 45,
         yoyo: true,
-        repeat: 3,
+        repeat: 1,
         ease: "Sine.easeInOut",
         onComplete: () => this.kicker?.setAngle(0),
       });
