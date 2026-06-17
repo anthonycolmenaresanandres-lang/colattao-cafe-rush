@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Press_Start_2P } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import {
@@ -23,6 +23,14 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   display: "swap",
   weight: ["500", "600", "700"],
+});
+
+// Retro arcade display font for the Penalty Rush character-select screen.
+const pressStart = Press_Start_2P({
+  variable: "--font-pixel",
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -128,7 +136,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${pressStart.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-colattao-page">
         <script
