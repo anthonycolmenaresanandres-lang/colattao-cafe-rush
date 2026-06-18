@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import MarketBoard from "@/components/MarketBoard";
 
-// Unlisted showcase: shareable by link, but not indexed and not linked in nav.
+// Public board: indexable and in the sitemap. (The internal /market/ops board
+// stays noindex + disallowed.)
 export const metadata: Metadata = {
   title: "Colattao Community Market — Project Board",
-  description: "Planning board for the Colattao Community Market, a monthly community bazaar in Virginia Beach.",
-  robots: { index: false, follow: false },
+  description: "Public planning board and per-market income & expense ledger for the Colattao Community Market, a monthly community bazaar in Virginia Beach.",
+  robots: { index: true, follow: true },
 };
 
 const SHELL =

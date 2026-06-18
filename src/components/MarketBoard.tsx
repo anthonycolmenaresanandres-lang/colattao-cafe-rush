@@ -186,6 +186,72 @@ export default function MarketBoard({ internal = false }: { internal?: boolean }
         )}
       </section>
 
+      {/* Per-market income & expense ledger (public log) */}
+      <section className={card}>
+        <h2 className={label}>Market ledger · income &amp; expenses</h2>
+        <p className="mt-2 text-xs leading-relaxed text-[#f4deba]/60">
+          Every market&apos;s income and expenses are logged here. Figures below are projected for the first market; actual numbers replace them after each event.
+        </p>
+        <div className="mt-4 space-y-3">
+          {MARKET.ledger.map((m) => {
+            const inc = m.income.reduce((a, b) => a + b.amount, 0);
+            const exp = m.expenses.reduce((a, b) => a + b.amount, 0);
+            const net = inc - exp;
+            return (
+              <div key={m.id} className="rounded-xl border border-[#f5c46b1a] bg-[#120904]/40 p-4">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <span className="font-medium text-[#fff3d6]">{m.id}</span>
+                  <span className="flex-1 text-xs text-[#f4deba]/60">{m.date}</span>
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] ${
+                      m.status === "held" ? "bg-[#8fcf88]/20 text-[#8fcf88]" : "bg-[#d99028]/20 text-[#f5c46b]"
+                    }`}
+                  >
+                    {m.status === "held" ? "Held" : "Planned"}
+                  </span>
+                </div>
+                <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#8fcf88]">Income</div>
+                    <div className="mt-1.5 space-y-1">
+                      {m.income.map((l) => (
+                        <div key={l.label} className="flex justify-between gap-3 text-sm text-[#f4deba]/80">
+                          <span>{l.label}</span>
+                          <span>${l.amount.toLocaleString()}</span>
+                        </div>
+                      ))}
+                      <div className="flex justify-between gap-3 border-t border-[#f5c46b14] pt-1 text-sm font-medium text-[#fff3d6]">
+                        <span>Total income</span>
+                        <span>${inc.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#e0795f]">Expenses</div>
+                    <div className="mt-1.5 space-y-1">
+                      {m.expenses.map((l) => (
+                        <div key={l.label} className="flex justify-between gap-3 text-sm text-[#f4deba]/80">
+                          <span>{l.label}</span>
+                          <span>${l.amount.toLocaleString()}</span>
+                        </div>
+                      ))}
+                      <div className="flex justify-between gap-3 border-t border-[#f5c46b14] pt-1 text-sm font-medium text-[#fff3d6]">
+                        <span>Total expenses</span>
+                        <span>${exp.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3 flex justify-between border-t border-[#f5c46b22] pt-2 text-sm">
+                  <span className="font-bold uppercase tracking-[0.14em] text-[#f5c46b]">Net</span>
+                  <span className="font-bold text-[#8fcf88]">${net.toLocaleString()}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Roles */}
       <section className={card}>
         <h2 className={label}>Who runs it</h2>

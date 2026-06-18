@@ -25,6 +25,16 @@ export type Scenario = {
   net: number; // internal only
 };
 
+export type LedgerLine = { label: string; amount: number };
+
+export type MarketEntry = {
+  id: string;
+  date: string;
+  status: "planned" | "held";
+  income: LedgerLine[];
+  expenses: LedgerLine[];
+};
+
 export const MARKET = {
   name: "Colattao Community Market",
   tagline: "Monthly community bazaar · Virginia Beach",
@@ -105,6 +115,27 @@ export const MARKET = {
 
   launchBudget:
     "$250–$700 to launch. Insurance + any city permit are the swing — confirm both by phone.",
+
+  // Public per-market income & expense log. Figures are projected for the first
+  // market; actuals replace them after each event. New markets append here.
+  ledger: [
+    {
+      id: "Market #1",
+      date: "Planned · first 2nd Saturday after approvals",
+      status: "planned",
+      income: [
+        { label: "Booth fees — pilot (9 × $35)", amount: 315 },
+        { label: "Booth fees — premium (3 × $75)", amount: 225 },
+        { label: "Sponsor", amount: 250 },
+      ],
+      expenses: [
+        { label: "Staff (manager + guide)", amount: 300 },
+        { label: "Signage & print", amount: 80 },
+        { label: "Supplies & trash", amount: 70 },
+        { label: "Contingency", amount: 75 },
+      ],
+    },
+  ] as MarketEntry[],
 
   // Internal only.
   risks: [
