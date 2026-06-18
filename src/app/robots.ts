@@ -13,6 +13,7 @@ export default function robots(): MetadataRoute.Robots {
         "/owner-command-center",
         "/owner-presentation",
         "/request-update",
+        "/market/ops",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
