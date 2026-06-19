@@ -14,6 +14,7 @@ export default function robots(): MetadataRoute.Robots {
         "/owner-presentation",
         "/request-update",
         "/market/ops",
+        "/befree",
       ],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
