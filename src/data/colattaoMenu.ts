@@ -99,6 +99,7 @@ export const menuCategories: MenuCategory[] = [
     title: "Kitchen",
     items: [
       { name: "Bacon Egg & Cheese", price: "$8.60" },
+      { name: "Waffle Breakfast", price: "Ask" },
       {
         name: "California Sandwich",
         price: "$9.85",

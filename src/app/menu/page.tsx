@@ -127,6 +127,30 @@ const ITEM_DETAILS: Record<string, ItemDetail> = {
     imageSrc: "/assets/colattao/menu-items/almond-croissant-photo.jpg",
     imageAlt: "Almond Croissant",
   },
+  "Waffle Breakfast": {
+    imageSrc: "/assets/colattao/menu-items/waffle-breakfast-photo.jpg",
+    imageAlt: "Waffle Breakfast",
+  },
+  Cubano: {
+    imageSrc: "/assets/colattao/menu-items/cubano-photo.jpg",
+    imageAlt: "Cubano sandwich",
+  },
+  "Pesto Mozzarella": {
+    imageSrc: "/assets/colattao/menu-items/pesto-mozzarella-photo.jpg",
+    imageAlt: "Pesto Mozzarella",
+  },
+  Montecristo: {
+    imageSrc: "/assets/colattao/menu-items/montecristo-photo.jpg",
+    imageAlt: "Montecristo",
+  },
+  "California Sandwich": {
+    imageSrc: "/assets/colattao/menu-items/california-sandwich-photo.jpg",
+    imageAlt: "California Sandwich",
+  },
+  "Ham & Cheesy": {
+    imageSrc: "/assets/colattao/menu-items/ham-cheesy-photo.jpg",
+    imageAlt: "Ham & Cheesy",
+  },
 };
 
 const COLLAPSIBLE_DESCRIPTION_ITEMS = new Set([
