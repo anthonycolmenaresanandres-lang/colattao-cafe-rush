@@ -302,9 +302,9 @@ export default function MenuPage() {
       <header className="sticky top-0 z-50 border-b border-[#DAAE4F]/25 bg-[linear-gradient(180deg,#211107_0%,#1D1108_72%,#140A02_100%)] px-3 py-2 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.9)]">
         <nav className="mx-auto w-full max-w-[360px]">
           <Link
-            href="/"
+            href="/penalty"
             className="group relative flex min-h-[52px] w-full items-center justify-center overflow-hidden rounded-2xl border border-[#DAAE4F]/75 bg-[linear-gradient(135deg,rgba(218,174,79,0.98)_0%,rgba(248,237,215,0.94)_48%,rgba(218,174,79,0.96)_100%)] px-4 py-2 text-center shadow-[0_10px_26px_-16px_rgba(218,174,79,0.95),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-2px_0_rgba(29,17,8,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-15px_rgba(218,174,79,1)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
-            aria-label="Play Colattao Rush"
+            aria-label="Play Colattao Penalty Rush"
           >
             {/* Golden-ticket side notches */}
             <span className="pointer-events-none absolute -left-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08]" />
@@ -321,7 +321,7 @@ export default function MenuPage() {
                 Tap to play
               </span>
               <span className="mt-1 text-[13px] font-black uppercase tracking-[0.16em] text-[#1D1108]">
-                PLAY COLATTAO RUSH
+                PLAY PENALTY RUSH
               </span>
             </span>
           </Link>

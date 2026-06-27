@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from "next";
-import { Inter, Playfair_Display, Cinzel } from "next/font/google";
+import { Inter, Playfair_Display, Press_Start_2P, Cinzel } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import {
@@ -23,6 +23,14 @@ const playfair = Playfair_Display({
   subsets: ["latin"],
   display: "swap",
   weight: ["500", "600", "700"],
+});
+
+// Retro arcade display font for the Penalty Rush character-select screen.
+const pressStart = Press_Start_2P({
+  variable: "--font-pixel",
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
 });
 
 // Engraved Roman capitals — the stoic, sovereign display face for the
@@ -137,7 +145,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${cinzel.variable} h-full antialiased`}
+      className={`${inter.variable} ${playfair.variable} ${pressStart.variable} ${cinzel.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-colattao-page">
         <script

@@ -22,9 +22,9 @@ export const GAME_CATALOG: Record<GameId, CatalogGame> = {
   },
   "penalty-shootout": {
     id: "penalty-shootout",
-    label: "Colattao Penalty Shootout",
-    description: "World Cup penalty kicks — pick your corner, beat the keeper.",
-    status: "beta", // built, asset-free (primitive-drawn); needs visual QA before going live
+    label: "Colattao Penalty Rush",
+    description: "Penalty kicks — pick your corner, beat the keeper. Play-for-fun, no reward flow.",
+    status: "live", // branded art set wired (crowd/keeper/ball/kicker), public at /penalty
     loadScenes: async () => {
       const { PenaltyBootScene } = await import(
         "@/game/catalog/penalty-shootout/PenaltyBootScene"
