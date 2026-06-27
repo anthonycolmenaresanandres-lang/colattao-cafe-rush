@@ -98,7 +98,7 @@ type ItemDetail = {
   imageAlt: string;
 };
 
-const ITEM_DETAILS: Record<string, ItemDetail> = {
+const ITEM_DETAILS: Partial<Record<string, ItemDetail>> = {
   "Chocolate Croissant": {
     imageSrc: "/assets/colattao/menu-items/chocolate-croissant-photo.jpg",
     imageAlt: "Chocolate Croissant",
@@ -476,20 +476,25 @@ export default function MenuPage() {
               </div>
 
               <ul className="relative z-10 mt-4 space-y-3">
-                {category.items.map((item) => (
-                  <li key={item.name} className="flex items-start gap-2 text-[var(--col-espresso)]">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-baseline">
-                        <span
-                          className="font-semibold leading-tight"
-                          style={{ textShadow: "0 1px 1px rgba(255,245,224,0.28)" }}
-                        >
-                          {item.name}
-                        </span>
-                        <span className="dotted-rule" />
-                      </div>
-                      {item.description && (
-                        category.id === "seasonal-drinks" && item.name === "Matcha Lemonade" ? (
+                {category.items.map((item) => {
+                  const itemDetail = ITEM_DETAILS[item.name];
+                  const hasCombinedDetails =
+                    Boolean(itemDetail) ||
+                    Boolean(item.description && COLLAPSIBLE_DESCRIPTION_ITEMS.has(item.name));
+
+                  return (
+                    <li key={item.name} className="flex items-start gap-2 text-[var(--col-espresso)]">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline">
+                          <span
+                            className="font-semibold leading-tight"
+                            style={{ textShadow: "0 1px 1px rgba(255,245,224,0.28)" }}
+                          >
+                            {item.name}
+                          </span>
+                          <span className="dotted-rule" />
+                        </div>
+                        {category.id === "seasonal-drinks" && item.name === "Matcha Lemonade" && item.description ? (
                           <details
                             id="matcha-lemonade-flavors"
                             className="group mt-1.5 rounded-2xl border border-[#d2b27a]/45 bg-[#f8edd7]/42 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.36)]"
@@ -529,48 +534,44 @@ export default function MenuPage() {
                               ))}
                             </ul>
                           </details>
-                        ) : COLLAPSIBLE_DESCRIPTION_ITEMS.has(item.name) ? (
+                        ) : hasCombinedDetails ? (
                           <details className="group mt-1.5">
                             <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-full border border-[#d2b27a]/45 bg-[#f8edd7]/45 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/80 transition-colors hover:bg-[#f8edd7]/65 hover:text-[var(--col-espresso-2)]">
                               Details
                               <span className="text-[9px] transition-transform group-open:rotate-180">▾</span>
                             </summary>
-                            <p className="mt-1.5 rounded-xl border border-[#d2b27a]/35 bg-[#f8edd7]/40 px-3 py-2 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
-                              {item.description}
-                            </p>
+                            <div className="mt-1.5 max-w-[220px] rounded-xl border border-[#d2b27a]/35 bg-[#f8edd7]/45 p-2 shadow-[0_8px_16px_-14px_rgba(27,14,8,0.45)]">
+                              {item.description && (
+                                <p className="px-1 pb-2 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
+                                  {item.description}
+                                </p>
+                              )}
+                              {itemDetail && (
+                                <Image
+                                  src={itemDetail.imageSrc}
+                                  alt={itemDetail.imageAlt}
+                                  width={900}
+                                  height={900}
+                                  className="h-auto w-full rounded-lg object-contain"
+                                />
+                              )}
+                            </div>
                           </details>
-                        ) : (
+                        ) : item.description ? (
                           <p className="mt-0.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
                             {item.description}
                           </p>
-                        )
-                      )}
-                      {ITEM_DETAILS[item.name] && (
-                        <details className="mt-1.5 group">
-                          <summary className="inline-flex cursor-pointer list-none items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/75 transition-colors hover:text-[var(--col-espresso-2)]">
-                            View item
-                            <span className="text-[9px] transition-transform group-open:rotate-180">▾</span>
-                          </summary>
-                          <div className="mt-1.5 max-w-[220px] overflow-hidden rounded-xl border border-[#d2b27a]/45 bg-[#f8edd7]/55 p-1.5 shadow-[0_8px_16px_-14px_rgba(27,14,8,0.45)]">
-                            <Image
-                              src={ITEM_DETAILS[item.name].imageSrc}
-                              alt={ITEM_DETAILS[item.name].imageAlt}
-                              width={900}
-                              height={900}
-                              className="h-auto w-full rounded-lg object-contain"
-                            />
-                          </div>
-                        </details>
-                      )}
-                    </div>
-                    <span
-                      className="shrink-0 pt-[1px] font-mono text-sm font-bold tracking-tight text-[var(--col-gold-deep)]"
-                      style={{ textShadow: "0 1px 1px rgba(255,245,224,0.25)" }}
-                    >
-                      {item.price ?? "ask"}
-                    </span>
-                  </li>
-                ))}
+                        ) : null}
+                      </div>
+                      <span
+                        className="shrink-0 pt-[1px] font-mono text-sm font-bold tracking-tight text-[var(--col-gold-deep)]"
+                        style={{ textShadow: "0 1px 1px rgba(255,245,224,0.25)" }}
+                      >
+                        {item.price ?? "ask"}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </section>
           );
