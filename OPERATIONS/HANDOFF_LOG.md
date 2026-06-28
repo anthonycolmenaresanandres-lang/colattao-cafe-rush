@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-06-27 08:12:24 -04:00 IN
+- did: Corrected target to the existing Colattao Cafe Rush penalty branch with `/penalty`, menu CTA, and game-page `BACK TO THE MENU` header behavior.
+- state: Clean launch branch `codex/colattao-penalty-rush-launch` is based on current `origin/main`; copying only penalty route/assets/menu/header/catalog runtime files from `feat/colattao-penalty-rush`.
+- next: Build and browser-verify `/menu -> /penalty`, then prepare owner approval and Instagram manager coordination copy.
+- blocked: Production merge/deploy still requires Anthony's explicit approval.
+
+## 2026-06-27 08:20:17 -04:00 OUT
+- did: Built and verified the clean launch branch. `/menu` CTA text is `PLAY PENALTY RUSH` and links to `/penalty`; `/penalty` top button reads `BACK TO THE MENU`; mobile CDP verified 390px width, no overflow, Phaser canvas present at 366x658, and screenshot saved locally.
+- state: Clean branch contains only penalty assets/runtime, menu CTA, header game-state label, sitemap entry, and handoff; no BeFree, market, menu-photo, or script diffs included.
+- next: Owner approval for Instagram post and explicit Anthony approval are still required before merge/deploy to production.
+- blocked: Full lint has existing unrelated errors in owner-presentation, RepIntakeGate, and SeasonalFeatureBanner; targeted lint for launch files passed.
+
 ## 2026-06-11 16:58:54 -04:00 IN
 - did: Checked in for Kitchen copy preservation and grammar/clarity edits.
 - state: `OPERATIONS/HANDOFF_LOG.md` did not exist before this session; existing repo handoff file is `HANDOFF.md`.
