@@ -31,6 +31,8 @@ const ALLOWED_FILE_TYPES = new Set([
 const MAX_TEXT_LEN = 4000;
 const MAX_FILES = 10;
 const MAX_FILE_SIZE_BYTES = 8 * 1024 * 1024;
+const COLATTAO_GUEST_NOTE_EMAIL =
+  process.env.COLATTAO_GUEST_NOTE_EMAIL || "colattao@hotmail.com";
 
 function cleanText(value: FormDataEntryValue | null, maxLen = MAX_TEXT_LEN) {
   if (typeof value !== "string") return "";
@@ -66,6 +68,13 @@ function extractGuestNoteMessage(message: string) {
   const markerIndex = message.indexOf(marker);
   if (markerIndex === -1) return message;
   return message.slice(markerIndex + marker.length).trim() || "Not provided";
+}
+
+function hiddenCopyRecipients(ownerEmail: string, primaryEmail: string) {
+  const normalizedOwnerEmail = ownerEmail.trim().toLowerCase();
+  const normalizedPrimaryEmail = primaryEmail.trim().toLowerCase();
+  if (!normalizedOwnerEmail || normalizedOwnerEmail === normalizedPrimaryEmail) return undefined;
+  return [ownerEmail.trim()];
 }
 
 function envDiagnostics() {
@@ -235,6 +244,8 @@ export async function POST(request: Request) {
   const fromEmail = process.env.FROM_EMAIL!;
   const resend = new Resend(process.env.RESEND_API_KEY);
   const isGuestNote = message.startsWith("Colattao Guest Note");
+  const toEmail = isGuestNote ? COLATTAO_GUEST_NOTE_EMAIL : ownerEmail;
+  const bccEmails = isGuestNote ? hiddenCopyRecipients(ownerEmail, toEmail) : undefined;
   let subject = `Colattao Owner Request: ${requestType}`;
   let textBody: string;
   let htmlBody: string;
@@ -321,7 +332,8 @@ export async function POST(request: Request) {
   try {
     const { error } = await resend.emails.send({
       from: fromEmail,
-      to: ownerEmail,
+      to: toEmail,
+      ...(bccEmails ? { bcc: bccEmails } : {}),
       subject,
       text: textBody,
       html: htmlBody,

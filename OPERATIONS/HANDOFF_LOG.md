@@ -1,5 +1,11 @@
 # Colattao Rush Handoff Log
 
+## 2026-06-29 07:08:40 -04:00 OUT
+- did: Published the approved Colattao Rush guest-note email routing from a clean `origin/main` worktree.
+- state: `/api/owner-requests` sends guest notes visibly to `COLATTAO_GUEST_NOTE_EMAIL` with fallback `colattao@hotmail.com`, and BCCs the configured internal `OWNER_NOTIFICATION_EMAIL` when different; no redirect was added.
+- next: Verify live `/menu` and production deployment after push.
+- blocked: None.
+
 ## 2026-06-11 16:58:54 -04:00 IN
 - did: Checked in for Kitchen copy preservation and grammar/clarity edits.
 - state: `OPERATIONS/HANDOFF_LOG.md` did not exist before this session; existing repo handoff file is `HANDOFF.md`.
