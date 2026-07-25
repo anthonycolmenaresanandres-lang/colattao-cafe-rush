@@ -345,17 +345,9 @@ export default function MenuPage() {
         className="relative z-10 overflow-hidden"
         aria-label="Animated Colattao Coffee House logo"
       >
-        <ColattaoButterflyLogoMotion loop={false} showReplay={false} />
-      </section>
-
-      <section className="relative z-10 px-4 pt-4">
-        <Image
-          src="/assets/colattao/menu/seasonal/featured-seasonal-plates-banner.png"
-          alt="Featured Seasonal Plates: Waffle Breakfast and Tuna Salad Sandwich"
-          width={1672}
-          height={941}
-          sizes="(max-width: 470px) calc(100vw - 32px), 438px"
-          className="h-auto w-full rounded-[22px] shadow-[0_18px_36px_-22px_rgba(0,0,0,0.82),0_0_0_1px_rgba(218,174,79,0.24)]"
+        <ColattaoButterflyLogoMotion
+          motionSource="device"
+          showReplay={false}
         />
       </section>
 

@@ -138,6 +138,7 @@
     display: none;
   }
 
+  .stage[data-motion-state="ready"] .logo,
   .logo {
     opacity: 1;
   }
