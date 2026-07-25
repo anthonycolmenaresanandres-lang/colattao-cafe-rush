@@ -12,6 +12,12 @@
 - next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify the production `/menu`.
 - blocked: None.
 
+## 2026-07-25 14:10:31 -04:00 OUT
+- did: Squash-merged green PR #5 at exact head and verified production commit `fe38c65` on deployment `dpl_CfhfdTJcHg7yTv9Yc1RXwMpuND7N`.
+- state: Live `/menu` returns 200 at 390x844 with device-responsive butterflies, a stable resting RAF, no lower featured-seasonal-plates square, no replay control, no overflow, and no browser, request, error, fatal, or 5xx failures.
+- next: No further release action; evaluate motion feel on Anthony's physical phone and tune only the response strength if requested.
+- blocked: None.
+
 ## 2026-07-25 13:00:28 -04:00 IN
 - did: Received Anthony's explicit approval of the butterfly-logo motion and authorization to push, merge, and publish it.
 - state: Draft PR #4 is clean and green at `f5e3081`; `origin/main` remains `b79fba8`, and the approved motion is still isolated from `/menu`.
