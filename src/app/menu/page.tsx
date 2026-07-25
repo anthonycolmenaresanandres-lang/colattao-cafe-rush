@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import appTheme from "@/config/theme";
+import ColattaoButterflyLogoMotion from "@/components/ColattaoButterflyLogoMotion";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
 import SeasonalFeatureBanner from "@/components/SeasonalFeatureBanner";
 import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
@@ -340,31 +341,11 @@ export default function MenuPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#1b0e08]/25 via-transparent to-[#1b0e08]/30" />
       </div>
 
-      <section className="relative z-10 overflow-hidden pb-6 pt-6">
-        <div className="pointer-events-none absolute inset-0">
-          <Image
-            src="/assets/colattao/website-concept/real-lounge-fireplace-wide.png"
-            alt=""
-            aria-hidden="true"
-            fill
-            priority
-            sizes="(max-width: 470px) 100vw, 470px"
-            className="object-cover object-[center_40%]"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,6,4,0.24)_0%,rgba(14,6,4,0.54)_52%,rgba(14,6,4,0.72)_100%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_15%,rgba(212,162,76,0.16),transparent_62%)]" />
-        </div>
-
-        <div className="relative z-10 px-5 pb-6 pt-10 text-center">
-          <Image
-            src={appTheme.brand.logoPath}
-            alt={appTheme.brand.displayName}
-            width={430}
-            height={176}
-            priority
-            className="mx-auto h-auto w-[300px] max-w-full select-none drop-shadow-[0_0_28px_rgba(212,162,76,0.28)]"
-          />
-        </div>
+      <section
+        className="relative z-10 overflow-hidden"
+        aria-label="Animated Colattao Coffee House logo"
+      >
+        <ColattaoButterflyLogoMotion loop={false} showReplay={false} />
       </section>
 
       <section className="relative z-10 px-4 pt-4">

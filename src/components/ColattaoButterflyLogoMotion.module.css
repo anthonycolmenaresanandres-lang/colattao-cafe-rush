@@ -79,10 +79,14 @@
   filter:
     drop-shadow(0 0 10px rgb(247 215 151 / 24%))
     drop-shadow(0 0 32px rgb(209 148 43 / 18%));
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
   transform: scale(1.55);
   user-select: none;
+}
+
+.stage[data-motion-state="ready"] .logo {
+  opacity: 0;
 }
 
 .glow {

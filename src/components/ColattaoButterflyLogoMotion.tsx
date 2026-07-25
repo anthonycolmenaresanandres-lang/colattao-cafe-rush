@@ -26,6 +26,11 @@ type LogoSample = {
   };
 };
 
+type ColattaoButterflyLogoMotionProps = {
+  loop?: boolean;
+  showReplay?: boolean;
+};
+
 const clamp = (value: number, minimum = 0, maximum = 1) =>
   Math.min(maximum, Math.max(minimum, value));
 
@@ -236,7 +241,10 @@ function createParticles(image: HTMLImageElement, lowPower: boolean): LogoSample
   };
 }
 
-export default function ColattaoButterflyLogoMotion() {
+export default function ColattaoButterflyLogoMotion({
+  loop = true,
+  showReplay = true,
+}: ColattaoButterflyLogoMotionProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const logoRef = useRef<HTMLImageElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -263,6 +271,7 @@ export default function ColattaoButterflyLogoMotion() {
 
     let animationFrame = 0;
     let cancelled = false;
+    let hasCompleted = false;
     let isIntersecting = true;
     let isPrepared = false;
     let particles: ButterflyParticle[] = [];
@@ -285,6 +294,7 @@ export default function ColattaoButterflyLogoMotion() {
       isIntersecting &&
       !document.hidden &&
       !reducedMotion.matches &&
+      (loop || !hasCompleted) &&
       !cancelled;
 
     const resize = () => {
@@ -310,7 +320,10 @@ export default function ColattaoButterflyLogoMotion() {
         startedAt = time;
       }
 
-      const phase = ((time - startedAt) % CYCLE_MS) / CYCLE_MS;
+      const elapsed = time - startedAt;
+      const phase = loop
+        ? (elapsed % CYCLE_MS) / CYCLE_MS
+        : Math.min(elapsed / (CYCLE_MS * 0.42), 1) * 0.42;
       const formation = formationForPhase(phase);
       const airborne = Math.sin(formation * Math.PI);
       const logoOpacity =
@@ -404,6 +417,11 @@ export default function ColattaoButterflyLogoMotion() {
         context.globalAlpha = 1;
       }
 
+      if (!loop && elapsed >= CYCLE_MS * 0.42) {
+        hasCompleted = true;
+        stage.dataset.motionPhase = "hold";
+      }
+
       if (canAnimate()) {
         animationFrame = window.requestAnimationFrame(draw);
       }
@@ -424,6 +442,11 @@ export default function ColattaoButterflyLogoMotion() {
       if (reducedMotion.matches) {
         stopAnimation();
         context.clearRect(0, 0, width, height);
+        stage.dataset.motionState = "static";
+        return;
+      }
+
+      if (!loop && hasCompleted) {
         stage.dataset.motionState = "static";
         return;
       }
@@ -511,7 +534,7 @@ export default function ColattaoButterflyLogoMotion() {
       delete stage.dataset.motionPhase;
       delete stage.dataset.particleCount;
     };
-  }, [cycleKey]);
+  }, [cycleKey, loop]);
 
   return (
     <div className={styles.shell}>
@@ -529,17 +552,20 @@ export default function ColattaoButterflyLogoMotion() {
           src={LOGO_SRC}
           alt="Colattao Coffee House"
           className={styles.logo}
+          fetchPriority="high"
         />
         <div className={styles.glow} aria-hidden="true" />
       </div>
 
-      <button
-        type="button"
-        className={styles.replay}
-        onClick={() => setCycleKey((current) => current + 1)}
-      >
-        Replay motion
-      </button>
+      {showReplay ? (
+        <button
+          type="button"
+          className={styles.replay}
+          onClick={() => setCycleKey((current) => current + 1)}
+        >
+          Replay motion
+        </button>
+      ) : null}
     </div>
   );
 }

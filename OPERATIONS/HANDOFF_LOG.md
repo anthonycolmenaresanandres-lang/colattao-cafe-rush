@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-07-25 13:00:28 -04:00 IN
+- did: Received Anthony's explicit approval of the butterfly-logo motion and authorization to push, merge, and publish it.
+- state: Draft PR #4 is clean and green at `f5e3081`; `origin/main` remains `b79fba8`, and the approved motion is still isolated from `/menu`.
+- next: Replace only the current `/menu` fireplace/owners hero with the approved motion component, run release gates, update PR #4, and merge after exact-head verification.
+- blocked: None within the approved hero-replacement and production-release scope.
+
+## 2026-07-25 13:12:19 -04:00 RELEASE GATE
+- did: Replaced only the `/menu` fireplace/owners hero with the approved golden-butterfly logo motion; the live route plays once, holds the exact logo, and omits the replay control while the review route keeps looping and replay.
+- state: Targeted ESLint, `tsc --noEmit`, production build, `git diff --check`, 390x844 overflow/content checks, no-JS fallback, completed-motion RAF stop, stable final canvas, and reduced-motion runtime switching passed.
+- next: Commit and push the scoped integration, require a green exact-head PR, merge PR #4, and verify the live `/menu`.
+- blocked: None.
+
 ## 2026-07-25 07:39:35 -04:00 IN
 - did: Checked in for Anthony's review-only Colattao logo-motion concept using the proven Fina Calle particle technique.
 - state: Work is isolated on `codex/colattao-butterfly-preview-20260725` from clean `origin/main`; the live `/menu` fireplace/owners hero remains untouched.
