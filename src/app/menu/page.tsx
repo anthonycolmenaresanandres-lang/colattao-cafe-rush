@@ -343,7 +343,7 @@ export default function MenuPage() {
 
       <section
         className="relative z-10"
-        aria-label="Colattao Coffee House logo transforming into the Espresso and Coffee menu"
+        aria-label="Colattao Coffee House logo transforming into the menu"
       >
         <ColattaoButterflyLogoMotion
           motionSource="scroll"

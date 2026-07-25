@@ -258,7 +258,7 @@ function createParticles(image: HTMLImageElement, lowPower: boolean): LogoSample
 function createMenuTarget(lowPower: boolean): MenuTargetSample | null {
   const targetCanvas = document.createElement("canvas");
   const targetWidth = 900;
-  const targetHeight = 420;
+  const targetHeight = 320;
   targetCanvas.width = targetWidth;
   targetCanvas.height = targetHeight;
   const targetContext = targetCanvas.getContext("2d", {
@@ -273,25 +273,23 @@ function createMenuTarget(lowPower: boolean): MenuTargetSample | null {
     getComputedStyle(document.documentElement)
       .getPropertyValue("--font-playfair")
       .trim() || "Georgia";
-  const sansFont =
-    getComputedStyle(document.documentElement)
-      .getPropertyValue("--font-inter")
-      .trim() || "Arial";
-
   targetContext.clearRect(0, 0, targetWidth, targetHeight);
   targetContext.textAlign = "center";
   targetContext.textBaseline = "middle";
-  targetContext.fillStyle = "#dcae4f";
-  targetContext.font = `800 42px ${sansFont}, Arial, sans-serif`;
-  targetContext.fillText("M  E  N  U", targetWidth / 2, 48);
   targetContext.shadowColor = "rgb(230 178 75 / 0.22)";
-  targetContext.shadowBlur = 12;
-  targetContext.fillStyle = "#fff0ce";
-  targetContext.font = `700 132px ${displayFont}, Georgia, serif`;
-  targetContext.fillText("ESPRESSO", targetWidth / 2, 178);
-  targetContext.fillStyle = "#e3b75f";
-  targetContext.font = `700 126px ${displayFont}, Georgia, serif`;
-  targetContext.fillText("& COFFEE", targetWidth / 2, 320);
+  targetContext.shadowBlur = 18;
+  const targetGradient = targetContext.createLinearGradient(
+    0,
+    54,
+    0,
+    targetHeight - 48,
+  );
+  targetGradient.addColorStop(0, "#fff3d8");
+  targetGradient.addColorStop(0.58, "#f3d794");
+  targetGradient.addColorStop(1, "#dcae4f");
+  targetContext.fillStyle = targetGradient;
+  targetContext.font = `700 246px ${displayFont}, Georgia, serif`;
+  targetContext.fillText("MENU", targetWidth / 2, targetHeight / 2 + 6);
   targetContext.shadowBlur = 0;
 
   const pixels = targetContext.getImageData(
@@ -810,7 +808,7 @@ export default function ColattaoButterflyLogoMotion({
       shell.dataset.motionState = "ready";
       stage.dataset.particleCount = String(particles.length);
       stage.dataset.motionTarget = isScrollResponsive
-        ? "espresso-coffee"
+        ? "menu"
         : "logo";
       window.addEventListener("resize", handleResize);
       document.addEventListener("visibilitychange", syncVisibility);

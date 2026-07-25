@@ -7,7 +7,7 @@
 }
 
 .shell[data-motion-mode="scroll"][data-motion-state="ready"] {
-  min-height: clamp(590px, 76svh, 720px);
+  min-height: clamp(720px, 100svh, 880px);
   align-items: start;
 }
 
