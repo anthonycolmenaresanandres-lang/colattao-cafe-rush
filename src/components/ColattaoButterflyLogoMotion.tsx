@@ -28,7 +28,7 @@ type LogoSample = {
 
 type ColattaoButterflyLogoMotionProps = {
   loop?: boolean;
-  motionSource?: "device" | "timeline";
+  motionSource?: "scroll" | "timeline";
   showReplay?: boolean;
 };
 
@@ -284,11 +284,6 @@ export default function ColattaoButterflyLogoMotion({
     let isPrepared = false;
     let lastInputAt = 0;
     let lastScrollY = window.scrollY;
-    let neutralBeta: number | null = null;
-    let neutralGamma: number | null = null;
-    let lastAcceptedBeta: number | null = null;
-    let lastAcceptedGamma: number | null = null;
-    let orientationPermissionRequested = false;
     let particles: ButterflyParticle[] = [];
     let logoSample: LogoSample | null = null;
     let width = 0;
@@ -296,7 +291,7 @@ export default function ColattaoButterflyLogoMotion({
     let pixelRatio = 1;
     let startedAt = 0;
     const butterflySprites = createButterflySprites();
-    const isDeviceResponsive = motionSource === "device";
+    const isScrollResponsive = motionSource === "scroll";
 
     const stopAnimation = () => {
       if (animationFrame !== 0) {
@@ -310,7 +305,7 @@ export default function ColattaoButterflyLogoMotion({
       isIntersecting &&
       !document.hidden &&
       !reducedMotion.matches &&
-      (isDeviceResponsive || loop || !hasCompleted) &&
+      (isScrollResponsive || loop || !hasCompleted) &&
       !cancelled;
 
     const resize = () => {
@@ -336,7 +331,7 @@ export default function ColattaoButterflyLogoMotion({
       const logoLeft = (width - logoWidth) / 2;
       const logoTop = (height - logoHeight) / 2;
 
-      if (isDeviceResponsive) {
+      if (isScrollResponsive) {
         const timeSinceInput =
           lastInputAt === 0 ? Number.POSITIVE_INFINITY : time - lastInputAt;
 
@@ -577,120 +572,20 @@ export default function ColattaoButterflyLogoMotion({
       animationFrame = window.requestAnimationFrame(draw);
     };
 
-    const pushMotionInput = (
-      nextX: number,
-      nextY: number,
-      nextEnergy: number,
-      source: "scroll" | "tilt" | "touch",
-    ) => {
-      if (!isDeviceResponsive || reducedMotion.matches) {
+    const pushScrollInput = (nextY: number, nextEnergy: number) => {
+      if (!isScrollResponsive || reducedMotion.matches) {
         return;
       }
 
-      inputTargetX = clamp(nextX, -1, 1);
+      inputTargetX = 0;
       inputTargetY = clamp(nextY, -1, 1);
       inputTargetEnergy = Math.max(
         inputTargetEnergy * 0.62,
         clamp(nextEnergy),
       );
       lastInputAt = performance.now();
-      stage.dataset.motionInput = source;
+      stage.dataset.motionInput = "scroll";
       startAnimation(false);
-    };
-
-    const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
-      if (event.beta === null || event.gamma === null) {
-        return;
-      }
-
-      if (neutralBeta === null || neutralGamma === null) {
-        neutralBeta = event.beta;
-        neutralGamma = event.gamma;
-        lastAcceptedBeta = event.beta;
-        lastAcceptedGamma = event.gamma;
-        stage.dataset.motionPermission = "active";
-        return;
-      }
-
-      const angularChange = Math.hypot(
-        event.beta - (lastAcceptedBeta ?? event.beta),
-        event.gamma - (lastAcceptedGamma ?? event.gamma),
-      );
-
-      if (angularChange < 0.85) {
-        return;
-      }
-
-      lastAcceptedBeta = event.beta;
-      lastAcceptedGamma = event.gamma;
-
-      let nextX = clamp((event.gamma - neutralGamma) / 24, -1, 1);
-      let nextY = clamp((event.beta - neutralBeta) / 24, -1, 1);
-      const screenAngle = window.screen.orientation?.angle ?? 0;
-
-      if (screenAngle === 90) {
-        [nextX, nextY] = [-nextY, nextX];
-      } else if (screenAngle === 270) {
-        [nextX, nextY] = [nextY, -nextX];
-      } else if (screenAngle === 180) {
-        nextX *= -1;
-        nextY *= -1;
-      }
-
-      pushMotionInput(
-        nextX,
-        nextY,
-        clamp(Math.hypot(nextX, nextY) / 1.15),
-        "tilt",
-      );
-    };
-
-    const requestPhoneMotionPermission = () => {
-      if (
-        !isDeviceResponsive ||
-        reducedMotion.matches ||
-        orientationPermissionRequested ||
-        !("DeviceOrientationEvent" in window)
-      ) {
-        return;
-      }
-
-      const orientationConstructor = window.DeviceOrientationEvent as typeof DeviceOrientationEvent & {
-        requestPermission?: () => Promise<"denied" | "granted">;
-      };
-
-      if (typeof orientationConstructor.requestPermission !== "function") {
-        stage.dataset.motionPermission = "not-required";
-        return;
-      }
-
-      orientationPermissionRequested = true;
-      void orientationConstructor
-        .requestPermission()
-        .then((permission) => {
-          stage.dataset.motionPermission = permission;
-        })
-        .catch(() => {
-          stage.dataset.motionPermission = "unavailable";
-        });
-    };
-
-    const handlePointerMove = (event: PointerEvent) => {
-      const bounds = stage.getBoundingClientRect();
-
-      if (bounds.width === 0 || bounds.height === 0) {
-        return;
-      }
-
-      const nextX = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2;
-      const nextY = ((event.clientY - bounds.top) / bounds.height - 0.5) * 2;
-
-      pushMotionInput(
-        nextX,
-        nextY,
-        clamp(Math.hypot(nextX, nextY) / 1.2),
-        "touch",
-      );
     };
 
     const handleScroll = () => {
@@ -702,18 +597,14 @@ export default function ColattaoButterflyLogoMotion({
         return;
       }
 
-      pushMotionInput(
-        0,
-        clamp(delta / 52, -1, 1),
-        clamp(Math.abs(delta) / 34),
-        "scroll",
-      );
+      stage.dataset.motionDirection = delta > 0 ? "down" : "up";
+      pushScrollInput(clamp(delta / 52, -1, 1), clamp(Math.abs(delta) / 34));
     };
 
     const handleResize = () => {
       resize();
 
-      if (isDeviceResponsive) {
+      if (isScrollResponsive) {
         startAnimation(false);
       } else if (!loop && hasCompleted) {
         stage.dataset.motionState = "static";
@@ -730,7 +621,7 @@ export default function ColattaoButterflyLogoMotion({
         return;
       }
 
-      if (!isDeviceResponsive && !loop && hasCompleted) {
+      if (!isScrollResponsive && !loop && hasCompleted) {
         stage.dataset.motionState = "static";
         return;
       }
@@ -741,7 +632,7 @@ export default function ColattaoButterflyLogoMotion({
 
     const syncVisibility = () => {
       if (canAnimate()) {
-        startAnimation(!isDeviceResponsive);
+        startAnimation(!isScrollResponsive);
       } else {
         stopAnimation();
       }
@@ -801,20 +692,9 @@ export default function ColattaoButterflyLogoMotion({
       document.addEventListener("visibilitychange", syncVisibility);
       reducedMotion.addEventListener("change", syncMotionPreference);
 
-      if (isDeviceResponsive) {
+      if (isScrollResponsive) {
         stage.dataset.motionInput = "rest";
-        window.addEventListener(
-          "deviceorientation",
-          handleDeviceOrientation,
-          { passive: true },
-        );
         window.addEventListener("scroll", handleScroll, { passive: true });
-        stage.addEventListener("pointerdown", requestPhoneMotionPermission, {
-          passive: true,
-        });
-        stage.addEventListener("pointermove", handlePointerMove, {
-          passive: true,
-        });
       }
 
       intersectionObserver?.observe(stage);
@@ -829,17 +709,11 @@ export default function ColattaoButterflyLogoMotion({
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", syncVisibility);
       reducedMotion.removeEventListener("change", syncMotionPreference);
-      window.removeEventListener(
-        "deviceorientation",
-        handleDeviceOrientation,
-      );
       window.removeEventListener("scroll", handleScroll);
-      stage.removeEventListener("pointerdown", requestPhoneMotionPermission);
-      stage.removeEventListener("pointermove", handlePointerMove);
       intersectionObserver?.disconnect();
       delete stage.dataset.motionEnergy;
+      delete stage.dataset.motionDirection;
       delete stage.dataset.motionInput;
-      delete stage.dataset.motionPermission;
       delete stage.dataset.motionState;
       delete stage.dataset.motionPhase;
       delete stage.dataset.particleCount;

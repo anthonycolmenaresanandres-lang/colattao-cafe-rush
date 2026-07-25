@@ -346,7 +346,7 @@ export default function MenuPage() {
         aria-label="Animated Colattao Coffee House logo"
       >
         <ColattaoButterflyLogoMotion
-          motionSource="device"
+          motionSource="scroll"
           showReplay={false}
         />
       </section>

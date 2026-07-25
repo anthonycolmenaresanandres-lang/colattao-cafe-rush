@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-07-25 14:17:28 -04:00 IN
+- did: Checked in for Anthony's correction from phone-orientation motion to scroll-only butterfly response.
+- state: Isolated branch `codex/colattao-scroll-motion-20260725` starts at production `aee4f8f`; prior local QA captures remain untracked and excluded.
+- next: Remove all orientation permission, tilt, and pointer handling from the live logo while preserving up/down scroll response, resting-logo accuracy, and the timeline review route.
+- blocked: Production merge remains gated on upward/downward scroll, settling, reduced-motion, mobile, build, and exact-scope verification.
+
+## 2026-07-25 14:23:47 -04:00 RELEASE GATE
+- did: Removed the entire device-orientation permission, tilt, and pointer-input path; the live logo now responds only to scroll delta and direction while the review route retains its timeline.
+- state: Targeted ESLint, `tsc --noEmit`, production build, `git diff --check`, 390x844 layout, ignored tilt/pointer events, down/up scroll response, stable post-scroll RAF, and reduced-motion fallback passed; no permission request occurred.
+- next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify production `/menu`.
+- blocked: None.
+
 ## 2026-07-25 13:50:17 -04:00 IN
 - did: Checked in for Anthony's phone-responsive butterfly-motion refinement and removal of the static seasonal plate square below the logo.
 - state: Isolated branch `codex/colattao-phone-motion-20260725` starts at clean production `a555979`; prior local QA captures remain untracked and excluded.
