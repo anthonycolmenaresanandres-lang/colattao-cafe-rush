@@ -12,6 +12,12 @@
 - next: Push the isolated review branch and open a draft PR so Anthony can inspect the hosted preview.
 - blocked: `/menu` remains unchanged; hero replacement and production merge require Anthony's visual approval.
 
+## 2026-07-25 08:40:27 -04:00 OUT
+- did: Pushed the isolated motion-preview branch and opened draft PR #4; the Vercel preview deployment check passed.
+- state: The review URL is hosted behind the project's signed-in preview protection, remains unlinked/noindex, and contains no `/menu` hero change.
+- next: Anthony reviews the animation; if approved, prepare a separate narrowly scoped `/menu` hero replacement.
+- blocked: No production merge or fireplace/owners-image replacement until Anthony explicitly approves the motion.
+
 ## 2026-06-29 07:08:40 -04:00 OUT
 - did: Published the approved Colattao Rush guest-note email routing from a clean `origin/main` worktree.
 - state: `/api/owner-requests` sends guest notes visibly to `COLATTAO_GUEST_NOTE_EMAIL` with fallback `colattao@hotmail.com`, and BCCs the configured internal `OWNER_NOTIFICATION_EMAIL` when different; no redirect was added.
