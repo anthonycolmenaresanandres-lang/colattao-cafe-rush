@@ -12,6 +12,12 @@
 - next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify production `/menu`.
 - blocked: None.
 
+## 2026-07-25 14:31:32 -04:00 OUT
+- did: Squash-merged green PR #6 at exact head and promoted its verified Vercel build to production deployment `dpl_FND8q6uN3Qv6MmsoMG3ihwMNgZYT`.
+- state: Live `/menu` returns 200 at 390x844 with `scroll` as the sole live motion source, verified down/up response, zero motion-permission requests, ignored tilt input, stable resting RAF, no lower seasonal square, no overflow, and no browser, request, error, fatal, or 5xx failures.
+- next: No further release action; motion strength can be tuned later without reintroducing device-orientation access.
+- blocked: None.
+
 ## 2026-07-25 13:50:17 -04:00 IN
 - did: Checked in for Anthony's phone-responsive butterfly-motion refinement and removal of the static seasonal plate square below the logo.
 - state: Isolated branch `codex/colattao-phone-motion-20260725` starts at clean production `a555979`; prior local QA captures remain untracked and excluded.
