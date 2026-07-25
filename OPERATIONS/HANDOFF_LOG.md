@@ -12,6 +12,12 @@
 - next: Commit and push the scoped integration, require a green exact-head PR, merge PR #4, and verify the live `/menu`.
 - blocked: None.
 
+## 2026-07-25 13:19:12 -04:00 OUT
+- did: Squash-merged green PR #4 at exact head and verified production commit `60533cb` on deployment `dpl_E4AP4qmGuLFpSEoV4schDJRhFgVX`.
+- state: Live `/menu` returns 200 with the approved one-shot logo motion, no old fireplace/owners hero, no replay control, no mobile overflow, a stable held logo, and no browser console/request failures; bounded deployment log queries returned no error, fatal, or 5xx records.
+- next: No further release action; monitor real-user feedback and analytics before considering any motion changes.
+- blocked: None.
+
 ## 2026-07-25 07:39:35 -04:00 IN
 - did: Checked in for Anthony's review-only Colattao logo-motion concept using the proven Fina Calle particle technique.
 - state: Work is isolated on `codex/colattao-butterfly-preview-20260725` from clean `origin/main`; the live `/menu` fireplace/owners hero remains untouched.
