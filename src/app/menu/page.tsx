@@ -342,8 +342,8 @@ export default function MenuPage() {
       </div>
 
       <section
-        className="relative z-10 overflow-hidden"
-        aria-label="Animated Colattao Coffee House logo"
+        className="relative z-10"
+        aria-label="Colattao Coffee House logo transforming into the Espresso and Coffee menu"
       >
         <ColattaoButterflyLogoMotion
           motionSource="scroll"

@@ -6,6 +6,16 @@
   margin-inline: auto;
 }
 
+.shell[data-motion-mode="scroll"][data-motion-state="ready"] {
+  min-height: clamp(590px, 76svh, 720px);
+  align-items: start;
+}
+
+.shell[data-motion-mode="scroll"][data-motion-state="ready"] .stage {
+  position: sticky;
+  top: clamp(72px, 9svh, 92px);
+}
+
 .stage {
   position: relative;
   isolation: isolate;
@@ -134,6 +144,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .shell[data-motion-mode="scroll"] {
+    min-height: auto;
+  }
+
+  .shell[data-motion-mode="scroll"] .stage {
+    position: relative;
+    top: auto;
+  }
+
   .canvas {
     display: none;
   }

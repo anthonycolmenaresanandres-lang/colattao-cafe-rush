@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-07-25 15:08:55 -04:00 IN
+- did: Checked in for Anthony's request to make the Colattao butterflies perform the same reversible scroll morph proven on the Fina Calle page.
+- state: Isolated branch `codex/colattao-logo-to-menu-morph-20260725` starts at production `cf77242`; existing QA captures remain untracked and excluded.
+- next: Build one scroll-controlled particle scene from the official Colattao logo into an `ESPRESSO & COFFEE` target, with exact reverse reconstruction and no autonomous motion.
+- blocked: Production merge remains gated on forward/reverse visual proof, endpoint fidelity, reduced-motion, mobile, build, and exact-scope verification.
+
+## 2026-07-25 15:19:57 -04:00 RELEASE GATE
+- did: Replaced the drift response with one sticky, scroll-controlled logo-to-`MENU / ESPRESSO & COFFEE` butterfly morph modeled on Fina Calle's verified source-to-target scene.
+- state: Targeted ESLint, `tsc --noEmit`, production build, `git diff --check`, 390x844 forward/midpoint/target/reverse visual checks, exact rebuilt-canvas equality, stable idle RAF, zero overflow, reduced-motion, and no-JavaScript fallbacks passed.
+- next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify the production `/menu`.
+- blocked: None.
+
 ## 2026-07-25 14:17:28 -04:00 IN
 - did: Checked in for Anthony's correction from phone-orientation motion to scroll-only butterfly response.
 - state: Isolated branch `codex/colattao-scroll-motion-20260725` starts at production `aee4f8f`; prior local QA captures remain untracked and excluded.
