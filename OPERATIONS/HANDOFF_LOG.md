@@ -12,6 +12,12 @@
 - next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify the production `/menu`.
 - blocked: None.
 
+## 2026-07-25 15:24:12 -04:00 OUT
+- did: Squash-merged green PR #7 at exact head and verified production commit `a6e8583` on deployment `dpl_9KTEnQSgaW63dBJobKuA8Cp4YSPL`.
+- state: Live `/menu` returns 200 at 390x844 with verified logo, butterfly midpoint, and `MENU / ESPRESSO & COFFEE` target endpoints; reverse scrolling reconstructs the starting canvas exactly, idle RAF is stable, overflow is zero, and browser, request, error, fatal, and 5xx checks are clean.
+- next: No further release action; review the live physical-phone feel before considering only visual-strength tuning.
+- blocked: None.
+
 ## 2026-07-25 14:17:28 -04:00 IN
 - did: Checked in for Anthony's correction from phone-orientation motion to scroll-only butterfly response.
 - state: Isolated branch `codex/colattao-scroll-motion-20260725` starts at production `aee4f8f`; prior local QA captures remain untracked and excluded.
