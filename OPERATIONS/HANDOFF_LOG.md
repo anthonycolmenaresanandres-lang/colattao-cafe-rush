@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-07-25 07:39:35 -04:00 IN
+- did: Checked in for Anthony's review-only Colattao logo-motion concept using the proven Fina Calle particle technique.
+- state: Work is isolated on `codex/colattao-butterfly-preview-20260725` from clean `origin/main`; the live `/menu` fireplace/owners hero remains untouched.
+- next: Build an unlinked, noindex logo-animation preview with golden butterfly-shaped particles, then run targeted build and mobile browser verification.
+- blocked: Production hero replacement and production publish remain approval-gated until Anthony reviews the preview.
+
+## 2026-07-25 08:33:00 -04:00 RELEASE GATE
+- did: Built the unlinked `/research-and-development/colattao-logo-motion` review route with four-wing golden butterfly particles that form the exact cropped Colattao logo and release back into motion.
+- state: Targeted ESLint, `tsc --noEmit`, production build, `git diff --check`, 390x844 overflow/noindex checks, runtime reduced-motion switching, and Chrome motion QA passed; measured phone-width rendering averaged 17.87 ms per frame across 112 frames.
+- next: Push the isolated review branch and open a draft PR so Anthony can inspect the hosted preview.
+- blocked: `/menu` remains unchanged; hero replacement and production merge require Anthony's visual approval.
+
 ## 2026-06-29 07:08:40 -04:00 OUT
 - did: Published the approved Colattao Rush guest-note email routing from a clean `origin/main` worktree.
 - state: `/api/owner-requests` sends guest notes visibly to `COLATTAO_GUEST_NOTE_EMAIL` with fallback `colattao@hotmail.com`, and BCCs the configured internal `OWNER_NOTIFICATION_EMAIL` when different; no redirect was added.
