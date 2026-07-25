@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-07-25 15:55:47 -04:00 IN
+- did: Checked in for Anthony's pacing and target simplification of the live Colattao butterfly morph.
+- state: Isolated branch `codex/colattao-menu-only-slower-morph-20260725` starts at production `9b94f9a`; existing QA captures remain untracked and excluded.
+- next: Lengthen the scroll-controlled transformation and replace the `MENU / ESPRESSO & COFFEE` destination with only the word `MENU`.
+- blocked: Production merge remains gated on measured slower progress, exact forward/reverse endpoints, reduced-motion, mobile, build, and scope verification.
+
+## 2026-07-25 15:59:40 -04:00 RELEASE GATE
+- did: Simplified the target artwork to one large gradient `MENU` word and lengthened the phone-width scroll morph from 373px to 576px.
+- state: Targeted ESLint, `tsc --noEmit`, production build, `git diff --check`, measured 54% slower progress, 390x844 endpoint visual proof, exact reverse reconstruction, stable idle RAF, zero overflow, reduced-motion, and no-JavaScript fallbacks passed.
+- next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify production `/menu`.
+- blocked: None.
+
 ## 2026-07-25 15:08:55 -04:00 IN
 - did: Checked in for Anthony's request to make the Colattao butterflies perform the same reversible scroll morph proven on the Fina Calle page.
 - state: Isolated branch `codex/colattao-logo-to-menu-morph-20260725` starts at production `cf77242`; existing QA captures remain untracked and excluded.
