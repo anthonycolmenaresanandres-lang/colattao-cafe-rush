@@ -12,6 +12,12 @@
 - next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify production `/menu`.
 - blocked: None.
 
+## 2026-07-25 16:04:04 -04:00 OUT
+- did: Squash-merged green PR #8 at exact head and verified production commit `d67f27e` on deployment `dpl_533rD5ApyuXz1Eg42BRpBoBtNw1c`.
+- state: Live `/menu` returns 200 at 390x844 with a 576px scroll morph into only `MENU`, exact reverse reconstruction, stable idle RAF, zero overflow, and no browser, request, error, fatal, or 5xx failures.
+- next: No further release action; review the slower pacing on Anthony's physical phone before any additional timing adjustment.
+- blocked: None.
+
 ## 2026-07-25 15:08:55 -04:00 IN
 - did: Checked in for Anthony's request to make the Colattao butterflies perform the same reversible scroll morph proven on the Fina Calle page.
 - state: Isolated branch `codex/colattao-logo-to-menu-morph-20260725` starts at production `cf77242`; existing QA captures remain untracked and excluded.
