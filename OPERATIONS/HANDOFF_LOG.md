@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-07-25 13:50:17 -04:00 IN
+- did: Checked in for Anthony's phone-responsive butterfly-motion refinement and removal of the static seasonal plate square below the logo.
+- state: Isolated branch `codex/colattao-phone-motion-20260725` starts at clean production `a555979`; prior local QA captures remain untracked and excluded.
+- next: Preserve the approved logo treatment while replacing its fixed live timeline with device-orientation, touch, and scroll input; remove only the lower featured-seasonal-plates image.
+- blocked: Production merge remains gated on interaction, reduced-motion, mobile, build, and exact-scope verification.
+
+## 2026-07-25 14:05:41 -04:00 RELEASE GATE
+- did: Removed only the lower featured-seasonal-plates square and converted the live logo from a fixed timeline to device-orientation, pointer, and scroll response while preserving the exact resting logo and the timeline-based review route.
+- state: Targeted ESLint, `tsc --noEmit`, production build, `git diff --check`, 390x844 layout/content checks, pointer/scroll response, reduced-motion fallback, and stationary-sensor decay passed; repeated 60 Hz tilt and sub-degree jitter stop scheduling frames after the response settles.
+- next: Commit and push the isolated branch, require a green exact-head PR, merge under Anthony's standing authorization, and verify the production `/menu`.
+- blocked: None.
+
 ## 2026-07-25 13:00:28 -04:00 IN
 - did: Received Anthony's explicit approval of the butterfly-logo motion and authorization to push, merge, and publish it.
 - state: Draft PR #4 is clean and green at `f5e3081`; `origin/main` remains `b79fba8`, and the approved motion is still isolated from `/menu`.

@@ -28,6 +28,7 @@ type LogoSample = {
 
 type ColattaoButterflyLogoMotionProps = {
   loop?: boolean;
+  motionSource?: "device" | "timeline";
   showReplay?: boolean;
 };
 
@@ -243,6 +244,7 @@ function createParticles(image: HTMLImageElement, lowPower: boolean): LogoSample
 
 export default function ColattaoButterflyLogoMotion({
   loop = true,
+  motionSource = "timeline",
   showReplay = true,
 }: ColattaoButterflyLogoMotionProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -272,8 +274,21 @@ export default function ColattaoButterflyLogoMotion({
     let animationFrame = 0;
     let cancelled = false;
     let hasCompleted = false;
+    let inputEnergy = 0;
+    let inputTargetEnergy = 0;
+    let inputTargetX = 0;
+    let inputTargetY = 0;
+    let inputX = 0;
+    let inputY = 0;
     let isIntersecting = true;
     let isPrepared = false;
+    let lastInputAt = 0;
+    let lastScrollY = window.scrollY;
+    let neutralBeta: number | null = null;
+    let neutralGamma: number | null = null;
+    let lastAcceptedBeta: number | null = null;
+    let lastAcceptedGamma: number | null = null;
+    let orientationPermissionRequested = false;
     let particles: ButterflyParticle[] = [];
     let logoSample: LogoSample | null = null;
     let width = 0;
@@ -281,6 +296,7 @@ export default function ColattaoButterflyLogoMotion({
     let pixelRatio = 1;
     let startedAt = 0;
     const butterflySprites = createButterflySprites();
+    const isDeviceResponsive = motionSource === "device";
 
     const stopAnimation = () => {
       if (animationFrame !== 0) {
@@ -294,7 +310,7 @@ export default function ColattaoButterflyLogoMotion({
       isIntersecting &&
       !document.hidden &&
       !reducedMotion.matches &&
-      (loop || !hasCompleted) &&
+      (isDeviceResponsive || loop || !hasCompleted) &&
       !cancelled;
 
     const resize = () => {
@@ -315,6 +331,131 @@ export default function ColattaoButterflyLogoMotion({
       }
 
       const activeLogoSample = logoSample;
+      const logoWidth = Math.min(width * 0.82, 405);
+      const logoHeight = logoWidth / activeLogoSample.aspectRatio;
+      const logoLeft = (width - logoWidth) / 2;
+      const logoTop = (height - logoHeight) / 2;
+
+      if (isDeviceResponsive) {
+        const timeSinceInput =
+          lastInputAt === 0 ? Number.POSITIVE_INFINITY : time - lastInputAt;
+
+        if (timeSinceInput > 100) {
+          inputTargetX *= 0.88;
+          inputTargetY *= 0.88;
+          inputTargetEnergy *= 0.86;
+        }
+
+        inputX = lerp(inputX, inputTargetX, 0.18);
+        inputY = lerp(inputY, inputTargetY, 0.18);
+        inputEnergy = lerp(inputEnergy, inputTargetEnergy, 0.16);
+
+        const motionStrength = clamp(
+          Math.max(inputEnergy, Math.hypot(inputX, inputY) * 0.72),
+        );
+
+        context.clearRect(0, 0, width, height);
+        stage.dataset.motionPhase =
+          motionStrength > 0.045 ? "respond" : "hold";
+        stage.dataset.motionEnergy = motionStrength.toFixed(3);
+
+        particles.forEach((particle, index) => {
+          const targetX = logoLeft + logoWidth * particle.u;
+          const targetY = logoTop + logoHeight * particle.v;
+          const depth = 0.38 + particle.seed * 0.92;
+          const wingX =
+            Math.sin(particle.seed * 31 + index * 0.07) *
+            motionStrength *
+            (5 + particle.seed * 23);
+          const wingY =
+            Math.cos(particle.seed * 27 + index * 0.05) *
+            motionStrength *
+            (4 + particle.seed * 18);
+          const flutter =
+            Math.sin(time * 0.009 + particle.seed * 29) *
+            motionStrength *
+            3.4;
+          const x =
+            targetX +
+            inputX * width * (0.055 + depth * 0.095) +
+            wingX;
+          const y =
+            targetY +
+            inputY * height * (0.045 + depth * 0.075) +
+            wingY +
+            flutter;
+          const targetCell = Math.max(
+            1.2,
+            logoWidth * activeLogoSample.targetCellRatio * 1.35,
+          );
+          const alpha = 0.42 + particle.seed * 0.48;
+          const butterflyThreshold = 0.055 + particle.seed * 0.035;
+
+          if (motionStrength <= butterflyThreshold) {
+            context.fillStyle = `rgb(${particle.color[0]} ${particle.color[1]} ${particle.color[2]} / ${alpha * 0.52})`;
+            context.fillRect(
+              x - targetCell / 2,
+              y - targetCell / 2,
+              targetCell,
+              targetCell,
+            );
+            return;
+          }
+
+          const flap = Math.sin(time * 0.016 + particle.seed * 26) > 0;
+          const sprite =
+            butterflySprites[
+              Math.floor(particle.seed * butterflySprites.length)
+            ]?.[flap ? 1 : 0];
+
+          if (!sprite) {
+            return;
+          }
+
+          const accentScale = particle.seed > 0.9 ? 1.45 : 1;
+          const renderSize =
+            particle.size *
+            (3 + motionStrength * 1.8) *
+            accentScale;
+
+          context.globalAlpha = alpha;
+          context.drawImage(
+            sprite,
+            x - renderSize / 2,
+            y - renderSize / 2,
+            renderSize,
+            renderSize,
+          );
+          context.globalAlpha = 1;
+        });
+
+        context.globalAlpha = lerp(1, 0.52, motionStrength);
+        context.drawImage(
+          logo,
+          activeLogoSample.sourceBounds.x,
+          activeLogoSample.sourceBounds.y,
+          activeLogoSample.sourceBounds.width,
+          activeLogoSample.sourceBounds.height,
+          logoLeft,
+          logoTop,
+          logoWidth,
+          logoHeight,
+        );
+        context.globalAlpha = 1;
+
+        const stillResponding =
+          timeSinceInput < 160 ||
+          inputTargetEnergy > 0.012 ||
+          inputEnergy > 0.012 ||
+          Math.abs(inputX - inputTargetX) > 0.004 ||
+          Math.abs(inputY - inputTargetY) > 0.004;
+
+        if (canAnimate() && stillResponding) {
+          animationFrame = window.requestAnimationFrame(draw);
+        }
+
+        return;
+      }
 
       if (startedAt === 0) {
         startedAt = time;
@@ -329,10 +470,6 @@ export default function ColattaoButterflyLogoMotion({
       const logoOpacity =
         formation > 0.88 ? smoothstep(0.88, 0.99, formation) : 0;
       const particleOpacity = 1 - logoOpacity * 0.82;
-      const logoWidth = Math.min(width * 0.82, 405);
-      const logoHeight = logoWidth / activeLogoSample.aspectRatio;
-      const logoLeft = (width - logoWidth) / 2;
-      const logoTop = (height - logoHeight) / 2;
 
       context.clearRect(0, 0, width, height);
       stage.dataset.motionPhase =
@@ -427,15 +564,162 @@ export default function ColattaoButterflyLogoMotion({
       }
     };
 
-    const startAnimation = () => {
-      stopAnimation();
+    const startAnimation = (restart = true) => {
+      if (restart) {
+        stopAnimation();
+        startedAt = 0;
+      }
 
-      if (!canAnimate()) {
+      if (!canAnimate() || animationFrame !== 0) {
         return;
       }
 
-      startedAt = 0;
       animationFrame = window.requestAnimationFrame(draw);
+    };
+
+    const pushMotionInput = (
+      nextX: number,
+      nextY: number,
+      nextEnergy: number,
+      source: "scroll" | "tilt" | "touch",
+    ) => {
+      if (!isDeviceResponsive || reducedMotion.matches) {
+        return;
+      }
+
+      inputTargetX = clamp(nextX, -1, 1);
+      inputTargetY = clamp(nextY, -1, 1);
+      inputTargetEnergy = Math.max(
+        inputTargetEnergy * 0.62,
+        clamp(nextEnergy),
+      );
+      lastInputAt = performance.now();
+      stage.dataset.motionInput = source;
+      startAnimation(false);
+    };
+
+    const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+      if (event.beta === null || event.gamma === null) {
+        return;
+      }
+
+      if (neutralBeta === null || neutralGamma === null) {
+        neutralBeta = event.beta;
+        neutralGamma = event.gamma;
+        lastAcceptedBeta = event.beta;
+        lastAcceptedGamma = event.gamma;
+        stage.dataset.motionPermission = "active";
+        return;
+      }
+
+      const angularChange = Math.hypot(
+        event.beta - (lastAcceptedBeta ?? event.beta),
+        event.gamma - (lastAcceptedGamma ?? event.gamma),
+      );
+
+      if (angularChange < 0.85) {
+        return;
+      }
+
+      lastAcceptedBeta = event.beta;
+      lastAcceptedGamma = event.gamma;
+
+      let nextX = clamp((event.gamma - neutralGamma) / 24, -1, 1);
+      let nextY = clamp((event.beta - neutralBeta) / 24, -1, 1);
+      const screenAngle = window.screen.orientation?.angle ?? 0;
+
+      if (screenAngle === 90) {
+        [nextX, nextY] = [-nextY, nextX];
+      } else if (screenAngle === 270) {
+        [nextX, nextY] = [nextY, -nextX];
+      } else if (screenAngle === 180) {
+        nextX *= -1;
+        nextY *= -1;
+      }
+
+      pushMotionInput(
+        nextX,
+        nextY,
+        clamp(Math.hypot(nextX, nextY) / 1.15),
+        "tilt",
+      );
+    };
+
+    const requestPhoneMotionPermission = () => {
+      if (
+        !isDeviceResponsive ||
+        reducedMotion.matches ||
+        orientationPermissionRequested ||
+        !("DeviceOrientationEvent" in window)
+      ) {
+        return;
+      }
+
+      const orientationConstructor = window.DeviceOrientationEvent as typeof DeviceOrientationEvent & {
+        requestPermission?: () => Promise<"denied" | "granted">;
+      };
+
+      if (typeof orientationConstructor.requestPermission !== "function") {
+        stage.dataset.motionPermission = "not-required";
+        return;
+      }
+
+      orientationPermissionRequested = true;
+      void orientationConstructor
+        .requestPermission()
+        .then((permission) => {
+          stage.dataset.motionPermission = permission;
+        })
+        .catch(() => {
+          stage.dataset.motionPermission = "unavailable";
+        });
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      const bounds = stage.getBoundingClientRect();
+
+      if (bounds.width === 0 || bounds.height === 0) {
+        return;
+      }
+
+      const nextX = ((event.clientX - bounds.left) / bounds.width - 0.5) * 2;
+      const nextY = ((event.clientY - bounds.top) / bounds.height - 0.5) * 2;
+
+      pushMotionInput(
+        nextX,
+        nextY,
+        clamp(Math.hypot(nextX, nextY) / 1.2),
+        "touch",
+      );
+    };
+
+    const handleScroll = () => {
+      const nextScrollY = window.scrollY;
+      const delta = nextScrollY - lastScrollY;
+      lastScrollY = nextScrollY;
+
+      if (Math.abs(delta) < 0.5) {
+        return;
+      }
+
+      pushMotionInput(
+        0,
+        clamp(delta / 52, -1, 1),
+        clamp(Math.abs(delta) / 34),
+        "scroll",
+      );
+    };
+
+    const handleResize = () => {
+      resize();
+
+      if (isDeviceResponsive) {
+        startAnimation(false);
+      } else if (!loop && hasCompleted) {
+        stage.dataset.motionState = "static";
+      } else {
+        startAnimation();
+      }
     };
 
     const syncMotionPreference = () => {
@@ -446,7 +730,7 @@ export default function ColattaoButterflyLogoMotion({
         return;
       }
 
-      if (!loop && hasCompleted) {
+      if (!isDeviceResponsive && !loop && hasCompleted) {
         stage.dataset.motionState = "static";
         return;
       }
@@ -457,7 +741,7 @@ export default function ColattaoButterflyLogoMotion({
 
     const syncVisibility = () => {
       if (canAnimate()) {
-        startAnimation();
+        startAnimation(!isDeviceResponsive);
       } else {
         stopAnimation();
       }
@@ -490,7 +774,6 @@ export default function ColattaoButterflyLogoMotion({
 
       if (cancelled || logo.naturalWidth === 0 || logo.naturalHeight === 0) {
         stage.dataset.motionState = "static";
-        logo.style.setProperty("--logo-opacity", "1");
         return;
       }
 
@@ -514,9 +797,26 @@ export default function ColattaoButterflyLogoMotion({
       isPrepared = true;
       stage.dataset.motionState = "ready";
       stage.dataset.particleCount = String(particles.length);
-      window.addEventListener("resize", resize);
+      window.addEventListener("resize", handleResize);
       document.addEventListener("visibilitychange", syncVisibility);
       reducedMotion.addEventListener("change", syncMotionPreference);
+
+      if (isDeviceResponsive) {
+        stage.dataset.motionInput = "rest";
+        window.addEventListener(
+          "deviceorientation",
+          handleDeviceOrientation,
+          { passive: true },
+        );
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        stage.addEventListener("pointerdown", requestPhoneMotionPermission, {
+          passive: true,
+        });
+        stage.addEventListener("pointermove", handlePointerMove, {
+          passive: true,
+        });
+      }
+
       intersectionObserver?.observe(stage);
       syncMotionPreference();
     };
@@ -526,15 +826,25 @@ export default function ColattaoButterflyLogoMotion({
     return () => {
       cancelled = true;
       stopAnimation();
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", syncVisibility);
       reducedMotion.removeEventListener("change", syncMotionPreference);
+      window.removeEventListener(
+        "deviceorientation",
+        handleDeviceOrientation,
+      );
+      window.removeEventListener("scroll", handleScroll);
+      stage.removeEventListener("pointerdown", requestPhoneMotionPermission);
+      stage.removeEventListener("pointermove", handlePointerMove);
       intersectionObserver?.disconnect();
+      delete stage.dataset.motionEnergy;
+      delete stage.dataset.motionInput;
+      delete stage.dataset.motionPermission;
       delete stage.dataset.motionState;
       delete stage.dataset.motionPhase;
       delete stage.dataset.particleCount;
     };
-  }, [cycleKey, loop]);
+  }, [cycleKey, loop, motionSource]);
 
   return (
     <div className={styles.shell}>
@@ -542,6 +852,7 @@ export default function ColattaoButterflyLogoMotion({
         ref={stageRef}
         className={styles.stage}
         data-colattao-butterfly-motion
+        data-motion-source={motionSource}
       >
         <div className={styles.atmosphere} aria-hidden="true" />
         <canvas ref={canvasRef} className={styles.canvas} aria-hidden="true" />
