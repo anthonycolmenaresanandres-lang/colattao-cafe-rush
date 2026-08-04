@@ -6,7 +6,6 @@ import appTheme from "@/config/theme";
 import ColattaoButterflyLogoMotion from "@/components/ColattaoButterflyLogoMotion";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
 import ChurroAffogatoBanner from "@/components/ChurroAffogatoBanner";
-import SeasonalFeatureBanner from "@/components/SeasonalFeatureBanner";
 import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -334,7 +333,6 @@ export default function MenuPage() {
         </nav>
       </header>
       <ChurroAffogatoBanner />
-      <SeasonalFeatureBanner />
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
           src="/assets/colattao/menu/menu-eldorado-04.png"
