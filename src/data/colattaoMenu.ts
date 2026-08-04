@@ -92,6 +92,13 @@ export const menuCategories: MenuCategory[] = [
       { name: "Chai", price: "$6.75" },
       { name: "Hot Chocolate", price: "$4.50 / $5.50" },
       { name: "Affogato", price: "$8" },
+      {
+        name: "Churro Affogato",
+        price: null,
+        description:
+          "New — creamy churro ice cream, a double shot of espresso, and a dust of cinnamon.",
+        needsConfirmation: true,
+      },
     ],
   },
   {
