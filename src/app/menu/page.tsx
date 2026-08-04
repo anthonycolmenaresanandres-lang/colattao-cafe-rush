@@ -5,7 +5,7 @@ import { menuCategories } from "@/data/colattaoMenu";
 import appTheme from "@/config/theme";
 import ColattaoButterflyLogoMotion from "@/components/ColattaoButterflyLogoMotion";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
-import SeasonalFeatureBanner from "@/components/SeasonalFeatureBanner";
+import ChurroAffogatoBanner from "@/components/ChurroAffogatoBanner";
 import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -100,6 +100,10 @@ type ItemDetail = {
 };
 
 const ITEM_DETAILS: Partial<Record<string, ItemDetail>> = {
+  "Churro Affogato": {
+    imageSrc: "/assets/colattao/menu-items/churro-affogato-photo.jpg",
+    imageAlt: "Churro Affogato — churro ice cream and espresso in a crystal glass",
+  },
   "Chocolate Croissant": {
     imageSrc: "/assets/colattao/menu-items/chocolate-croissant-photo.jpg",
     imageAlt: "Chocolate Croissant",
@@ -328,7 +332,7 @@ export default function MenuPage() {
           </Link>
         </nav>
       </header>
-      <SeasonalFeatureBanner />
+      <ChurroAffogatoBanner />
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
           src="/assets/colattao/menu/menu-eldorado-04.png"
