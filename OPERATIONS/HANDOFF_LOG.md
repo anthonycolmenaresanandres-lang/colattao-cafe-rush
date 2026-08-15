@@ -1,5 +1,29 @@
 # Colattao Rush Handoff Log
 
+## 2026-08-15 18:26:21 -04:00 IN
+- did: Checked in after Anthony explicitly approved merging the verified Matcha Lemonade promotion branch to production.
+- state: `origin/main` is an ancestor of clean branch head `98cdd53`; the exact-head audit and Vercel preview status pass, only the intended menu CTA plus handoff documentation differ, and protected game surfaces remain unchanged.
+- next: Commit this approval handoff, create a ready PR, require successful exact-head checks, squash-merge to `main`, wait for Vercel production, then verify live `/menu` navigation and Matcha Lemonade gameplay.
+- blocked: None; Anthony supplied the production merge approval in this session.
+
+## 2026-08-15 17:57:51 -04:00 OUT
+- did: Committed and pushed `ac9b551` on `codex/matcha-drink-promo`; Vercel Git preview `dpl_Ba86KCJRnZvHHi4mkZbahGzSDaZQ` is Ready at `https://colattao-cafe-rush-plsg1gk2i.vercel.app`.
+- state: Hosted checks passed for the `/menu` Matcha CTA, navigation to `/`, playable Matcha Lemonade gameplay, Original/Strawberry/Mango assets, 200 responses for `/menu`, `/`, and `/penalty`, 360/390/430 mobile overflow, inspected screenshots, and browser errors; production remains unchanged. A redundant CLI preview attempt was blocked by Vercel team configuration and stopped without a deployment alias.
+- next: Anthony reviews the temporary authenticated preview link; merge and production deployment require his explicit approval.
+- blocked: Production merge and production deployment remain approval-gated.
+
+## 2026-08-15 17:38:05 -04:00 RELEASE GATE
+- did: Repointed the live-menu game CTA to `/` and renamed it `PLAY MATCHA LEMONADE RUSH`, promoting the existing Original, Strawberry, and Mango Cafe Rush collectibles without changing game code or the `/penalty` route.
+- state: Targeted ESLint, `npm.cmd run build`, `git diff --check`, protected-surface checks, 200 responses for `/menu`, `/`, `/penalty`, and all three stickers, 390x844 gameplay/navigation, 360x800 and 430x932 resize/overflow checks, menu conversion, visual inspection, and a blocked-asset playable fallback check passed; the only local console notice was expected unavailable Vercel Analytics.
+- next: Commit and push only `HANDOFF.md`, `OPERATIONS/HANDOFF_LOG.md`, and `src/app/menu/page.tsx`, then create and inspect a Vercel preview for Anthony.
+- blocked: Production merge and production deployment remain approval-gated.
+
+## 2026-08-15 17:24:15 -04:00 IN
+- did: Checked in for Anthony's approved switch from the menu-promoted Penalty Rush to the existing three-flavor Matcha Lemonade Cafe Rush campaign.
+- state: Isolated branch `codex/matcha-drink-promo` starts at current `origin/main` `a8f003a`; all approved Matcha assets and gameplay already exist, the old `/penalty` route remains reachable, and `OPERATIONS/CODEX_QUEUE.md` is absent.
+- next: Change only the `/menu` game CTA route, accessible label, and visible product-first copy; preserve gameplay, prices, rewards, Churro Affogato promotion, and stable routes; then verify locally and deploy a preview.
+- blocked: Production merge and production deployment remain approval-gated; C: has 2.30 GB free, so reuse this dependency-ready worktree without installing or creating another worktree.
+
 ## 2026-07-25 15:55:47 -04:00 IN
 - did: Checked in for Anthony's pacing and target simplification of the live Colattao butterfly morph.
 - state: Isolated branch `codex/colattao-menu-only-slower-morph-20260725` starts at production `9b94f9a`; existing QA captures remain untracked and excluded.
