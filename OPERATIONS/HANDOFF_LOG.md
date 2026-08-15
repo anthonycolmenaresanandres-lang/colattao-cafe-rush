@@ -1,5 +1,11 @@
 # Colattao Rush Handoff Log
 
+## 2026-08-15 18:34:34 -04:00 OUT
+- did: Created and squash-merged green PR #10 at pinned head `0b8d7f1`; `origin/main` is now merge commit `d2dbac4`, deployed by Vercel as production `dpl_6XEVZPjBHANDL9GaqiyGnJZZpvFd` at `https://colattao-cafe-rush.vercel.app`.
+- state: Production is Ready and tied to exact merge SHA `d2dbac477a2e83522e227e2d7252785e3480558f`; live `/menu` displays `PLAY MATCHA LEMONADE RUSH` and routes to playable `/`, Original/Strawberry/Mango assets and `/penalty` return 200, the 390x844 inspected UI has no overflow, and browser errors plus 4xx/5xx request checks are empty.
+- next: No further release action; production now promotes Matcha Lemonade Rush, while `/penalty` remains reachable for direct access.
+- blocked: None.
+
 ## 2026-08-15 18:26:21 -04:00 IN
 - did: Checked in after Anthony explicitly approved merging the verified Matcha Lemonade promotion branch to production.
 - state: `origin/main` is an ancestor of clean branch head `98cdd53`; the exact-head audit and Vercel preview status pass, only the intended menu CTA plus handoff documentation differ, and protected game surfaces remain unchanged.

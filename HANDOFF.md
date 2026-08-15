@@ -80,6 +80,7 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-08-15 18:34:41] Squash-merged PR #10 as d2dbac4; Vercel production dpl_6XEVZPjBHANDL9GaqiyGnJZZpvFd is Ready, and live menu-to-Matcha gameplay, all three flavor assets, route health, overflow, visual, network, and browser-error checks passed.
 - [2026-08-15 17:58:00] Committed and pushed ac9b551 on codex/matcha-drink-promo; Git preview dpl_Ba86KCJRnZvHHi4mkZbahGzSDaZQ is Ready and hosted mobile visual, CTA navigation, gameplay, three-flavor asset, route, overflow, and browser-error checks passed.
 - [2026-08-15 17:38:28] Targeted ESLint, production build, scoped diffs, live-route HTTP checks, three-flavor asset checks, mobile gameplay/navigation, resize/overflow, menu conversion, visual inspection, and asset-failure playability checks passed locally.
 - [2026-08-15 17:24:49] Changed only the menu game CTA href, accessible label, and visible copy to promote the existing three-flavor Matcha Lemonade Rush; Penalty Rush remains reachable but is no longer promoted from `/menu`.
@@ -155,6 +156,7 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-08-15 18:34:46] No further release action. Production now promotes Matcha Lemonade Rush; keep /penalty reachable and require a new scoped approval for any further campaign or gameplay change.
 - [2026-08-15 18:26:36] Create the ready PR at exact head, require successful checks, squash-merge to main, wait for Vercel production, and verify live /menu to Matcha Lemonade Rush gameplay.
 - [2026-08-15 17:58:05] Anthony reviews the protected Matcha Lemonade preview; merge and production deployment require his explicit approval. Production remains unchanged.
 - [2026-08-15 17:38:28] Commit and push the scoped branch, deploy and inspect a Vercel preview, then stop before production pending Anthony approval.
