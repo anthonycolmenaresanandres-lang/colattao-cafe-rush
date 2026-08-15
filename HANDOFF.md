@@ -79,6 +79,7 @@
 - [2026-05-23 08:36:15] Session started
 
 ## DONE
+- [2026-08-15 17:58:00] Committed and pushed ac9b551 on codex/matcha-drink-promo; Git preview dpl_Ba86KCJRnZvHHi4mkZbahGzSDaZQ is Ready and hosted mobile visual, CTA navigation, gameplay, three-flavor asset, route, overflow, and browser-error checks passed.
 - [2026-08-15 17:38:28] Targeted ESLint, production build, scoped diffs, live-route HTTP checks, three-flavor asset checks, mobile gameplay/navigation, resize/overflow, menu conversion, visual inspection, and asset-failure playability checks passed locally.
 - [2026-08-15 17:24:49] Changed only the menu game CTA href, accessible label, and visible copy to promote the existing three-flavor Matcha Lemonade Rush; Penalty Rush remains reachable but is no longer promoted from `/menu`.
 - [2026-06-04 14:32:15] Verified Colattao game background protocol config and docs with npm.cmd run build
@@ -153,6 +154,7 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-08-15 17:58:05] Anthony reviews the protected Matcha Lemonade preview; merge and production deployment require his explicit approval. Production remains unchanged.
 - [2026-08-15 17:38:28] Commit and push the scoped branch, deploy and inspect a Vercel preview, then stop before production pending Anthony approval.
 - [2026-08-15 17:24:15] Change only the live menu game CTA to the existing Matcha Lemonade Cafe Rush, verify locally and on a protected Vercel preview, then await production approval.
 - [2026-06-04 14:32:15] Await approval before staging or committing Colattao game background protocol documentation

@@ -1,5 +1,11 @@
 # Colattao Rush Handoff Log
 
+## 2026-08-15 17:57:51 -04:00 OUT
+- did: Committed and pushed `ac9b551` on `codex/matcha-drink-promo`; Vercel Git preview `dpl_Ba86KCJRnZvHHi4mkZbahGzSDaZQ` is Ready at `https://colattao-cafe-rush-plsg1gk2i.vercel.app`.
+- state: Hosted checks passed for the `/menu` Matcha CTA, navigation to `/`, playable Matcha Lemonade gameplay, Original/Strawberry/Mango assets, 200 responses for `/menu`, `/`, and `/penalty`, 360/390/430 mobile overflow, inspected screenshots, and browser errors; production remains unchanged. A redundant CLI preview attempt was blocked by Vercel team configuration and stopped without a deployment alias.
+- next: Anthony reviews the temporary authenticated preview link; merge and production deployment require his explicit approval.
+- blocked: Production merge and production deployment remain approval-gated.
+
 ## 2026-08-15 17:38:05 -04:00 RELEASE GATE
 - did: Repointed the live-menu game CTA to `/` and renamed it `PLAY MATCHA LEMONADE RUSH`, promoting the existing Original, Strawberry, and Mango Cafe Rush collectibles without changing game code or the `/penalty` route.
 - state: Targeted ESLint, `npm.cmd run build`, `git diff --check`, protected-surface checks, 200 responses for `/menu`, `/`, `/penalty`, and all three stickers, 390x844 gameplay/navigation, 360x800 and 430x932 resize/overflow checks, menu conversion, visual inspection, and a blocked-asset playable fallback check passed; the only local console notice was expected unavailable Vercel Analytics.
