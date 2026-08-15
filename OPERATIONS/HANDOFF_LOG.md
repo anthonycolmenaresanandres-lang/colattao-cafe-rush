@@ -1,5 +1,11 @@
 # Colattao Rush Handoff Log
 
+## 2026-08-15 18:26:21 -04:00 IN
+- did: Checked in after Anthony explicitly approved merging the verified Matcha Lemonade promotion branch to production.
+- state: `origin/main` is an ancestor of clean branch head `98cdd53`; the exact-head audit and Vercel preview status pass, only the intended menu CTA plus handoff documentation differ, and protected game surfaces remain unchanged.
+- next: Commit this approval handoff, create a ready PR, require successful exact-head checks, squash-merge to `main`, wait for Vercel production, then verify live `/menu` navigation and Matcha Lemonade gameplay.
+- blocked: None; Anthony supplied the production merge approval in this session.
+
 ## 2026-08-15 17:57:51 -04:00 OUT
 - did: Committed and pushed `ac9b551` on `codex/matcha-drink-promo`; Vercel Git preview `dpl_Ba86KCJRnZvHHi4mkZbahGzSDaZQ` is Ready at `https://colattao-cafe-rush-plsg1gk2i.vercel.app`.
 - state: Hosted checks passed for the `/menu` Matcha CTA, navigation to `/`, playable Matcha Lemonade gameplay, Original/Strawberry/Mango assets, 200 responses for `/menu`, `/`, and `/penalty`, 360/390/430 mobile overflow, inspected screenshots, and browser errors; production remains unchanged. A redundant CLI preview attempt was blocked by Vercel team configuration and stopped without a deployment alias.

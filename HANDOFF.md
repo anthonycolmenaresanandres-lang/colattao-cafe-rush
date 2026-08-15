@@ -1,6 +1,7 @@
 # HANDOFF
 
 ## STARTED
+- [2026-08-15 18:26:26] Session started
 - [2026-08-15 17:24:14] Session started
 - [2026-06-04 14:28:25] Session started
 - [2026-06-04 13:52:01] Session started
@@ -154,6 +155,7 @@
 - [2026-05-23 08:38:22] Scaffolded fresh Next.js TypeScript Tailwind app in temporary child folder
 
 ## NEXT
+- [2026-08-15 18:26:36] Create the ready PR at exact head, require successful checks, squash-merge to main, wait for Vercel production, and verify live /menu to Matcha Lemonade Rush gameplay.
 - [2026-08-15 17:58:05] Anthony reviews the protected Matcha Lemonade preview; merge and production deployment require his explicit approval. Production remains unchanged.
 - [2026-08-15 17:38:28] Commit and push the scoped branch, deploy and inspect a Vercel preview, then stop before production pending Anthony approval.
 - [2026-08-15 17:24:15] Change only the live menu game CTA to the existing Matcha Lemonade Cafe Rush, verify locally and on a protected Vercel preview, then await production approval.
@@ -241,6 +243,7 @@
 - [2026-05-23 08:36:23] handoff show failed due to utf-8 BOM in console encoding
 
 ## NOTES
+- [2026-08-15 18:26:30] Anthony explicitly approved merging the verified Matcha Lemonade promotion branch to production.
 - [2026-08-15 17:24:14] Anthony approved promoting all three Matcha Lemonade flavors from the existing Cafe Rush game; Penalty Rush stays reachable but is no longer promoted from `/menu`; preview deployment only.
 - [2026-06-04] Decision: Promotional games for Fina Calle, AMMA, Colattao, and future client projects must follow PRODUCT_MODULES/PROMOTIONAL_GAME_POLICY.md. Core rule: every game must entertain first, but sell quietly through repetition, reward, product visibility, and menu conversion.
 - [2026-06-04 10:51:48] Decision: Future Colattao seasonal drink banners must follow docs/COLATTAO_SEASONAL_ASSET_PROTOCOL.md for source selection, poster/banner asset outputs, UI behavior, deployed-URL review, and final reporting.
