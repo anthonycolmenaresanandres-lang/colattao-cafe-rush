@@ -1,5 +1,17 @@
 # Colattao Rush Handoff Log
 
+## 2026-08-15 17:38:05 -04:00 RELEASE GATE
+- did: Repointed the live-menu game CTA to `/` and renamed it `PLAY MATCHA LEMONADE RUSH`, promoting the existing Original, Strawberry, and Mango Cafe Rush collectibles without changing game code or the `/penalty` route.
+- state: Targeted ESLint, `npm.cmd run build`, `git diff --check`, protected-surface checks, 200 responses for `/menu`, `/`, `/penalty`, and all three stickers, 390x844 gameplay/navigation, 360x800 and 430x932 resize/overflow checks, menu conversion, visual inspection, and a blocked-asset playable fallback check passed; the only local console notice was expected unavailable Vercel Analytics.
+- next: Commit and push only `HANDOFF.md`, `OPERATIONS/HANDOFF_LOG.md`, and `src/app/menu/page.tsx`, then create and inspect a Vercel preview for Anthony.
+- blocked: Production merge and production deployment remain approval-gated.
+
+## 2026-08-15 17:24:15 -04:00 IN
+- did: Checked in for Anthony's approved switch from the menu-promoted Penalty Rush to the existing three-flavor Matcha Lemonade Cafe Rush campaign.
+- state: Isolated branch `codex/matcha-drink-promo` starts at current `origin/main` `a8f003a`; all approved Matcha assets and gameplay already exist, the old `/penalty` route remains reachable, and `OPERATIONS/CODEX_QUEUE.md` is absent.
+- next: Change only the `/menu` game CTA route, accessible label, and visible product-first copy; preserve gameplay, prices, rewards, Churro Affogato promotion, and stable routes; then verify locally and deploy a preview.
+- blocked: Production merge and production deployment remain approval-gated; C: has 2.30 GB free, so reuse this dependency-ready worktree without installing or creating another worktree.
+
 ## 2026-07-25 15:55:47 -04:00 IN
 - did: Checked in for Anthony's pacing and target simplification of the live Colattao butterfly morph.
 - state: Isolated branch `codex/colattao-menu-only-slower-morph-20260725` starts at production `9b94f9a`; existing QA captures remain untracked and excluded.
