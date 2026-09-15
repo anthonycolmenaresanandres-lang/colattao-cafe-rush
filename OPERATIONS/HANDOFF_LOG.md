@@ -349,3 +349,45 @@
 - state: Ready to publish the approved branch preview. Local production gameplay verification and visual evidence are recorded; no production authorization has been inferred.
 - next: Commit the scoped files, push the feature branch, open the PR and verify its deployment/commit.
 - blocked: None.
+
+## 2026-09-15 PREVIEW — Fall Rush ready for Anthony
+- did: Committed and pushed f0c5383738d339fff2a610bc1868d4fe6f498676; opened PR #15. Vercel preview dpl_GctFWt4XUK7EjJY6kC17b4S7XcRY is Ready and GitHub checks passed. Authenticated preview reads confirm fall title, four sprite paths, menu link and final minimum height; downloaded Campfire asset matches the committed SHA-256.
+- state: Preview https://colattao-cafe-rush-bxeukt4wl.vercel.app. PR https://github.com/anthonycolmenaresanandres-lang/colattao-cafe-rush/pull/15. Existing Vercel login protection is unchanged; interactive gameplay was verified against the local production build. Preview approval is being requested before production merge.
+- next: If Anthony approves, recheck PR head/main, merge this exact reviewed commit, confirm production Ready and public game/assets/menu, then check OUT. Otherwise retain the reviewable preview.
+- blocked: No technical blocker. Production awaits Anthony's explicit decision.
+
+## 2026-09-15 OUT — Verified Fall Rush preview delivered
+- did: Completed the approved implementation, final builds and browser checks; delivered PR #15 and Ready Vercel preview for commit f0c5383738d339fff2a610bc1868d4fe6f498676. Opened the preview in Codex and requested the required production-merge decision. Stopped verified task-local servers and closed only task browser sessions.
+- state: Preview complete; production remains on the prior summer game. Review URL: https://colattao-cafe-rush-bxeukt4wl.vercel.app (existing Vercel login protection). All source/assets are committed and pushed. This final handoff record is local only so the verified preview commit remains stable.
+- next: On explicit approval, recheck PR #15 head/checks and current production, merge reviewed head f0c5383738d339fff2a610bc1868d4fe6f498676, then verify public game/menu/assets and record the release.
+- blocked: Waiting on Anthony's production decision; no technical blocker. Physical mobile device testing remains unverified.
+
+## 2026-09-15 IN — Approved Fall Rush production release
+- did: Anthony explicitly instructed "Merge". Rechecked PR #15: OPEN/CLEAN, Vercel checks successful, reviewed head f0c5383738d339fff2a610bc1868d4fe6f498676. Remote main remains 5c5f156edf55444d3267ec2c9af04619e3a2b3a8, matching the handoff.
+- state: Existing production deployment dpl_GwZJFAaEqFxobyTB9RwVwXMwphH6 is Ready at https://colattao-cafe-rush-2r6av2m0m.vercel.app. Local documentation commit 171dd93 remains outside the reviewed PR.
+- next: Merge the exact approved PR head, verify Vercel production and public game/menu/assets, then check OUT.
+- blocked: None; production authorization received.
+
+## 2026-09-15 MERGED — Fall Rush
+- did: Merged PR #15 at the approved head f0c5383738d339fff2a610bc1868d4fe6f498676 following Anthony's explicit instruction.
+- state: Main merge commit 842adc01165d99219fd9aa787580d2cf99a3d423; merged at 2026-09-15T19:15:48Z. Vercel auto-deployment pending verification.
+- next: Confirm production Ready and verify public game, fall assets and menu routes.
+- blocked: None.
+
+## 2026-09-15 OUT — Fall Rush live
+- did: Merged PR #15 as 842adc01165d99219fd9aa787580d2cf99a3d423 under Anthony's explicit "Merge" instruction. Production deployment dpl_6q6rjJFPubAUiWS1wdYFgzrb8kZt is Ready and GitHub Vercel status is successful.
+- state: LIVE https://colattao-cafe-rush.vercel.app/ on https://colattao-cafe-rush-ckzujei0g.vercel.app. Fresh public 390x844 browser verified the fall screen, actual canvas, keyboard start, four loaded promo images, HTTP 200 and exact expected sizes for all four sprites and background, and no horizontal overflow. The fall promo navigates to /menu#fall-drinks; all four names and anchor are present, menu game link returns to /, and the game canvas is removed on menu navigation. No browser page errors; Vercel error scan since 10m returned no logs. Evidence: ../fall-live-390.png and ../fall-live-playing.png.
+- next: No required release work remains. Physical mobile Safari/Android testing remains unverified. Previous production dpl_GwZJFAaEqFxobyTB9RwVwXMwphH6 and main 5c5f156 are recorded above for rollback reference. Task browser closed.
+- blocked: None. Release documentation remains in a local-only commit to avoid a redundant documentation deployment.
+
+## 2026-09-15 IN — Larger Colattao falling items
+- did: Anthony clarified Colattao Fall Rush and explicitly approved enlarging its items. Rechecked clean local state and remote main842adc0, matching the verified production release; started codex/colattao-larger-drinks from origin/main and preserved prior local release logs.
+- state: Current falling drinks76px and chain coffee74px. Plan112px drinks/108px chain coffee, matched hit areas, size-aware edge padding and entry/exit. Artwork, timings, scoring and levels retained. No CODEX_QUEUE exists in this dedicated repo; direct request is active scope.
+- next: Targeted scene/test edits, browser sizing/pointer/resize/gameplay checks, final build and reviewable PR preview. Production release requires explicit approval of this new revision.
+- blocked: None.
+
+## 2026-09-15 VERIFIED — Larger fall items
+- did: Increased good drink112px/bad coffee108px; hit areas use the same size, horizontal padding includes wobble clearance and vertical travel fully enters/exits the screen. Targeted lint, production build/TypeScript and existing complete browser harness passed.
+- state: Native pointer at center+48px on both axes scored exactly10 (outside the old38px half-size). 320px edge fixtures at +/-8deg retained >9px side clearance; resize320/390/430/844px preserved score10 and no horizontal overflow. Four distinct112px textures, all levels/600point completion, replay, fallback, timeout and pause/resume passed. No browser errors. Staged four-drink size comparison: ../fall-larger-drinks-390.png (positions held for review, not natural spawn timing).
+- next: Commit and publish a PR preview, verify Ready deployment, then request the new production release decision.
+- blocked: None. Physical mobile hardware testing remains unverified.

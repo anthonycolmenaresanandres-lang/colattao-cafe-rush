@@ -74,3 +74,9 @@ The feature branch is `codex/colattao-fall-rush`, starting from production `5c5f
 Preserve deployment protection. Authorized preview inspection uses Vercel CLI; do not disable protection or print bypass secrets. Production has not been changed by the implementation phase.
 
 For an approved release, recheck production first, record its deployment, merge only the reviewed PR head, and verify the public alias. If rollback is required, restore the previous approved deployment or revert the scoped release, covering scene code and asset configuration together. Summer assets are retained.
+
+## September 15 follow-up: larger falling items
+
+Anthony requested larger Colattao collectibles. Drinks now use112px containers (up from76px,47.4% larger per dimension), and chain coffee108px (up from74px). Matching input rectangles expand with the artwork. Size-aware side margins reserve space for the eight-degree wobble; vertical travel begins and ends fully outside the canvas. Asset files, start-screen examples, scoring and level parameters are unchanged.
+
+Validation: targeted ESLint, production build/TypeScript and the full local browser harness passed. Native pointer center+48px scored10. Rotated edge fixtures at320px retained over9px clearance;320/390/430px and844x390 resize checks retained score and horizontal containment. The screenshot ../fall-larger-drinks-390.png is a staged four-item sizing review. Physical device testing remains unverified.
