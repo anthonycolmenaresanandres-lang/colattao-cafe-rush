@@ -369,3 +369,21 @@ customer header.
 - state: LIVE https://colattao-cafe-rush.vercel.app/menu. Public 390px browser check observed the same leaf identity from loosen through full-opacity bottom landing, twelve pool slots, four fall items, valid Menu JSON-LD, every anchor target and zero horizontal overflow or browser errors. Both transparent WebP assets returned HTTP 200.
 - next: Anthony can review the live feel. Optional physical Safari check remains the only device-specific follow-up; no required implementation or publishing work remains.
 - blocked: None. Video capture was policy-blocked; frame measurements and screenshots provided verification instead.
+
+## 2026-09-15 IN — Owner reference, realistic drinks and complete leaf fall
+- did: Anthony supplied the owner's autumn poster and requested all leaves fall, more realistic drink/menu visuals and a live merge. Inspected the deployed autumn files, menu rendering/data, owner artwork and current main.
+- state: Applying the owner reference to the existing fall section with four realistic drink assets. Replacing the permanent-anchor behavior; an optional cascade-versus-two-at-a-time preference is pending while artwork work proceeds. Current main d7bda06 matches the handoff.
+- next: Generate and optimize artwork, implement the scoped autumn presentation and complete leaf lifecycle, verify mobile/native scrolling and core menu regressions, then merge and confirm production under Anthony's explicit instruction.
+- blocked: None. No CODEX_QUEUE.md exists in this customer repository; the direct request is the active queue.
+
+## 2026-09-15 PROGRESS — Owner drink visuals and complete cascade
+- did: Added four optimized realistic drink images (107,878 bytes combined), the original owner poster in an expandable view, a dark seasonal board and data-driven FallDrinkItem presentation. Rejected checkerboard output; final ceramic images use clean black backgrounds blended with CSS screen.
+- state: Six pure motion tests and targeted lint pass. Browser full-cascade trace saw all ten unique leaf identities detach, zero remaining on the rim, eight landings and two complete overflow exits, with no backward steps, fades or early recycling. No automatic respawn. Replay and pause of both active leaves and queued releases passed; actual height resize and reverse scrolling retained downward progression.
+- next: Finish native-scroll activation, reduced motion, responsive poster/drink layout, keyboard/hidden-tab checks, production build, then merge and verify live.
+- blocked: None. Optional cascade preference was unanswered during artwork work; the recommended one-time full cascade was stated and implemented to meet Anthony's all-leaves request.
+
+## 2026-09-15 VERIFIED — Owner collection ready to merge
+- did: Passed six motion tests, targeted lint and production build/TypeScript. Verified all ten detach, no remaining rim leaves, eight landings/two full exits, replay, normal/slow scrolling, pause of queued/current leaves, resize/reverse movement, reduced motion, input focus, simulated visibility, zero idle RAF and 320/390/430/1440px layouts.
+- state: Production-mode menu has all four exact drink names and Menu JSON-LD; existing game link reaches / and removes the portal. Owner poster lazy-loads only when opened. No application page errors; physical Safari remains unverified. Final asset provenance and screenshots are documented in docs/COLATTAO_OWNER_FALL.md.
+- next: Commit the scoped changes, inspect Vercel preview checks, merge under Anthony's explicit instruction and verify the public deployment.
+- blocked: None.

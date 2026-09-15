@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
-import { createMotionController, type MotionController } from "./MotionController";
+import { createMotionController, type CascadeState, type MotionController } from "./MotionController";
 import FallingLeafLayer from "./FallingLeafLayer";
 import styles from "./autumn.module.css";
 
@@ -11,16 +11,16 @@ const LEAF_ASSETS = [
   "/assets/colattao/menu/autumn/oak-russet.webp",
 ] as const;
 const LEAVES = [
-  { id: "anchor-1", kind: "anchor", x: 7, y: -20, size: 35, angle: -62 },
-  { id: "anchor-2", kind: "anchor", x: 15, y: -16, size: 31, angle: 39 },
-  { id: "anchor-3", kind: "anchor", x: 21, y: -19, size: 27, angle: -20 },
-  { id: "anchor-4", kind: "anchor", x: 87, y: -17, size: 30, angle: 56 },
-  { id: "loose-1", kind: "loose", x: 10, y: -27, size: 32, angle: -35 },
-  { id: "loose-2", kind: "loose", x: 25, y: -21, size: 26, angle: 70 },
-  { id: "loose-3", kind: "loose", x: 83, y: -22, size: 27, angle: -58 },
-  { id: "edge-1", kind: "edge", x: 2, y: -19, size: 25, angle: -79 },
-  { id: "edge-2", kind: "edge", x: 93, y: -18, size: 24, angle: 76 },
-  { id: "edge-3", kind: "edge", x: 4, y: -26, size: 24, angle: 14 },
+  { id: "leaf-1", order: 6, x: 7, y: -20, size: 35, angle: -62 },
+  { id: "leaf-2", order: 8, x: 15, y: -16, size: 31, angle: 39 },
+  { id: "leaf-3", order: 9, x: 21, y: -19, size: 27, angle: -20 },
+  { id: "leaf-4", order: 5, x: 87, y: -17, size: 30, angle: 56 },
+  { id: "leaf-5", order: 4, x: 10, y: -27, size: 32, angle: -35 },
+  { id: "leaf-6", order: 7, x: 25, y: -21, size: 26, angle: 70 },
+  { id: "leaf-7", order: 3, x: 83, y: -22, size: 27, angle: -58 },
+  { id: "leaf-8", order: 0, x: 2, y: -19, size: 25, angle: -79 },
+  { id: "leaf-9", order: 1, x: 93, y: -18, size: 24, angle: 76 },
+  { id: "leaf-10", order: 2, x: 4, y: -26, size: 24, angle: 14 },
 ] as const;
 
 const mediaQuery = "(prefers-reduced-motion: reduce)";
@@ -36,13 +36,14 @@ export default function AutumnAtmosphere() {
   const layerRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<MotionController | null>(null);
   const [paused, setPaused] = useState(false);
+  const [cascade, setCascade] = useState<CascadeState>("idle");
   const mounted = useSyncExternalStore(subscribeMount, () => true, () => false);
   const reduced = useSyncExternalStore(subscribeMotion,
     () => window.matchMedia(mediaQuery).matches, () => true);
 
   useEffect(() => {
     if (!mounted || !rootRef.current || !layerRef.current) return;
-    const controller = createMotionController(rootRef.current, layerRef.current);
+    const controller = createMotionController(rootRef.current, layerRef.current, setCascade);
     controllerRef.current = controller;
     return () => {
       controller.destroy();
@@ -55,7 +56,7 @@ export default function AutumnAtmosphere() {
       {mounted && <FallingLeafLayer layerRef={layerRef} />}
       <div aria-hidden="true" className={styles.leafLedge} data-leaf-ledge="">
         {LEAVES.map((leaf, index) => (
-          <span key={leaf.id} data-leaf-id={leaf.id} data-kind={leaf.kind}
+          <span key={leaf.id} data-leaf-id={leaf.id} data-release-order={leaf.order}
             data-angle={leaf.angle} data-state="rest" className={styles.leaf}
             style={{ left: `${leaf.x}%`, top: leaf.y, width: leaf.size, height: leaf.size * 1.2,
               "--leaf-angle": `${leaf.angle}deg` } as CSSProperties}>
@@ -63,6 +64,12 @@ export default function AutumnAtmosphere() {
           </span>
         ))}
       </div>
+      <button type="button" className={styles.cascadeControl}
+        disabled={reduced || paused || cascade === "running"}
+        aria-label={cascade === "complete" ? "Replay all falling leaves" : "Let all leaves fall"}
+        onClick={() => controllerRef.current?.startCascade()}>
+        {cascade === "running" ? "Leaves falling" : cascade === "complete" ? "Replay leaves" : "Let leaves fall"}
+      </button>
       <button type="button" className={styles.motionControl} disabled={reduced}
         aria-label={reduced ? "Autumn motion off: reduced motion preference" :
           paused ? "Resume autumn motion" : "Pause autumn motion"}

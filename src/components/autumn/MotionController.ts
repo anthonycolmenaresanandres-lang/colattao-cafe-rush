@@ -1,11 +1,12 @@
 import {
-  clamp, fallDuration, landingPose, MAX_AIRBORNE, MAX_LANDED, pathVelocity, samplePath,
+  clamp, fallDuration, landingPose, MAX_AIRBORNE, MAX_LANDED, pathVelocity, releaseDelay, samplePath,
   type Path, type Pose, type Velocity,
 } from "./leafMotion";
 
-export type MotionController = { setPaused: (paused: boolean) => void; destroy: () => void };
+export type CascadeState = "idle" | "running" | "complete";
+export type MotionController = { setPaused: (paused: boolean) => void; startCascade: () => void; destroy: () => void };
 type Source = {
-  node: HTMLElement; visual: HTMLElement; kind: string; angle: number; gust: number;
+  node: HTMLElement; visual: HTMLElement; order: number; angle: number; gust: number;
   spent: boolean; nodeStyle: string; visualStyle: string;
 };
 type Flight = {
@@ -21,14 +22,15 @@ const editable = () => {
 };
 
 /** One sleeping RAF loop. React never re-renders in response to scrolling. */
-export function createMotionController(root: HTMLElement, layer: HTMLElement): MotionController {
+export function createMotionController(root: HTMLElement, layer: HTMLElement,
+  onCascadeChange: (state: CascadeState) => void = () => {}): MotionController {
   const ledge = root.querySelector<HTMLElement>("[data-leaf-ledge]")!;
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
   const sources: Source[] = Array.from(root.querySelectorAll<HTMLElement>("[data-leaf-id]")).map((node) => ({
-    node, visual: node.firstElementChild as HTMLElement, kind: node.dataset.kind!,
+    node, visual: node.firstElementChild as HTMLElement, order: Number(node.dataset.releaseOrder),
     angle: Number(node.dataset.angle), gust: 0, spent: false,
     nodeStyle: node.style.cssText, visualStyle: (node.firstElementChild as HTMLElement).style.cssText,
-  }));
+  })).sort((a, b) => a.order - b.order);
   const flights: Flight[] = Array.from(layer.querySelectorAll<HTMLElement>("[data-flight-slot]")).map((node) => ({
     node, visual: node.firstElementChild as HTMLElement, source: null, phase: "available",
     path: null, pose: { x: 0, y: 0, angle: 0, scale: 1 }, age: 0, size: 0, direction: 1, landing: null,
@@ -39,14 +41,15 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
   });
   let viewport = readViewport();
   let frame = 0, lastFrame = 0, scrollY = window.scrollY, lastScroll = performance.now();
-  let wind = 0, targetWind = 0, lastInput = -Infinity, lastRelease = -Infinity, serial = 0;
+  let wind = 0, targetWind = 0, lastInput = -Infinity, serial = 0;
+  let cascade: CascadeState = "idle", cascadeAge = 0, nextSource = 0;
   let rim = ledge.getBoundingClientRect().top, visible = false, paused = false, destroyed = false;
 
   const active = () => flights.filter((flight) => flight.phase !== "available" && flight.phase !== "landed");
   const canRun = () => !destroyed && !paused && !media.matches && !document.hidden && !editable();
   const stop = () => { cancelAnimationFrame(frame); frame = 0; lastFrame = 0; };
   const wake = () => {
-    if (canRun() && !frame && (visible || active().length)) frame = requestAnimationFrame(tick);
+    if (canRun() && !frame && (visible || active().length || cascade === "running")) frame = requestAnimationFrame(tick);
   };
   const setPhase = (flight: Flight, phase: Flight["phase"]) => {
     flight.phase = phase;
@@ -75,18 +78,30 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
     flight.landing = null;
     delete flight.node.dataset.leafId;
   };
-  const rearmOffscreen = () => {
-    // New identities can occupy the vacated rim only while it is entirely offscreen.
-    if (active().length || (rim >= -50 && rim <= viewport.height + 50)) return;
+  const restoreSources = () => {
     for (const source of sources) {
-      if (source.spent) {
-        source.spent = false;
-        source.gust = 0;
-        source.node.style.cssText = source.nodeStyle;
-        source.visual.style.cssText = source.visualStyle;
-        source.node.dataset.state = "rest";
-      }
+      source.spent = false;
+      source.gust = 0;
+      source.node.style.cssText = source.nodeStyle;
+      source.visual.style.cssText = source.visualStyle;
+      source.node.dataset.state = "rest";
     }
+  };
+  const setCascade = (state: CascadeState) => {
+    cascade = state;
+    root.dataset.cascade = state;
+    onCascadeChange(state);
+  };
+  const startCascade = () => {
+    if (!canRun() || cascade === "running") return;
+    if (cascade === "complete") {
+      flights.forEach(recycle);
+      restoreSources();
+    }
+    nextSource = 0;
+    cascadeAge = 0;
+    setCascade("running");
+    wake();
   };
   const destination = (flight: Flight) => flight.landing === null
     ? { x: flight.direction < 0 ? 3 : viewport.width - flight.size - 3,
@@ -109,7 +124,7 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
     flight.age = 0;
     setPhase(flight, "falling");
   };
-  const release = (source: Source, now: number) => {
+  const release = (source: Source) => {
     const flight = flights.find((candidate) => candidate.phase === "available");
     if (!flight) return;
     const box = source.node.getBoundingClientRect();
@@ -122,7 +137,10 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
     flight.direction = direction;
     flight.landing = landing;
     flight.pose = {
-      x: box.left + source.gust * 2, y: box.top - Math.abs(source.gust) * 0.8,
+      x: box.left + source.gust * 2,
+      // A fast scroll may carry the remaining rim above the screen between
+      // releases. Keep that handoff wholly above view, without a long invisible fall.
+      y: Math.max(box.top - Math.abs(source.gust) * 0.8, -box.height * 2),
       angle: source.angle + source.gust * 4, scale: 1,
     };
     flight.node.style.width = `${box.width}px`;
@@ -131,10 +149,12 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
     flight.node.dataset.leafId = `${source.node.dataset.leafId}-flight-${++serial}`;
     flight.path = {
       from: { ...flight.pose },
-      to: { ...flight.pose, x: clamp(flight.pose.x + direction * 16, 2, viewport.width - box.width - 2),
-        y: flight.pose.y + 4, angle: flight.pose.angle + direction * 6 },
+      to: { ...flight.pose, x: direction < 0
+        ? (viewport.width - Math.min(viewport.width, 470)) / 2 + 2
+        : (viewport.width + Math.min(viewport.width, 470)) / 2 - box.width - 2,
+        y: flight.pose.y + 8, angle: flight.pose.angle + direction * 10 },
       velocity: STILL, endVelocity: { x: 0, y: 30, angle: 0 },
-      duration: 280, sway: 0, rock: 0, direction,
+      duration: 400 + (source.order % 3) * 45, sway: 0, rock: 0, direction,
     };
     flight.age = 0;
     // Exact same-frame handoff: artwork, size, transform origin and current pose
@@ -144,19 +164,11 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
     source.node.dataset.state = "spent";
     source.node.style.visibility = "hidden";
     setPhase(flight, "loosen");
-    lastRelease = now;
   };
-  const tryRelease = (now: number) => {
+  const tryStart = (now: number) => {
+    if (cascade !== "idle") return;
     if (!visible || rim < 95 || rim > viewport.height - 28 || now - lastInput > 1000) return;
-    const count = active().length;
-    const strength = Math.abs(wind);
-    const strongSecond = count === 1 && strength > 2.1 && now - lastRelease > 190;
-    if (count >= MAX_AIRBORNE || strength < 1.05 || (!strongSecond && now - lastRelease < 1150)) return;
-    const candidates = sources.filter((source) => source.kind === "edge" && !source.spent);
-    const previousSide = active()[0]?.direction;
-    const source = candidates.find((candidate) => previousSide !== undefined &&
-      (Number.parseFloat(candidate.node.style.left) < 50 ? -1 : 1) !== previousSide) ?? candidates[0];
-    if (source) release(source, now);
+    if (Math.abs(wind) > 0.4) startCascade();
   };
 
   function tick(now: number) {
@@ -167,12 +179,18 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
     targetWind *= Math.exp(-dt / 200);
     wind += (targetWind - wind) * (1 - Math.exp(-dt / 120));
     for (const source of sources) {
-      if (source.spent || source.kind === "anchor" || !visible) continue;
-      const strength = source.kind === "loose" ? 0.65 : 1;
+      if (source.spent || !visible) continue;
+      const strength = 0.65 + (source.order % 3) * 0.15;
       source.gust = wind * strength;
       source.visual.style.transform = `translate3d(${source.gust * 2}px, ${-Math.abs(source.gust) * 0.8}px, 0) rotate(${source.angle + source.gust * 4}deg)`;
     }
-    tryRelease(now);
+    tryStart(now);
+    if (cascade === "running") {
+      cascadeAge += dt;
+      while (nextSource < sources.length && cascadeAge >= releaseDelay(nextSource) && active().length < MAX_AIRBORNE) {
+        release(sources[nextSource++]);
+      }
+    }
     for (const flight of active()) {
       if (!flight.path) continue;
       flight.age = Math.min(flight.path.duration, flight.age + dt);
@@ -197,8 +215,8 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
         recycle(flight);
       }
     }
-    rearmOffscreen();
-    if (active().length || (visible && Math.abs(wind) + Math.abs(targetWind) > 0.015)) wake();
+    if (cascade === "running" && nextSource === sources.length && !active().length) setCascade("complete");
+    if (cascade === "running" || active().length || (visible && Math.abs(wind) + Math.abs(targetWind) > 0.015)) wake();
     else { rest(); lastFrame = 0; }
   }
 
@@ -218,15 +236,20 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
   };
   const onScroll = () => {
     const now = performance.now();
-    const velocity = clamp((window.scrollY - scrollY) / clamp(now - lastScroll, 16, 80), -5, 5);
+    const delta = window.scrollY - scrollY;
+    const velocity = clamp(delta / clamp(now - lastScroll, 16, 80), -5, 5);
+    const previousRim = rim;
     scrollY = window.scrollY;
     lastScroll = now;
     rim = ledge.getBoundingClientRect().top;
     visible = rim > 70 && rim < viewport.height + 40;
-    rearmOffscreen();
     if (!canRun()) return;
     // Native momentum is accepted; category links/history/layout do not supply wind.
-    if (now - lastInput < 1000) targetWind = velocity;
+    if (now - lastInput < 1000) {
+      targetWind = velocity;
+      if (cascade === "idle" && Math.abs(delta) > 30 && previousRim > 70 &&
+        previousRim < viewport.height + 40 && rim <= 70) startCascade();
+    }
     if (!visible) rest();
     wake();
   };
@@ -268,7 +291,11 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
     lastScroll = performance.now();
     lastInput = -Infinity;
     layer.dataset.suspended = String(editable());
-    if (media.matches) { active().forEach(recycle); rest(); }
+    if (media.matches) {
+      active().forEach(recycle);
+      if (cascade === "running") setCascade("complete");
+      rest();
+    }
     root.dataset.motion = media.matches ? "reduced" : paused ? "paused" : document.hidden ? "hidden" : editable() ? "keyboard" : "ready";
     onResize();
     wake();
@@ -277,9 +304,8 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
   const observer = new IntersectionObserver(() => {
     rim = ledge.getBoundingClientRect().top;
     visible = rim > 70 && rim < viewport.height + 40;
-    rearmOffscreen();
     if (!visible) rest();
-    if (!visible && !active().length) stop();
+    if (!visible && !active().length && cascade !== "running") stop();
     else wake();
   }, { rootMargin: "50px 0px" });
   observer.observe(ledge);
@@ -299,6 +325,7 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
 
   return {
     setPaused(value) { paused = value; sync(); },
+    startCascade,
     destroy() {
       destroyed = true;
       stop();
@@ -327,6 +354,7 @@ export function createMotionController(root: HTMLElement, layer: HTMLElement): M
       });
       delete layer.dataset.suspended;
       delete root.dataset.motion;
+      delete root.dataset.cascade;
     },
   };
 }

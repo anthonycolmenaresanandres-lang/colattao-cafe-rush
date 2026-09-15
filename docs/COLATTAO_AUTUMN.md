@@ -1,5 +1,10 @@
 # Colattao autumn menu
 
+Current revision: see [Owner-inspired fall collection](COLATTAO_OWNER_FALL.md).
+Anthony's latest request replaces permanent anchor leaves and two-at-a-time release
+with a finite, staggered cascade of all ten leaves, plus realistic drink imagery.
+The implementation and release notes below document the earlier iterations.
+
 ## Source and edit boundary
 
 - Base: `colattao-cafe-rush` main `d2dbac4`; branch `codex/colattao-autumn-menu`.
