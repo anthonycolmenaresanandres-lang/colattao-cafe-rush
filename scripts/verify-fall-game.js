@@ -4,6 +4,11 @@
   const assert = (condition, message) => { if (!condition) throw Error(message); };
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const until = async (check) => { for (let i = 0; i < 80; i++) { if (check()) return; await wait(50); } throw Error("State transition timed out"); };
+  const play = [...document.querySelectorAll("button")].find((button) => button.textContent.includes("Play Fall Rush"));
+  if (play) {
+    assert(!document.querySelector("canvas"), "Landing does not mount the game before Play");
+    play.click();
+  }
   await until(() => document.querySelector("canvas") && !document.body.innerText.includes("Preparing your fall favorites"));
   const host = document.getElementById("game-container");
   let fiber = host[Object.keys(host).find((key) => key.startsWith("__reactFiber$"))];
@@ -17,8 +22,12 @@
   assert(game, "Game mounted");
   window.__fallTestGame = game; // Browser-only verification handle, never part of app code.
   let scene = game.scene.getScene("DemoScene");
-  const restart = async () => { scene.scene.restart(); await until(() => scene.phase === "start" && !scene.roundStarted); };
-  if (scene.phase !== "start") await restart();
+  const restart = async () => {
+    const previousTimer = scene.countdownTimer;
+    scene.scene.restart();
+    await until(() => scene.countdownTimer !== previousTimer && scene.phase === "playing" && scene.roundStarted && scene.score === 0);
+  };
+  if (scene.phase !== "playing") await restart();
   const freezeTimers = () => { scene.spawnTimer?.remove(false); scene.countdownTimer?.remove(false); };
   const spawn = (index, bad = false) => {
     const random = Math.random;
@@ -27,19 +36,19 @@
     finally { Math.random = random; }
     return [...scene.fallingItems].at(-1);
   };
-  scene.overlayAction(); freezeTimers();
+  freezeTimers();
   const drinks = [];
   for (let index = 0; index < 4; index++) {
     const item = spawn(index);
     const art = item.list[0];
     const before = scene.score;
     assert(item.getData("textureKey") === "colattao-fall-drink-" + index, "Every configured drink spawns");
-    assert(item.width === 112 && item.height === 112, "Drink has the larger tap area");
-    assert(art.displayWidth <= 112.01 && art.displayHeight <= 112.01, "Sprite respects game size");
+    assert(item.width >= 136 && item.width <= 160 && item.height === item.width, "Drink has the responsive larger tap area");
+    assert(art.displayWidth <= 160.01 && art.displayHeight <= 160.01 && Math.max(art.displayWidth, art.displayHeight) >= 131.9, "Sprite respects game size");
     assert(item.input.hitArea.contains(item.displayOriginX, item.displayOriginY), "Tap area contains the visible center");
-    assert(item.input.hitArea.contains(item.displayOriginX + 50, item.displayOriginY + 50), "Tap area covers the enlarged lower-right of the drink");
+    assert(item.input.hitArea.contains(item.displayOriginX + 60, item.displayOriginY + 60), "Tap area covers the enlarged lower-right of the drink");
     await wait(120);
-    assert(art.displayWidth <= 112.01 && art.displayHeight <= 112.01, "Wobble preserves base scale");
+    assert(art.displayWidth <= 160.01 && art.displayHeight <= 160.01, "Wobble preserves base scale");
     drinks.push({ key: item.getData("textureKey"), width: art.displayWidth, height: art.displayHeight });
     item.emit("pointerdown");
     assert(scene.score === before + 10, "One good tap adds exactly ten");
@@ -66,14 +75,14 @@
   assert(scene.totalScore === 600, "Three levels produce 600 cumulative points");
   const replay = [...document.querySelectorAll("button")].find((button) => /play again/i.test(button.textContent));
   assert(replay, "Completion replay available"); replay.click();
-  await until(() => scene.phase === "start" && !document.body.innerText.includes("Pass Earned"));
-  scene.overlayAction(); freezeTimers(); spawn(0, true).emit("pointerdown");
+  await until(() => scene.phase === "playing" && !document.body.innerText.includes("Pass Earned"));
+  freezeTimers(); spawn(0, true).emit("pointerdown");
   assert(scene.phase === "lost" && scene.score === 0, "Bad tap loses without awarding score");
-  scene.overlayAction(); await until(() => scene.phase === "start"); scene.overlayAction();
+  scene.overlayAction(); await until(() => scene.phase === "playing");
   scene.spawnTimer.remove(false); scene.timeLeft = 1;
   await until(() => scene.phase === "lost");
   assert(scene.timeLeft === 0, "Timeout follows countdown boundary");
-  await restart(); scene.overlayAction();
+  await restart();
   scene.spawnTimer.remove(false);
   const item = spawn(1);
   await wait(600);

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FALL_ACTION, FALL_UI, type FallUiState } from "@/game/events/fallUi";
 
-export default function GameCanvas() {
+export default function GameCanvas({ autoStart = false }: { autoStart?: boolean }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
   const gameRef = useRef<import("phaser").Game | null>(null);
   const pausedRef = useRef(false);
@@ -13,7 +13,16 @@ export default function GameCanvas() {
 
   useEffect(() => {
     let mounted = true;
+    let expired = false;
     let observer: ResizeObserver | undefined;
+    const fail = () => {
+      if (!mounted) return;
+      expired = true;
+      clearTimeout(timeout);
+      gameRef.current?.destroy(true);
+      gameRef.current = null;
+      setFailed(true);
+    };
     const applyPause = () => {
       const game = gameRef.current;
       if (!game?.scene.keys.DemoScene) return;
@@ -22,6 +31,7 @@ export default function GameCanvas() {
     };
     const onUi = (state: FallUiState) => {
       if (!mounted) return;
+      clearTimeout(timeout);
       setUi(state);
       if (state.phase === "start") { pausedRef.current = false; setPaused(false); }
       applyPause();
@@ -36,7 +46,7 @@ export default function GameCanvas() {
       const [Phaser] = await Promise.all([import("phaser"), document.fonts.ready]);
       const { BootScene } = await import("@/game/scenes/BootScene");
       const { DemoScene } = await import("@/game/scenes/DemoScene");
-      if (!mounted || !hostRef.current || gameRef.current) {
+      if (!mounted || expired || !hostRef.current || gameRef.current) {
         return;
       }
 
@@ -47,7 +57,11 @@ export default function GameCanvas() {
         height: "100%",
         backgroundColor: "#1B0E08",
         scene: [BootScene, DemoScene],
-        callbacks: { preBoot: (instance) => { instance.events.on(FALL_UI, onUi); } },
+        callbacks: { preBoot: (instance) => {
+          gameRef.current = instance;
+          instance.registry.set("fall-direct-start", autoStart);
+          instance.events.on(FALL_UI, onUi);
+        } },
         scale: {
           mode: Phaser.Scale.RESIZE,
           autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -60,19 +74,22 @@ export default function GameCanvas() {
       gameRef.current = game;
       observer = new ResizeObserver(() => game.scale.refresh());
       observer.observe(hostRef.current);
+      hostRef.current.focus({ preventScroll: true });
     };
 
-    void mountGame().catch(() => { if (mounted) setFailed(true); });
+    const timeout = setTimeout(fail, 30_000);
+    void mountGame().catch(fail);
 
     return () => {
       mounted = false;
+      clearTimeout(timeout);
       observer?.disconnect();
       document.removeEventListener("visibilitychange", applyPause);
       gameRef.current?.events.off(FALL_UI, onUi);
       gameRef.current?.destroy(true);
       gameRef.current = null;
     };
-  }, []);
+  }, [autoStart]);
 
   const togglePause = () => {
     const game = gameRef.current;
@@ -100,8 +117,8 @@ export default function GameCanvas() {
           }
         }}
         />
-        {!ui && <div className="pointer-events-none absolute inset-0 flex items-center justify-center text-sm text-[#E7CEAC]" role="status">
-          {failed ? "The game could not load. Refresh to try again." : "Preparing your fall favorites…"}
+        {!ui && <div className="absolute inset-0 flex flex-col items-center justify-center gap-5 text-sm text-[#E7CEAC]" role="status">
+          {failed ? <><p className="max-w-64 text-center">The game could not load. Reload the page to try again.</p><button type="button" className="min-h-11 cursor-pointer border border-gold/50 px-6" onClick={() => window.location.reload()}>Reload page</button></> : "Preparing your fall favorites…"}
         </div>}
         {paused && <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-[20px] bg-black/65 font-serif text-3xl text-[#F5E9D0]">Rush paused</div>}
       </div>
