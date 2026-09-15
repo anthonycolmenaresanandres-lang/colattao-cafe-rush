@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import { createMotionController, type MotionController } from "./MotionController";
+import FallingLeafLayer from "./FallingLeafLayer";
 import styles from "./autumn.module.css";
 
 // Individual photographic cutouts with real alpha; no chroma-key background reaches the UI.
@@ -23,6 +24,7 @@ const LEAVES = [
 ] as const;
 
 const mediaQuery = "(prefers-reduced-motion: reduce)";
+const subscribeMount = () => () => {};
 function subscribeMotion(callback: () => void) {
   const media = window.matchMedia(mediaQuery);
   media.addEventListener("change", callback);
@@ -31,24 +33,27 @@ function subscribeMotion(callback: () => void) {
 
 export default function AutumnAtmosphere() {
   const rootRef = useRef<HTMLDivElement>(null);
+  const layerRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<MotionController | null>(null);
   const [paused, setPaused] = useState(false);
+  const mounted = useSyncExternalStore(subscribeMount, () => true, () => false);
   const reduced = useSyncExternalStore(subscribeMotion,
     () => window.matchMedia(mediaQuery).matches, () => true);
 
   useEffect(() => {
-    if (!rootRef.current) return;
-    const controller = createMotionController(rootRef.current);
+    if (!mounted || !rootRef.current || !layerRef.current) return;
+    const controller = createMotionController(rootRef.current, layerRef.current);
     controllerRef.current = controller;
     return () => {
       controller.destroy();
       controllerRef.current = null;
     };
-  }, []);
+  }, [mounted]);
 
   return (
     <div ref={rootRef} className={styles.atmosphere} data-autumn-atmosphere="">
-      <div aria-hidden="true" className={styles.leafLedge}>
+      {mounted && <FallingLeafLayer layerRef={layerRef} />}
+      <div aria-hidden="true" className={styles.leafLedge} data-leaf-ledge="">
         {LEAVES.map((leaf, index) => (
           <span key={leaf.id} data-leaf-id={leaf.id} data-kind={leaf.kind}
             data-angle={leaf.angle} data-state="rest" className={styles.leaf}

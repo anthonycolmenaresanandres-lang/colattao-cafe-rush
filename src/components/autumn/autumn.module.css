@@ -41,6 +41,10 @@
 .leafLedge { position: absolute; top: 0; width: 100%; height: 1px; pointer-events: none; }
 .leaf { position: absolute; display: block; pointer-events: none; }
 .leafVisual { display: block; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; transform: rotate(var(--leaf-angle)); transform-origin: 50% 65%; }
+.fallingLayer { position: fixed; inset: 0; z-index: 21; overflow: clip; pointer-events: none; contain: layout style; }
+.flyingLeaf { position: absolute; left: 0; top: 0; display: block; pointer-events: none; }
+.flyingLeaf[data-state="available"] { visibility: hidden; }
+.fallingLayer[data-suspended="true"] { visibility: hidden; }
 .motionControl { position: absolute; right: 0; top: -49px; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 4px 8px 12px; border: 0; background: transparent; color: var(--autumn-chalk); font-size: 10px; letter-spacing: 0.03em; cursor: pointer; pointer-events: auto; }
 .motionControl:disabled { color: #d3c2a4; cursor: default; }
 .fallCard { border-color: #b98149 !important; }
@@ -48,6 +52,6 @@
 .fallCard li + li { padding-top: 12px; border-top: 1px solid #9c6b1f26; }
 @media (prefers-reduced-motion: reduce) {
   :global(html):has(.page) { scroll-behavior: auto; }
-  .leafVisual { transform: rotate(var(--leaf-angle)) !important; }
-  .leaf[data-state="falling"], .leaf[data-state="spent"] { visibility: hidden !important; }
+  .leafLedge .leafVisual { transform: rotate(var(--leaf-angle)) !important; }
+  .flyingLeaf:not([data-state="landed"]), .leaf[data-state="spent"] { visibility: hidden !important; }
 }
