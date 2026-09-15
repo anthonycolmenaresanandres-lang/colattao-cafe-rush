@@ -289,3 +289,33 @@
 - state: Production-mode menu has all four exact drink names and Menu JSON-LD; existing game link reaches / and removes the portal. Owner poster lazy-loads only when opened. No application page errors; physical Safari remains unverified. Final asset provenance and screenshots are documented in docs/COLATTAO_OWNER_FALL.md.
 - next: Commit the scoped changes, inspect Vercel preview checks, merge under Anthony's explicit instruction and verify the public deployment.
 - blocked: None.
+
+## 2026-09-15 MERGED — Owner fall collection
+- did: Vercel preview dpl_71DYbAmZRpTKPJv46kXSG1vHewqH is Ready; GitHub checks passed. Merged PR #13 at verified head 717b27724387872e7316eed2b55bb353334dea6f under Anthony's explicit merge instruction.
+- state: Main merge 9381acf5a3bed862c1a162260ee7c9c3594d0a3a. Production auto-deployment is pending public verification.
+- next: Confirm production Ready and verify all ten leaves, the four drink images, original poster and menu anchors on the public alias.
+- blocked: None.
+
+## 2026-09-15 OUT — Owner fall collection live
+- did: Merged PR #13 as 9381acf5a3bed862c1a162260ee7c9c3594d0a3a and verified production deployment dpl_FrAaBdVwRRbLJHmNnBGg7MJhRGG2 is Ready with the public alias.
+- state: LIVE https://colattao-cafe-rush.vercel.app/menu. A fresh public browser trace observed all ten unique leaves detach on normal scrolling, zero backward movement and zero remaining on the rim, eight corner landings and a completed cascade. All four realistic drink images and the owner's original poster return HTTP 200; four exact names, valid anchors, no horizontal overflow and no application page errors.
+- next: Anthony can scroll or tap Let leaves fall, then Replay leaves, to review. Physical Safari remains an optional device-specific review; no required implementation or publishing work remains.
+- blocked: None. Artwork provenance, final prompts, source paths and verification are in docs/COLATTAO_OWNER_FALL.md.
+
+## 2026-09-15 IN — Remove retired seasonal menu and affogato promo
+- did: Anthony requested removal of Seasonal Drinks and the affogato box. Inspected the menu data, server rendering, category navigation, JSON-LD and banner mount; synchronized the scoped worktree with the verified owner-fall production release.
+- state: Removing the older Seasonal Drinks category and Churro Affogato promotional banner. The new Fall Drinks collection and the actual Tea & More menu entries remain. No CODEX_QUEUE.md exists here; the direct request is the active queue.
+- next: Make two targeted source edits, verify build/mobile navigation/data, then publish under the existing live-merge authorization.
+- blocked: None.
+
+## 2026-09-15 PROGRESS — Menu removal and linked promo
+- did: Removed the retired category, its special flavor renderer and the Churro Affogato banner mount. Targeted lint and the initial production build passed.
+- state: Dependency search found the game-page promo still linked to /menu#seasonal-drinks. Updated only that promo's destination, copy and images to the current Fall Drinks collection in src/app/page.tsx; game and reward functions are unchanged.
+- next: Repeat final lint/build for the additional linked edit, then browser and deployment verification.
+- blocked: None.
+
+## 2026-09-15 VERIFIED — Retired menu cleanup ready to release
+- did: Final production build/TypeScript passed; targeted ESLint has zero errors and the pre-existing game-promo img warning. Browser checks at 320px and 390px confirm seven categories, four exact Fall Drinks, no retired category/banner, valid anchors and matching Menu JSON-LD, guest-note/footer links and no horizontal overflow.
+- state: Tea & More follows Matcha directly, verified visually. Actual affogato items remain. The game promo's three images load and its link reaches /menu#fall-drinks; no browser page errors. Game/reward functions and autumn motion are unchanged.
+- next: Commit, inspect preview checks, merge and confirm the public menu under Anthony's existing live authorization.
+- blocked: None. Local screenshot: ../menu-cleanup-tea.png.

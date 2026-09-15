@@ -11,29 +11,29 @@ import type { GameWonPayload } from "@/types/game";
 function SeasonalPromoBanner() {
   return (
     <a
-      href="/menu#seasonal-drinks"
-      aria-label="New seasonal Matcha Lemonade — view flavors"
+      href="/menu#fall-drinks"
+      aria-label="Fall Drinks — view the seasonal menu"
       className="group pointer-events-auto flex w-full items-center gap-3 overflow-hidden rounded-2xl border border-[#DAAE4F]/55 bg-[linear-gradient(135deg,#241405_0%,#170d05_100%)] px-3 py-2.5 shadow-[0_18px_38px_-18px_rgba(0,0,0,0.95),inset_0_1px_0_rgba(248,237,215,0.1)] ring-1 ring-black/20 backdrop-blur-sm transition hover:border-[#DAAE4F]/85"
     >
       <div className="flex shrink-0 -space-x-3">
-        {["original", "strawberry", "mango"].map((f) => (
+        {["pumpkin-pie", "caramel-apple", "maple-pecan"].map((f) => (
           <img
             key={f}
-            src={`/assets/colattao/game/stickers/${f}-sticker.png`}
+            src={`/assets/colattao/menu/autumn/${f}.webp`}
             alt=""
-            className="h-11 w-11 rounded-full ring-2 ring-[#1a0f06]"
+            className="h-11 w-11 rounded-full object-contain mix-blend-screen"
           />
         ))}
       </div>
       <div className="min-w-0 flex-1 leading-tight">
         <p className="text-[8px] font-bold uppercase tracking-[0.24em] text-[#DAAE4F]">
-          New · Seasonal
+          Now pouring
         </p>
         <p className="truncate text-[13px] font-black tracking-tight text-[#F8EDD7]">
-          Matcha Lemonade
+          Fall Drinks
         </p>
         <p className="truncate text-[10px] text-[#F8EDD7]/55">
-          Strawberry · Mango · Original
+          Four cozy seasonal favorites
         </p>
       </div>
       <span className="shrink-0 pr-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#DAAE4F] transition group-hover:translate-x-0.5">

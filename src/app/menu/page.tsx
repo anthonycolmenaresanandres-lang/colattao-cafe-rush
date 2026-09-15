@@ -8,7 +8,6 @@ import FallPromo from "@/components/autumn/FallPromo";
 import autumnStyles from "@/components/autumn/autumn.module.css";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
 import FallDrinkItem from "@/components/autumn/FallDrinkItem";
-import ChurroAffogatoBanner from "@/components/ChurroAffogatoBanner";
 import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
 
 export const metadata: Metadata = {
@@ -168,27 +167,6 @@ const COLLAPSIBLE_DESCRIPTION_ITEMS = new Set([
   "Montecristo",
   "Pesto Mozzarella",
 ]);
-
-const MATCHA_LEMONADE_FLAVORS = [
-  {
-    name: "Original",
-    description: "Bright lemonade and smooth matcha.",
-    imageSrc: "/assets/colattao/menu/seasonal/matcha-original-thumb.png",
-    imageAlt: "Original Matcha Lemonade",
-  },
-  {
-    name: "Strawberry",
-    description: "Fresh berry sweetness with a matcha finish.",
-    imageSrc: "/assets/colattao/menu/seasonal/matcha-strawberry-thumb.png",
-    imageAlt: "Strawberry Matcha Lemonade",
-  },
-  {
-    name: "Mango",
-    description: "Tropical mango layered with citrus and matcha.",
-    imageSrc: "/assets/colattao/menu/seasonal/matcha-mango-thumb.png",
-    imageAlt: "Mango Matcha Lemonade",
-  },
-] as const;
 
 function InstagramGlyph() {
   return (
@@ -396,7 +374,6 @@ export default function MenuPage() {
           const texture = CATEGORY_TEXTURES[category.id] ?? DEFAULT_CATEGORY_TEXTURE;
           return (
             <div key={category.id} className={autumnStyles.cardWrap} data-fall-card={category.id === "fall-drinks" ? "" : undefined}>
-              {category.id === "tea" ? <ChurroAffogatoBanner /> : null}
               <div className={autumnStyles.cardSurface}>
               {category.id === "fall-drinks" ? <AutumnAtmosphere /> : null}
             <section
@@ -470,47 +447,7 @@ export default function MenuPage() {
                           </span>
                           <span className="dotted-rule" />
                         </div>
-                        {category.id === "seasonal-drinks" && item.name === "Matcha Lemonade" && item.description ? (
-                          <details
-                            id="matcha-lemonade-flavors"
-                            className="group mt-1.5 rounded-2xl border border-[#d2b27a]/45 bg-[#f8edd7]/42 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.36)]"
-                          >
-                            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--col-espresso-3)]/85 transition-colors hover:text-[var(--col-espresso-2)]">
-                              <span>View Matcha Lemonade flavors</span>
-                              <span className="text-[10px] transition-transform group-open:rotate-180">▾</span>
-                            </summary>
-                            <p className="mt-1.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
-                              {item.description}
-                            </p>
-                            <ul className="mt-2 space-y-1.5">
-                              {MATCHA_LEMONADE_FLAVORS.map((flavor) => (
-                                <li
-                                  key={flavor.name}
-                                  className="flex items-center gap-3 rounded-xl border border-[#d2b27a]/35 bg-[#fff6df]/56 px-2.5 py-2 text-[var(--col-espresso)] shadow-[inset_0_1px_0_rgba(255,255,255,0.38)]"
-                                >
-                                  <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#f8edd7]/58 ring-1 ring-[#d2b27a]/30">
-                                    <Image
-                                      src={flavor.imageSrc}
-                                      alt={flavor.imageAlt}
-                                      width={72}
-                                      height={72}
-                                      sizes="64px"
-                                      className="h-14 w-14 object-contain drop-shadow-[0_5px_7px_rgba(75,36,18,0.18)]"
-                                    />
-                                  </span>
-                                  <span className="min-w-0">
-                                    <span className="block text-[12px] font-bold leading-tight text-[var(--col-espresso)]">
-                                      {flavor.name}
-                                    </span>
-                                    <span className="mt-0.5 block text-[11px] font-medium leading-snug text-[var(--col-espresso-3)]/86">
-                                      {flavor.description}
-                                    </span>
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </details>
-                        ) : hasCombinedDetails ? (
+                        {hasCombinedDetails ? (
                           <details className="group mt-1.5">
                             <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-full border border-[#d2b27a]/45 bg-[#f8edd7]/45 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/80 transition-colors hover:bg-[#f8edd7]/65 hover:text-[var(--col-espresso-2)]">
                               Details
