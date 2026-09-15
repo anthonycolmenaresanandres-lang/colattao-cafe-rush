@@ -237,7 +237,8 @@ export class DemoScene extends Phaser.Scene {
     });
     this.resetFullGameState();
     this.buildHud();
-    this.showStartScreen();
+    if (this.registry.get("fall-direct-start")) this.startRound();
+    else this.showStartScreen();
     this.notifyUi();
   }
 
@@ -491,9 +492,8 @@ export class DemoScene extends Phaser.Scene {
     const kind: FallingKind = Math.random() < cfg.badRate ? "bad" : "good";
     const drink = Phaser.Utils.Array.GetRandom(GOOD_ITEMS) ?? { key: "missing-drink", label: "Coffee" };
     const key = kind === "bad" ? ASSET_KEYS.bad : drink.key;
-    const itemSize = kind === "bad" ? 108 : 112;
-    // Include room for the eight-degree wobble, even at the screen edges.
-    const edgePadding = itemSize * 0.58 + 8;
+    const currentSize = () => Phaser.Math.Clamp(this.scale.width * 0.39, 136, 160) * (kind === "bad" ? 0.94 : 1);
+    const itemSize = currentSize();
     const item = this.add.container(0, -50).setDepth(2).setSize(itemSize, itemSize);
     item.setData({ kind, textureKey: key });
     const art = this.createCollectibleArt(key, drink.label, itemSize, kind === "bad");
@@ -504,9 +504,13 @@ export class DemoScene extends Phaser.Scene {
     const progress = { value: 0 };
     const horizontal = Math.random();
     const position = () => {
+      const size = currentSize();
+      item.setScale(size / itemSize);
+      // Include room for the eight-degree wobble, even at the screen edges.
+      const edgePadding = size * 0.58 + 8;
       item.x = edgePadding + horizontal * Math.max(0, this.scale.width - edgePadding * 2);
       item.y = -edgePadding + progress.value * (this.scale.height + edgePadding * 2);
-      if (item.input) item.input.enabled = item.y > 132 + itemSize / 2 && !this.gameEnded;
+      if (item.input) item.input.enabled = item.y > 132 + size / 2 && !this.gameEnded;
     };
     position();
     item.setData("reflow", position);

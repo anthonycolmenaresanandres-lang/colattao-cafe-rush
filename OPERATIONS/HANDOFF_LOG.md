@@ -391,3 +391,69 @@
 - state: Native pointer at center+48px on both axes scored exactly10 (outside the old38px half-size). 320px edge fixtures at +/-8deg retained >9px side clearance; resize320/390/430/844px preserved score10 and no horizontal overflow. Four distinct112px textures, all levels/600point completion, replay, fallback, timeout and pause/resume passed. No browser errors. Staged four-drink size comparison: ../fall-larger-drinks-390.png (positions held for review, not natural spawn timing).
 - next: Commit and publish a PR preview, verify Ready deployment, then request the new production release decision.
 - blocked: None. Physical mobile hardware testing remains unverified.
+
+## 2026-09-15 OUT — Larger drinks preview ready
+- did: Pushed782e57a27f149cf0f1aa61c5139dc3f1f8ae947a and opened PR16 https://github.com/anthonycolmenaresanandres-lang/colattao-cafe-rush/pull/16. Vercel preview dpl_HWeu1vwGs4yBTTpgDEfJ7Z8B728A is Ready at https://colattao-cafe-rush-eyh1vjrap.vercel.app. Authenticated HTML check confirms Fall Rush and menu destination. Interactive verification used the same source in a local production build.
+- state: Implementation and verification complete; existing preview login protection retained. Screenshot ../fall-larger-drinks-390.png opened for review. Local server stopped and task browser closed. Live production remains the previous version pending this new release decision.
+- next: On Anthony's explicit approval, recheck PR16 head782e57a/checks and main842adc0, merge exact reviewed head and verify public deployment. No Las Palmas game changes made.
+- blocked: Production merge awaits approval under Anthony's AGENTS instructions. No technical blocker; physical mobile hardware unverified. This final handoff record is local only.
+
+## 2026-09-15 IN — Approved larger-drinks release
+- did: Anthony approved the concrete PR16 production release with "Make it happen". Rechecked reviewed head782e57a27f149cf0f1aa61c5139dc3f1f8ae947a, OPEN/CLEAN and successful Vercel checks. Main remains842adc01165d99219fd9aa787580d2cf99a3d423, consistent with handoff.
+- state: Ready to merge. Previous production dpl_6q6rjJFPubAUiWS1wdYFgzrb8kZt is the rollback reference. Local e63d56b is documentation only and excluded from PR16.
+- next: Merge exact approved head, verify production and public item sizing, then check OUT.
+- blocked: None.
+
+## 2026-09-15 MERGED — Larger Colattao drinks
+- did: Merged PR16 at approved782e57a as main91191682f68999d6ef7f2e4371485c81cf803af4 at21:20:31Z.
+- state: Vercel production deployment pending verification.
+- next: Confirm Ready/public sizing and runtime loading.
+- blocked: None.
+
+## 2026-09-15 OUT — Larger Colattao items live
+- did: Merged approved PR16 as91191682f68999d6ef7f2e4371485c81cf803af4. Production dpl_FKfapJwLRBvk6tHWg6u4EDUHaW6t is Ready, owns public alias https://colattao-cafe-rush.vercel.app and GitHub Vercel check is successful.
+- state: Fresh public390x844 browser verified natural spawns of112px good drinks and108px bad items in playing phase, all DOM artwork loaded, live canvas and correct fall-menu destination, no horizontal overflow or browser page errors. Vercel error scan since5m returned no logs. Screenshot ../fall-larger-live.png. Prior completed local production checks cover native larger-edge tapping,320/390/430/landscape containment and full gameplay. Task browser closed.
+- next: Release complete; no required work remains. Physical mobile hardware testing remains unverified. Rollback reference is prior main842adc0/deployment dpl_6q6rjJFPubAUiWS1wdYFgzrb8kZt.
+- blocked: None. Release-only documentation is committed locally to avoid an extra deployment.
+
+## 2026-09-15 IN — Premium drink-first landing strategy
+- did: Anthony requests even larger Colattao items and a premium landing page focused on drinks/flavors, strategy first. Verified main9119168 and current112px gameplay versus58/72px start-screen drink row and36px promo thumbnails. Read current root page, scene intro, navigation and authoritative fall-menu names/ingredients; inspected live390px page.
+- state: Planning only. Current fixed-height canvas landing prioritizes Fall Rush title and decoration over product detail. Prior artwork is generated promotional art, not product photography. Existing256px game sprites need higher-resolution source derivatives for large high-DPI hero use.
+- next: Write product-first art direction and implementation/verification plan, including responsive144–160px gameplay trial, large flavor hero and four selectable real flavor descriptions. No source changes or deployment.
+- blocked: None for planning.
+
+## 2026-09-15 OUT — Premium Colattao strategy prepared
+- did: Wrote docs/COLATTAO_PREMIUM_FLAVOR_PLAN.md after inspecting live390px landing and current source/menu/art provenance. Identified58–72px intro images as a separate small-size cause from112px gameplay.
+- state: Recommended240–300px featured flavor hero, four accessible flavor choices and exact menu descriptions, scoped premium header/palette/type, natural scrolling, explicit Play transition without duplicate start screen, and136–160px responsive falling-item trial with density/input/edge verification. Existing high-resolution sources preferred for hero artwork. Only planning docs/logs changed; no app source or deployment.
+- next: On implementation approval, build visual prototype, verify optical sizing/third-level congestion, connect landing-to-game lifecycle, complete checks and deliver preview before production approval.
+- blocked: None for planning. Proposed pixel targets require visual/gameplay validation. Physical mobile hardware remains unverified.
+
+## 2026-09-15 IN — Execute refined premium flavor collection
+- did: Anthony approved a second strategy pass and execution. Preserved prior plan/logs, rechecked main9119168 and created codex/colattao-flavor-collection. Frontend-design is the primary skill; existing Phaser sprite guidance informs size/input work.
+- state: Refined route: accessible HTML product showcase with large high-resolution drink portrait, full flavor names, menu-sourced ingredients, labeled controls, restrained original logo/header, direct Play transition and return to flavors. Larger136–160px responsive collectibles; inspect high-density play before finalizing. Existing generated artwork sources reused, no new brand claims or assets invented.
+- next: Prepare hero derivatives, build landing/lifecycle, validate live-like mobile/desktop and all gameplay transitions, then create verified preview. Production remains gated on approval of the completed revision.
+- blocked: None. No CODEX_QUEUE exists in this dedicated repo; direct request is the active scope.
+
+## 2026-09-15 PROGRESS — Premium landing and direct play implemented
+- did: Built accessible HTML flavor collection, full menu-derived names/descriptions, four radio choices, original trimmed logo, responsive900px hero derivatives, scoped mobile action bar and desktop editorial layout. Removed initial game mount from landing; explicit Play starts directly, return preserves flavor selection/focus, replay retains event contract. Added game-load retry/watchdog and responsive136–160px drinks with matched scale/input/margins.
+- state: Initial targeted lint cleaned up. Existing browser gameplay harness updated for direct-start lifecycle and passes all levels/600points, replay, bad tap, timeout, pause, fallback,160px sizing and cleanup. Developer server initially cached a404 while the logo was being created; final fresh-server asset verification pending. No production changes.
+- next: Verify all flavor/keyboard/image states, phone/desktop layouts, third-level density, mobile native taps and failure paths; final build and preview.
+- blocked: None.
+
+## 2026-09-15 PROGRESS — Visual and recovery review
+- did: Reviewed all four loaded hero states at390px, desktop1440px and320px layout; added a fixed phone action bar after the initial layout buried Play. Cropped original logo whitespace without changing its artwork. Hero derivatives are960x960 with alpha. Native radio keyboard selection and return-to-flavors selection/focus passed. Reduced-motion landing animation is disabled. All gameplay checks passed at320px and390px; third-level scene inspected on320px.
+- state: Forced missing hero shows text/cup fallback; blocked game art/background remains playable and scores10. A failed dynamic module remained cached after in-place retry; replaced that unreliable action with explicit Reload page and verified reload-to-Play recovery. A native pointer attempt was invalidated by developer hot reload; repeat against the final production bundle is required. All checks so far local; no deployment.
+- next: Final lint/build, production-bundle lifecycle/native pointer/resize/screenshot verification and PR preview.
+- blocked: None.
+
+## 2026-09-15 PROGRESS — Production interaction review
+- did: Final production bundle passed the complete gameplay harness, four flavor/image states, return selection/focus and canvas removal. Native pointer at the enlarged edge scored exactly 10. Active collectibles and hit areas resized together to 136px at 320px and 160px at 430px without overflow. Screenshots captured at 390px and 1440px; game size comparison holds four drink positions for review.
+- state: Keyboard focus review found the fixed phone action bar could obscure a radio choice. Added targeted focus scrolling to reveal the choice above the bar. Root metadata now explicitly includes Colattao Coffee House. These final accessibility/metadata edits require a fresh build and focused verification. Production remains unchanged at main 9119168.
+- next: Rebuild, verify unobscured keyboard controls, then commit and create the PR preview.
+- blocked: None; physical mobile devices remain unverified.
+
+## 2026-09-15 VERIFIED — Premium flavor collection
+- did: Final build/TypeScript and targeted ESLint passed. Fresh production bundle confirmed the branded page title, no initial canvas, unobscured keyboard flavor focus and native ArrowRight selection. Complete gameplay harness previously passed on the production bundle; the last source edits only affect landing focus and metadata.
+- state: All four full flavor names/images and menu destination verified. Native larger-edge pointer scored 10; active item/input sizes stay aligned at 136px on 320px and 160px on 430px. Return to flavors removes canvas and restores Play focus. Screenshots: ../premium-final-390.png, ../premium-final-desktop.png, ../premium-final-mobile-flavors.png; staged size comparison ../premium-final-game-390.png. No browser errors. Main remains 9119168, matching the release log.
+- next: Commit the scoped implementation, open PR and verify its Ready preview. Production release requires Anthony's approval of the completed revision.
+- blocked: None technically. Physical mobile devices remain unverified.
