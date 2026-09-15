@@ -1,25 +1,29 @@
 ﻿import Phaser from "phaser";
 import { EventBus } from "@/game/events/EventBus";
 import appTheme from "@/config/theme";
+import { FALL_UI, FALL_ACTION, type FallPhase } from "@/game/events/fallUi";
 
 type FallingKind = "good" | "bad";
 
+const GOOD_ITEMS = appTheme.game.assets.goodItems.map((path, index) => ({
+  key: "colattao-" + (appTheme.game.assets.season ?? "default") + "-drink-" + index,
+  path,
+  label: appTheme.game.assets.goodItemLabels?.[index] ?? "Coffee",
+}));
+
 const ASSET_KEYS = {
-  bg: "colattao-bg",
+  bg: "colattao-bg-" + (appTheme.game.assets.season ?? "default"),
   logo: "colattao-logo",
-  coffee: "item-coffee-cup",
-  croissant: "item-croissant",
-  matcha: "item-matcha-iced",
+
   bad: "item-seafarers-bad",
 } as const;
 
 // â”€â”€ Premium type stacks (Phaser uses web fonts loaded by next/font) â”€â”€
-const FONT_SERIF = '"Playfair Display", Georgia, "Times New Roman", serif';
-const FONT_SANS = 'Inter, ui-sans-serif, system-ui, -apple-system, sans-serif';
+const FONT_SERIF = getComputedStyle(document.body).getPropertyValue("--font-playfair").trim() || '"Playfair Display", Georgia, "Times New Roman", serif';
+const FONT_SANS = getComputedStyle(document.body).getPropertyValue("--font-inter").trim() || 'Inter, ui-sans-serif, system-ui, -apple-system, sans-serif';
 
 // â”€â”€ Brand palette (mirrors globals.css) â”€â”€
 const COLOR_ESPRESSO = 0x1b0e08;
-const COLOR_ESPRESSO_2 = 0x2a1208;
 const COLOR_PARCHMENT = 0xf5e9d0;
 const COLOR_GOLD = 0xd4a24c;
 const COLOR_GOLD_SOFT = 0xe9c988;
@@ -154,35 +158,87 @@ export class DemoScene extends Phaser.Scene {
   private spawnTimer?: Phaser.Time.TimerEvent;
   private countdownTimer?: Phaser.Time.TimerEvent;
   private offRestart?: () => void;
+  private backgroundGroup?: Phaser.GameObjects.Container;
+  private overlayGroup?: Phaser.GameObjects.Container;
+  private overlayRebuild?: () => void;
+  private overlayAction?: () => void;
+  private phase: FallPhase = "start";
+  private reducedMotion = false;
+  private readonly fallingItems = new Set<Phaser.GameObjects.Container>();
+
+  private notifyUi() {
+    this.game.events.emit(FALL_UI, {
+      phase: this.phase, score: this.score, time: this.timeLeft, target: this.level.targetScore,
+    });
+  }
+
+  private clearOverlay() {
+    this.overlayGroup?.each((object: Phaser.GameObjects.GameObject) => this.tweens.killTweensOf(object));
+    this.overlayGroup?.destroy(true);
+    this.overlayGroup = undefined;
+    this.overlayRebuild = undefined;
+    this.overlayAction = undefined;
+  }
+
+  private resizeLayout() {
+    this.drawSceneBackground();
+    this.hudGroup?.destroy(true);
+    this.buildHud();
+    this.refreshHudForLevel();
+    this.hudGroup?.setVisible(this.roundStarted);
+    this.fallingItems.forEach((item) => item.getData("reflow")?.());
+    const rebuild = this.overlayRebuild;
+    if (rebuild) { this.clearOverlay(); rebuild(); }
+  }
 
   constructor() {
     super("DemoScene");
   }
 
   preload() {
-    // Asset paths sourced from the master theme config (texture keys unchanged).
     const assets = appTheme.game.assets;
     this.load.image(ASSET_KEYS.bg, assets.background);
     this.load.image(ASSET_KEYS.logo, appTheme.brand.logoPath);
-    this.load.image(ASSET_KEYS.coffee, assets.goodItems[0]);
-    this.load.image(ASSET_KEYS.croissant, assets.goodItems[1]);
-    this.load.image(ASSET_KEYS.matcha, assets.goodItems[2]);
+    GOOD_ITEMS.forEach((item) => this.load.image(item.key, item.path));
     this.load.image(ASSET_KEYS.bad, assets.badItems[0]);
   }
 
   create() {
+    this.fallingItems.clear();
+    this.overlayGroup = undefined;
+    this.overlayRebuild = undefined;
+    this.overlayAction = undefined;
+    this.phase = "start";
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateMotion = () => {
+      this.reducedMotion = motion.matches;
+      if (this.reducedMotion) this.fallingItems.forEach((item) => {
+        item.each((child: Phaser.GameObjects.GameObject) => this.tweens.killTweensOf(child));
+      });
+    };
+    updateMotion();
+    motion.addEventListener("change", updateMotion);
     this.drawSceneBackground();
     this.offRestart?.();
-    this.offRestart = EventBus.on("RESTART_GAME", () => {
-      this.scene.restart();
-    });
+    this.offRestart = EventBus.on("RESTART_GAME", () => this.scene.restart());
+    const action = () => this.overlayAction?.();
+    this.game.events.on(FALL_ACTION, action);
+    this.scale.on(Phaser.Scale.Events.RESIZE, this.resizeLayout, this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       this.offRestart?.();
       this.offRestart = undefined;
+      motion.removeEventListener("change", updateMotion);
+      this.game.events.off(FALL_ACTION, action);
+      this.scale.off(Phaser.Scale.Events.RESIZE, this.resizeLayout, this);
+      this.fallingItems.forEach((item) => item.destroy());
+      this.fallingItems.clear();
+      this.overlayAction = undefined;
+      this.overlayRebuild = undefined;
     });
     this.resetFullGameState();
     this.buildHud();
     this.showStartScreen();
+    this.notifyUi();
   }
 
   private get level(): LevelConfig {
@@ -194,19 +250,16 @@ export class DemoScene extends Phaser.Scene {
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private drawSceneBackground() {
     const { width, height } = this.scale;
-
+    this.backgroundGroup?.destroy(true);
+    const layer = this.add.container(0, 0).setDepth(-100);
+    this.backgroundGroup = layer;
+    layer.add(this.add.rectangle(width / 2, height / 2, width, height, 0x16130f));
     if (this.textures.exists(ASSET_KEYS.bg)) {
-      this.add.image(width / 2, height / 2, ASSET_KEYS.bg).setDisplaySize(width, height);
-      this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO_2, 0.32);
-      const vignette = this.add.graphics();
-      vignette.fillGradientStyle(COLOR_GOLD, COLOR_GOLD, 0x000000, 0x000000, 0.12, 0.12, 0, 0);
-      vignette.fillRect(0, 0, width, height * 0.45);
-      return;
+      const image = this.add.image(width / 2, height / 2, ASSET_KEYS.bg);
+      image.setScale(Math.max(width / image.width, height / image.height));
+      layer.add(image);
     }
-
-    const bg = this.add.graphics();
-    bg.fillGradientStyle(0x150a05, 0x150a05, 0x4b2412, 0x4b2412, 1);
-    bg.fillRect(0, 0, width, height);
+    layer.add(this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.08));
   }
 
   private resetFullGameState() {
@@ -230,7 +283,8 @@ export class DemoScene extends Phaser.Scene {
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private buildHud() {
     const { width } = this.scale;
-    this.hudGroup = this.add.container(0, 0);
+    this.hudGroup = this.add.container(0, 0).setDepth(10);
+    this.hudGroup.add(this.add.rectangle(width / 2, 64, width, 132, 0x16130f, 0.94));
 
     const chipWidth = 110;
     const chipHeight = 30;
@@ -291,7 +345,7 @@ export class DemoScene extends Phaser.Scene {
 
     // Status line under HUD
     this.statusText = this.add
-      .text(width / 2, 112, "Real Colombian coffee — not the chain.", {
+      .text(width / 2, 112, "Fall favorites. Colattao only.", {
         fontFamily: FONT_SANS,
         fontSize: "11px",
         color: "#F5E9D0",
@@ -308,8 +362,8 @@ export class DemoScene extends Phaser.Scene {
   }
 
   private refreshHudForLevel() {
-    this.scoreText?.setText("0");
-    this.timerText?.setText(String(this.level.durationSec));
+    this.scoreText?.setText(String(this.score));
+    this.timerText?.setText(String(this.timeLeft));
     this.levelNameText?.setText(this.level.name);
     this.targetText?.setText(`Target ${this.level.targetScore}`);
   }
@@ -319,202 +373,79 @@ export class DemoScene extends Phaser.Scene {
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private showStartScreen() {
     const { width, height } = this.scale;
-    this.statusText?.setVisible(false);
     this.hudGroup?.setVisible(false);
-
-    const brandZone = height * 0.382;
-    const playZone = height - brandZone;
-
-    const veil = this.add.graphics();
-    veil.fillGradientStyle(COLOR_ESPRESSO, COLOR_ESPRESSO, COLOR_ESPRESSO_2, COLOR_ESPRESSO_2, 0.55, 0.55, 0, 0);
-    veil.fillRect(0, 0, width, brandZone + 20);
-
-    const eyebrow = this.add
-      .text(width / 2, brandZone * 0.18, "COFFEE HOUSE · VIRGINIA BEACH", {
-        fontFamily: FONT_SANS,
-        fontSize: "10px",
-        color: "#E9C988",
-      })
-      .setOrigin(0.5)
-      .setAlpha(0.85);
-    eyebrow.setLetterSpacing(3);
-
-    let logo: Phaser.GameObjects.Image | undefined;
+    const layer = this.add.container(0, 0).setDepth(20);
+    this.overlayGroup = layer;
+    this.overlayRebuild = () => this.showStartScreen();
+    const compact = height < 470;
+    const text = (y: number, value: string, size: number, color = "#F5E9D0", serif = false) => {
+      const object = this.add.text(width / 2, height * y, value, {
+        fontFamily: serif ? FONT_SERIF : FONT_SANS, fontSize: size + "px", color,
+        align: "center", wordWrap: { width: width - 58 },
+      }).setOrigin(0.5);
+      layer.add(object);
+      return object;
+    };
     if (this.textures.exists(ASSET_KEYS.logo)) {
-      logo = this.add.image(width / 2, brandZone * 0.48, ASSET_KEYS.logo);
-      const frame = this.textures.getFrame(ASSET_KEYS.logo, "__BASE");
-      if (frame) {
-        const targetWidth = 220;
-        const ratio = frame.height / frame.width;
-        logo.setDisplaySize(targetWidth, targetWidth * ratio);
-      }
-    } else {
-      this.add
-        .text(width / 2, brandZone * 0.48, "Colattao", {
-          fontFamily: FONT_SERIF,
-          fontSize: "44px",
-          color: "#F5E9D0",
-        })
-        .setOrigin(0.5);
-    }
-
-    const ruleY = brandZone * 0.78;
-    const rule = this.add.graphics();
-    rule.lineStyle(1, COLOR_GOLD, 0.7);
-    rule.lineBetween(width / 2 - 60, ruleY, width / 2 + 60, ruleY);
-
-    const rushTitle = this.add
-      .text(width / 2, brandZone * 0.92, appTheme.game.title, {
-        fontFamily: FONT_SERIF,
-        fontSize: "30px",
-        color: "#FFF6E2",
-        align: "center",
-      })
-      .setOrigin(0.5);
-    rushTitle.setLetterSpacing(2);
-
-    const subtitle = this.add
-      .text(
-        width / 2,
-        brandZone + playZone * 0.16,
-        "Catch Colattao's drinks & treats 🍓🥭🍵\nDodge the chain coffee 💧\n\nTap to play",
-        {
-          fontFamily: FONT_SANS,
-          fontSize: "12px",
-          color: "#F5E9D0",
-          align: "center",
-          wordWrap: { width: width - 100 },
-          lineSpacing: 4,
-        },
-      )
-      .setOrigin(0.5)
-      .setAlpha(0.9);
-    subtitle.setLetterSpacing(0.6);
-
-    const subtitleBounds = subtitle.getBounds();
-    const subtitleBg = this.add
-      .rectangle(
-        subtitleBounds.centerX,
-        subtitleBounds.centerY,
-        subtitleBounds.width + 26,
-        subtitleBounds.height + 20,
-        COLOR_ESPRESSO,
-        0.58,
-      )
-      .setStrokeStyle(1, COLOR_GOLD, 0.28);
-    subtitleBg.setDepth(subtitle.depth - 1);
-
-    const ctaY = brandZone + playZone * 0.46;
-    const ctaW = 180;
-    const ctaH = 50;
-    const ctaRadius = 16;
-    const halfW = ctaW / 2;
-    const halfH = ctaH / 2;
-
-    const ctaGlow = this.add
-      .rectangle(width / 2, ctaY + 6, ctaW + 18, ctaH + 14, COLOR_GOLD, 0.18)
-      .setAlpha(0.55);
-
-    // Premium golden-ticket face — drawn on a Graphics positioned at its own
-    // centre so the pulse tween below scales it cleanly. Matches the web gold CTA:
-    // gold gradient body, dark text, white gloss, espresso ticket notches,
-    // inner dark hairline ring.
-    const ctaFace = this.add.graphics();
-    ctaFace.setPosition(width / 2, ctaY);
-    // Gold gradient body (cream → gold → cream, top-left to bottom-right).
-    ctaFace.fillGradientStyle(0xf3e4c2, COLOR_GOLD, COLOR_GOLD, 0xf3e4c2, 1, 1, 1, 1);
-    ctaFace.fillRoundedRect(-halfW, -halfH, ctaW, ctaH, ctaRadius);
-    // Top gloss (white fading down).
-    ctaFace.fillGradientStyle(0xffffff, 0xffffff, 0xffffff, 0xffffff, 0.32, 0.32, 0, 0);
-    ctaFace.fillRoundedRect(-halfW + 4, -halfH + 4, ctaW - 8, halfH, ctaRadius - 6);
-    // Outer warm rim.
-    ctaFace.lineStyle(1, 0x4b2412, 0.5);
-    ctaFace.strokeRoundedRect(-halfW, -halfH, ctaW, ctaH, ctaRadius);
-    // Inner dark hairline ring.
-    ctaFace.lineStyle(1, COLOR_ESPRESSO, 0.18);
-    ctaFace.strokeRoundedRect(-halfW + 3, -halfH + 3, ctaW - 6, ctaH - 6, ctaRadius - 4);
-    // Golden-ticket side notches (espresso cutouts on the edges).
-    ctaFace.fillStyle(COLOR_ESPRESSO, 1);
-    ctaFace.fillCircle(-halfW, 0, 7);
-    ctaFace.fillCircle(halfW, 0, 7);
-
-    // Invisible hit area on top — preserves the original interaction/logic.
-    const ctaBg = this.add
-      .rectangle(width / 2, ctaY, ctaW, ctaH, COLOR_GOLD_SOFT, 0)
-      .setInteractive({ useHandCursor: true });
-
-    const ctaHighlight = this.add.rectangle(
-      width / 2,
-      ctaY - ctaH / 2 + 6,
-      ctaW - 30,
-      2,
-      0xffffff,
-      0.5,
-    );
-
-    const ctaLabel = this.add
-      .text(width / 2, ctaY, "Start", {
-        fontFamily: FONT_SERIF,
-        fontSize: "22px",
-        color: "#1D1108",
-      })
-      .setOrigin(0.5);
-    ctaLabel.setLetterSpacing(2);
-
-    const ctaHint = this.add
-      .text(width / 2, ctaY + ctaH / 2 + 18, "Tap to start the round", {
-        fontFamily: FONT_SANS,
-        fontSize: "10px",
-        color: "#E9C988",
-      })
-      .setOrigin(0.5)
-      .setAlpha(0.65);
-    ctaHint.setLetterSpacing(1.5);
-
-    this.tweens.add({
-      targets: [ctaFace, ctaBg, ctaLabel, ctaHighlight],
-      scaleX: 1.025,
-      scaleY: 1.025,
-      duration: 1100,
-      yoyo: true,
-      repeat: -1,
-      ease: "Sine.easeInOut",
+      const logo = this.add.image(width / 2, height * 0.125, ASSET_KEYS.logo);
+      logo.setScale((compact ? 135 : 158) / logo.width);
+      layer.add(logo);
+    } else text(0.125, "Colattao", 32, "#F5E9D0", true);
+    text(0.245, "THE AUTUMN COLLECTION", compact ? 9 : 10, "#D7A175").setLetterSpacing(2.4);
+    text(0.335, appTheme.game.title, compact ? 40 : 48, "#FFF2D9", true);
+    text(0.425, "Four seasonal favorites. One cozy rush.", compact ? 10 : 12, "#D8C4A9");
+    const spacing = Math.min(80, (width - 40) / Math.max(1, GOOD_ITEMS.length));
+    GOOD_ITEMS.forEach((drink, index) => {
+      const x = width / 2 + (index - (GOOD_ITEMS.length - 1) / 2) * spacing;
+      const size = compact ? 58 : 72;
+      const object = this.createCollectibleArt(drink.key, drink.label, size, false);
+      object.setPosition(x, height * 0.555);
+      layer.add(object);
+      layer.add(this.add.text(x, height * 0.67, drink.label.replace(" ", "\n"), {
+        fontFamily: FONT_SANS, fontSize: "10px", color: "#E7CEAC", align: "center", lineSpacing: 2,
+      }).setOrigin(0.5));
     });
+    text(0.755, appTheme.game.subtitle, compact ? 10 : 12, "#F5E9D0");
+    const button = this.add.rectangle(width / 2, height * 0.87, Math.min(214, width - 90), 48, COLOR_GOLD_SOFT)
+      .setStrokeStyle(1, 0x9b6c43).setInteractive({ useHandCursor: true });
+    layer.add(button);
+    text(0.87, "Start the rush", 19, "#29180D", true);
 
-    let startTriggered = false;
-    const startRoundFromOverlay = () => {
-      if (startTriggered) return;
-      startTriggered = true;
-      veil.destroy();
-      eyebrow.destroy();
-      logo?.destroy();
-      rule.destroy();
-      rushTitle.destroy();
-      subtitleBg.destroy();
-      subtitle.destroy();
-      ctaGlow.destroy();
-      ctaFace.destroy();
-      ctaBg.destroy();
-      ctaHighlight.destroy();
-      ctaLabel.destroy();
-      ctaHint.destroy();
+    this.overlayAction = () => {
+      this.clearOverlay();
       this.hudGroup?.setVisible(true);
-      this.statusText?.setVisible(true);
       this.refreshHudForLevel();
       this.startRound();
     };
-
-    this.input.once("pointerdown", startRoundFromOverlay);
-    ctaBg.on("pointerdown", () => {
-      startRoundFromOverlay();
-    });
+    button.on("pointerdown", () => this.overlayAction?.());
   }
 
-  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  // Round loop
-  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  private createCollectibleArt(key: string, label: string, size: number, bad: boolean) {
+    if (this.textures.exists(key)) {
+      const image = this.add.image(0, 0, key);
+      // Keep aspect ratio; later animation is relative to this base scale.
+      image.setScale(size / Math.max(image.width, image.height));
+      return image;
+    }
+    const fallback = this.add.container(0, 0);
+    const cup = this.add.graphics();
+    cup.fillStyle(bad ? 0x923d37 : COLOR_PARCHMENT);
+    cup.fillRoundedRect(-size * 0.32, -size * 0.32, size * 0.56, size * 0.62, 8);
+    cup.lineStyle(5, bad ? 0x923d37 : COLOR_PARCHMENT);
+    cup.strokeCircle(size * 0.29, -size * 0.04, size * 0.15);
+    cup.fillStyle(bad ? 0x451710 : 0x996642);
+    cup.fillEllipse(-size * 0.04, -size * 0.26, size * 0.48, 10);
+    const name = this.add.text(-size * 0.04, 4, bad ? "X" : label.split(" ")[0], {
+      fontFamily: FONT_SANS, fontSize: bad ? "21px" : "10px", color: bad ? "#FFFFFF" : "#3A2317",
+    }).setOrigin(0.5);
+    fallback.add([cup, name]);
+    return fallback;
+  }
+
   private startRound() {
     this.roundStarted = true;
+    this.phase = "playing";
+    this.notifyUi();
     this.configureSpawnTimer();
 
     this.countdownTimer = this.time.addEvent({
@@ -526,6 +457,7 @@ export class DemoScene extends Phaser.Scene {
         }
 
         this.timeLeft -= 1;
+        this.notifyUi();
         this.timerText?.setText(`${this.timeLeft}`);
         if (this.timeLeft > 0 && this.timeLeft % 5 === 0) {
           this.spawnDelayMs = Math.max(
@@ -551,92 +483,58 @@ export class DemoScene extends Phaser.Scene {
   }
 
   private spawnItem() {
-    if (this.gameEnded || !this.roundStarted) {
-      return;
-    }
-
+    if (this.gameEnded || !this.roundStarted) return;
     const cfg = this.level;
-    const { width, height } = this.scale;
-    const x = Phaser.Math.Between(52, width - 52);
     const elapsed = cfg.durationSec - this.timeLeft;
-    const fallBonus = Math.min(
-      cfg.fallSpeedupCapMs,
-      Math.floor(elapsed / 5) * cfg.fallSpeedupStepMs,
-    );
-    // Hard floors low enough for Level 3 to actually feel its speed ramp.
-    const minDuration = Math.max(550, cfg.fallMinMs - fallBonus);
-    const maxDuration = Math.max(850, cfg.fallMaxMs - fallBonus);
-    const fallDuration = Phaser.Math.Between(minDuration, maxDuration);
-    const isBad = Math.random() < cfg.badRate;
-    const kind: FallingKind = isBad ? "bad" : "good";
-
-    const goodKeys: string[] = [ASSET_KEYS.coffee, ASSET_KEYS.croissant, ASSET_KEYS.matcha];
-    const pickedGoodKey = Phaser.Utils.Array.GetRandom(goodKeys);
-    const textureKey = kind === "bad" ? ASSET_KEYS.bad : pickedGoodKey;
-
-    const useImage = this.textures.exists(textureKey);
-    const fallbackEmoji =
-      kind === "bad"
-        ? "💧"
-        : textureKey === ASSET_KEYS.coffee
-          ? "☕"
-          : textureKey === ASSET_KEYS.croissant
-            ? "🥐"
-            : "🍵";
-
-    const itemSize = kind === "bad" ? 74 : 66;
-    const item = useImage
-      ? this.add.image(x, -50, textureKey).setDisplaySize(itemSize, itemSize).setInteractive({ useHandCursor: true })
-      : this.add
-          .text(x, -36, fallbackEmoji, {
-            fontFamily: FONT_SANS,
-            fontSize: "52px",
-          })
-          .setOrigin(0.5)
-          .setInteractive({ useHandCursor: true });
-
-    item.setScale(useImage ? 1 : item.scaleX);
-
-    this.tweens.add({
-      targets: item,
-      angle: Phaser.Math.Between(-10, 10),
-      scaleX: useImage ? 0.96 : 1.02,
-      scaleY: useImage ? 0.96 : 1.02,
-      duration: 550,
-      yoyo: true,
-      repeat: -1,
-      ease: "Sine.easeInOut",
+    const fallBonus = Math.min(cfg.fallSpeedupCapMs, Math.floor(elapsed / 5) * cfg.fallSpeedupStepMs);
+    const fallDuration = Phaser.Math.Between(Math.max(550, cfg.fallMinMs - fallBonus), Math.max(850, cfg.fallMaxMs - fallBonus));
+    const kind: FallingKind = Math.random() < cfg.badRate ? "bad" : "good";
+    const drink = Phaser.Utils.Array.GetRandom(GOOD_ITEMS) ?? { key: "missing-drink", label: "Coffee" };
+    const key = kind === "bad" ? ASSET_KEYS.bad : drink.key;
+    const itemSize = kind === "bad" ? 74 : 76;
+    const item = this.add.container(0, -50).setDepth(2).setSize(itemSize, itemSize);
+    item.setData({ kind, textureKey: key });
+    const art = this.createCollectibleArt(key, drink.label, itemSize, kind === "bad");
+    item.add(art);
+    // Phaser adds displayOrigin when testing a sized container's local hit area.
+    item.setInteractive(new Phaser.Geom.Rectangle(0, 0, itemSize, itemSize), Phaser.Geom.Rectangle.Contains);
+    this.fallingItems.add(item);
+    const progress = { value: 0 };
+    const horizontal = Math.random();
+    const position = () => {
+      item.x = 52 + horizontal * Math.max(0, this.scale.width - 104);
+      item.y = -50 + progress.value * (this.scale.height + 106);
+      if (item.input) item.input.enabled = item.y > 132 + itemSize / 2 && !this.gameEnded;
+    };
+    position();
+    item.setData("reflow", position);
+    if (!this.reducedMotion) {
+      this.tweens.add({ targets: art, angle: Phaser.Math.Between(-8, 8),
+        scaleX: art.scaleX * 0.97, scaleY: art.scaleY * 0.97,
+        duration: 550, yoyo: true, repeat: -1, ease: "Sine.easeInOut" });
+    }
+    item.once(Phaser.GameObjects.Events.DESTROY, () => {
+      this.tweens.killTweensOf(progress);
+      this.tweens.killTweensOf(art);
+      this.fallingItems.delete(item);
     });
-
-    item.on("pointerdown", () => {
-      if (this.gameEnded) {
-        return;
-      }
-
+    item.once("pointerdown", () => {
+      if (this.gameEnded) return;
+      const { x, y } = item;
       item.destroy();
-
       if (kind === "bad") {
-        this.showFloatingFeedback(item.x, item.y, "Not Colattao.", "#7f1d1d");
+        this.showFloatingFeedback(x, y, "Not Colattao.", "#F6BAA2");
         this.endLevel(false, getBadLossMessage());
         return;
       }
-
       this.score += 10;
-      this.scoreText?.setText(`${this.score}`);
-      this.showFloatingFeedback(item.x, item.y, "+10", "#1f3a1f");
-
-      if (this.score >= this.level.targetScore) {
-        this.endLevel(true);
-      }
+      this.scoreText?.setText(String(this.score));
+      this.notifyUi();
+      this.showFloatingFeedback(x, y, "+10", "#F5DCA7");
+      if (this.score >= this.level.targetScore) this.endLevel(true);
     });
-
-    this.tweens.add({
-      targets: item,
-      y: height + 56,
-      duration: fallDuration,
-      ease: "Linear",
-      onComplete: () => item.destroy(),
-    });
+    this.tweens.add({ targets: progress, value: 1, duration: fallDuration, ease: "Linear",
+      onUpdate: position, onComplete: () => item.destroy() });
   }
 
   private showFloatingFeedback(x: number, y: number, text: string, color: string) {
@@ -645,8 +543,8 @@ export class DemoScene extends Phaser.Scene {
         fontFamily: FONT_SERIF,
         fontSize: "22px",
         color,
-        stroke: "#FFF6E2",
-        strokeThickness: 3,
+        stroke: "#29180D",
+        strokeThickness: 2,
       })
       .setOrigin(0.5);
 
@@ -669,6 +567,7 @@ export class DemoScene extends Phaser.Scene {
     }
 
     this.gameEnded = true;
+    this.fallingItems.forEach((item) => item.destroy());
     this.spawnTimer?.remove(false);
     this.countdownTimer?.remove(false);
 
@@ -676,6 +575,8 @@ export class DemoScene extends Phaser.Scene {
       this.totalScore += this.score;
       const isFinal = this.currentLevelIndex >= LEVELS.length - 1;
       if (isFinal) {
+        this.phase = "won";
+        this.notifyUi();
         this.statusText?.setText(appTheme.game.copy.winMessage);
         this.time.delayedCall(700, () => {
           EventBus.emit("GAME_WON", {
@@ -698,10 +599,13 @@ export class DemoScene extends Phaser.Scene {
   }
 
   private showLevelCompleteOverlay() {
+    this.phase = "level-complete";
+    this.notifyUi();
+    const previousObjects = new Set(this.children.list);
     const { width, height } = this.scale;
     const nextLevel = LEVELS[this.currentLevelIndex + 1];
 
-    const dim = this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.6);
+    this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.6);
 
     const eyebrow = this.add
       .text(width / 2, height / 2 - 80, "LEVEL COMPLETE", {
@@ -756,22 +660,17 @@ export class DemoScene extends Phaser.Scene {
       .setOrigin(0.5);
     btnLabel.setLetterSpacing(1.5);
 
-    btnBg.on("pointerdown", () => {
-      dim.destroy();
-      eyebrow.destroy();
-      msg.destroy();
-      sub.destroy();
-      btnBg.destroy();
-      btnLabel.destroy();
-      this.advanceToNextLevel();
-    });
+    this.overlayGroup = this.add.container(0, 0, this.children.list.filter((o) => !previousObjects.has(o))).setDepth(20);
+    this.overlayRebuild = () => this.showLevelCompleteOverlay();
+    this.overlayAction = () => { this.clearOverlay(); this.advanceToNextLevel(); };
+    btnBg.on("pointerdown", () => this.overlayAction?.());
   }
 
   private advanceToNextLevel() {
     this.currentLevelIndex += 1;
     this.resetLevelState();
     this.refreshHudForLevel();
-    this.statusText?.setText("Real Colombian coffee — not the chain.");
+    this.statusText?.setText("Fall favorites. Colattao only.");
     this.statusText?.setVisible(true);
     this.startRound();
   }
@@ -782,12 +681,15 @@ export class DemoScene extends Phaser.Scene {
    * No level-progression helper text (that lives on the level-complete overlay).
    */
   private showLossOverlay(message: string) {
+    this.phase = "lost";
+    this.notifyUi();
+    const previousObjects = new Set(this.children.list);
     const { width, height } = this.scale;
 
-    const dim = this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.65);
+    this.add.rectangle(width / 2, height / 2, width, height, COLOR_ESPRESSO, 0.65);
 
     const msgY = height / 2 - 60;
-    const msg = this.add
+    this.add
       .text(width / 2, msgY, message, {
         fontFamily: FONT_SERIF,
         fontSize: "20px",
@@ -816,13 +718,9 @@ export class DemoScene extends Phaser.Scene {
       .setOrigin(0.5);
     btnLabel.setLetterSpacing(1.5);
 
-    btnBg.on("pointerdown", () => {
-      dim.destroy();
-      msg.destroy();
-      btnBg.destroy();
-      btnLabel.destroy();
-      this.scene.restart();
-    });
+    this.overlayGroup = this.add.container(0, 0, this.children.list.filter((o) => !previousObjects.has(o))).setDepth(20);
+    this.overlayRebuild = () => this.showLossOverlay(message);
+    this.overlayAction = () => { this.clearOverlay(); this.scene.restart(); };
+    btnBg.on("pointerdown", () => this.overlayAction?.());
   }
 }
-

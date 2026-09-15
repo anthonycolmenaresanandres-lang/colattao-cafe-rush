@@ -2,9 +2,7 @@
  * Master theme config — single source of truth for the white-label
  * Café Rush template.
  *
- * Phase 1 (this file): define the shape and export the current Colattao
- * values. No pages or Phaser scenes consume this yet — that refactor
- * comes in a later pass.
+ * Consumed by the game scene and its surrounding presentation.
  *
  * Privacy:
  *   No personal customer data is collected by this app. Vercel Web
@@ -41,6 +39,8 @@ export interface GameAssetsConfig {
   player: string;
   /** Good catchable items shown during gameplay. */
   goodItems: string[];
+  /** Short labels for the matching collectible images and their fallbacks. */
+  goodItemLabels?: string[];
   /** Bad / instant-loss items shown during gameplay. */
   badItems: string[];
   /** Background scene image used inside the Phaser canvas. */
@@ -117,22 +117,24 @@ export const appTheme: ThemeConfig = {
 
   game: {
     gameId: "colattao-rush",
-    title: "Café Rush",
-    subtitle: "Catch the treats. Avoid the chain.",
+    title: "Fall Rush",
+    subtitle: "Tap the fall drinks. Avoid the chain coffee.",
     assets: {
       // TODO: verify asset path — no dedicated "player" sprite today; the
       // current build uses tap-on-falling-items mechanics without an avatar.
       player: "/assets/colattao/logo/colattao-logo.png",
       goodItems: [
-        "/assets/colattao/game/stickers/original-sticker.png",
-        "/assets/colattao/game/stickers/strawberry-sticker.png",
-        "/assets/colattao/game/stickers/mango-sticker.png",
+        "/assets/colattao/game/fall/pumpkin-pie.webp",
+        "/assets/colattao/game/fall/caramel-apple.webp",
+        "/assets/colattao/game/fall/campfire.webp",
+        "/assets/colattao/game/fall/maple-pecan.webp",
       ],
+      goodItemLabels: ["Pumpkin Pie", "Caramel Apple", "Campfire", "Maple Pecan"],
       badItems: [
         "/assets/colattao/items/seafarers-bad.png",
       ],
-      background: "/assets/colattao/backgrounds/colattao-bg-summer.png",
-      season: "summer",
+      background: "/assets/colattao/backgrounds/colattao-bg-fall.webp",
+      season: "fall",
       // Reference-only — placeholders, not active in gameplay yet.
       seasonalStickers: [
         "/assets/colattao/game/stickers/original-sticker.png",
