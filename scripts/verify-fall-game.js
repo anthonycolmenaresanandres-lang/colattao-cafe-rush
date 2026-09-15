@@ -34,11 +34,12 @@
     const art = item.list[0];
     const before = scene.score;
     assert(item.getData("textureKey") === "colattao-fall-drink-" + index, "Every configured drink spawns");
-    assert(art.displayWidth <= 76.01 && art.displayHeight <= 76.01, "Sprite respects game size");
+    assert(item.width === 112 && item.height === 112, "Drink has the larger tap area");
+    assert(art.displayWidth <= 112.01 && art.displayHeight <= 112.01, "Sprite respects game size");
     assert(item.input.hitArea.contains(item.displayOriginX, item.displayOriginY), "Tap area contains the visible center");
-    assert(item.input.hitArea.contains(item.displayOriginX + 30, item.displayOriginY + 30), "Tap area covers the lower-right of the drink");
+    assert(item.input.hitArea.contains(item.displayOriginX + 50, item.displayOriginY + 50), "Tap area covers the enlarged lower-right of the drink");
     await wait(120);
-    assert(art.displayWidth <= 76.01 && art.displayHeight <= 76.01, "Wobble preserves base scale");
+    assert(art.displayWidth <= 112.01 && art.displayHeight <= 112.01, "Wobble preserves base scale");
     drinks.push({ key: item.getData("textureKey"), width: art.displayWidth, height: art.displayHeight });
     item.emit("pointerdown");
     assert(scene.score === before + 10, "One good tap adds exactly ten");
