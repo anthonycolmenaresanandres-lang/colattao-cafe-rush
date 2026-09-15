@@ -319,3 +319,33 @@
 - state: Tea & More follows Matcha directly, verified visually. Actual affogato items remain. The game promo's three images load and its link reaches /menu#fall-drinks; no browser page errors. Game/reward functions and autumn motion are unchanged.
 - next: Commit, inspect preview checks, merge and confirm the public menu under Anthony's existing live authorization.
 - blocked: None. Local screenshot: ../menu-cleanup-tea.png.
+
+## 2026-09-15 IN — Implement Colattao Fall Rush
+- did: Anthony approved the researched recommendation: "Keep going approved". Rechecked remote main 5c5f156 and created isolated worktree/branch codex/colattao-fall-rush. The approved plan is in the parent workspace COLATTAO_FALL_GAME_PLAN.md.
+- state: Building the recommended four-drink tap-to-collect autumn game through a verified preview. No CODEX_QUEUE.md exists here; this direct request is the queue. Existing level/reward behavior and QR routes are protected.
+- next: Prepare fall artwork, implement focused theme/scene/layout/copy edits, verify gameplay/mobile/fallbacks/build, create the PR and Vercel preview for Anthony. Production merge awaits approval of the concrete replacement.
+- blocked: None.
+
+## 2026-09-15 PROGRESS — Four-drink fall implementation
+- did: Implemented configuration-driven four-item loading, base-scale preservation, primitive cup fallbacks, scene/overlay resize handling, bounded item/tween cleanup, pause/hidden-tab controls, fall start-screen artwork and copy, reserved menu-promo space, and updated menu game-link labels. Kept all level constants and win/replay contracts intact.
+- state: All four dedicated 256x256 sprites have actual alpha; combined size 93,410 bytes. Fall background is 182,022 bytes versus the old 3,704,549 bytes. Two checkerboard Campfire outputs were rejected; a fresh transparent variant succeeded. Initial targeted lint has zero errors and four cleanup warnings.
+- next: Inspect actual mobile presentation, verify deterministic four-item/scoring/fallback/resize/pause/replay behavior and fix any findings, then final build and Vercel preview.
+- blocked: None.
+
+## 2026-09-15 VERIFIED — Fall game ready for preview
+- did: Corrected the sized-container pointer offset found by native input, added hit-area regressions, and fixed 320px promo wrapping. Targeted lint has zero warnings/errors; production build/TypeScript passed. Browser checks cover four distinct collectibles, 360px sizing, +10 scoring, all three targets/timers, 600-point completion/replay, bad tap, timeout, pause/resume and listener cleanup.
+- state: Native pointer scoring and resize state preservation passed. Real 82,948ms hidden-tab freeze retained time 20; reduced motion and all-assets-blocked playable fallback passed. Menu names/anchors/game link remain valid. Artwork provenance and exact accepted prompts are in docs/COLATTAO_FALL_RUSH.md.
+- next: Finish production-bundle smoke checks, commit the scoped implementation, push the branch and create a PR; verify the Vercel preview. Request approval of the concrete preview before production merge.
+- blocked: No implementation blocker. Physical mobile Safari/Android remain unverified; no hardware-performance guarantee claimed.
+
+## 2026-09-15 PROGRESS — Production verification and landscape correction
+- did: Full scripted gameplay verification passed against the production bundle. Stress sample at 390x844 recorded 18.0ms median/18.1ms p95, matching the live summer game in the same browser environment. First 844x390 review found cramped content; added a 560px minimum page height and verified natural scrolling and readable layout.
+- state: Final source change is limited to that page-height class. Final rebuild is running. No production deployment or merge performed.
+- next: Confirm final build, commit and push only the scoped files, then verify the preview deployment and open the PR for Anthony.
+- blocked: None.
+
+## 2026-09-15 READY — Final fall build passed
+- did: Final build/TypeScript passed after the landscape adjustment; targeted page lint and diff checks passed. Protected menu data, reward configuration, win/replay event files and completion card have no diffs. Other catalog scenes do not consume the changed game theme fields.
+- state: Ready to publish the approved branch preview. Local production gameplay verification and visual evidence are recorded; no production authorization has been inferred.
+- next: Commit the scoped files, push the feature branch, open the PR and verify its deployment/commit.
+- blocked: None.
