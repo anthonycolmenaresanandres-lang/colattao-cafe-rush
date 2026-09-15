@@ -302,3 +302,15 @@ customer header.
 - state: Ready to merge the scoped autumn branch under Anthony's explicit approval; original checkouts remain unchanged.
 - next: Open and merge the PR, then confirm the production deployment and public assets before checking out.
 - blocked: None.
+
+## 2026-09-15 MERGED — Realistic autumn menu
+- did: Merged PR #11 into main using the verified head e2d520e; GitHub merge commit 38364213e71276210844b097979102e5aa2311c3.
+- state: Production auto-deployment is pending verification. PR: https://github.com/anthonycolmenaresanandres-lang/colattao-cafe-rush/pull/11.
+- next: Confirm Vercel production Ready, public /menu, both leaf assets and browser rendering.
+- blocked: None.
+
+## 2026-09-15 OUT — Realistic autumn menu live
+- did: Merged PR #11 as 38364213e71276210844b097979102e5aa2311c3 and verified Vercel production deployment dpl_3BdbStwMeGWopg9CxfkA8gKhfCTi is Ready with the public alias.
+- state: LIVE https://colattao-cafe-rush.vercel.app/menu. Public browser verification shows four fall drinks, ten realistic leaves, zero butterfly canvases, no horizontal overflow and no page errors. Both transparent WebP assets return HTTP 200 with image/webp (13,584 and 12,406 bytes).
+- next: Optional physical iPhone visual review; maintain the existing motion/data behavior when adjusting future art. Artifact paths and generation prompts are in docs/COLATTAO_AUTUMN.md.
+- blocked: None. Anthony's realistic-leaf correction and live merge request are complete.

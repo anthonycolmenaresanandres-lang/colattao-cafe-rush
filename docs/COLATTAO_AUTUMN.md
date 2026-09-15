@@ -118,3 +118,13 @@ and adjust foliage size or spacing only if needed. Preserve geometry, motion sta
 data, game/reward logic, guest notes, auth and backend. Run targeted lint and
 `npm.cmd run build`, recheck mobile motion, and provide a Vercel preview URL.
 Do not publish or merge to production without Anthony's explicit approval.
+
+## Live release — 2026-09-15
+
+- Live: https://colattao-cafe-rush.vercel.app/menu
+- PR: https://github.com/anthonycolmenaresanandres-lang/colattao-cafe-rush/pull/11
+- Merge commit: 38364213e71276210844b097979102e5aa2311c3.
+- Vercel production deployment dpl_3BdbStwMeGWopg9CxfkA8gKhfCTi: Ready.
+- Public 390px browser verification: four fall items, ten realistic leaves, both
+  transparent WebP assets HTTP 200, zero butterfly canvases, no horizontal overflow
+  and no page errors. Existing sign-in-free production access is preserved.
