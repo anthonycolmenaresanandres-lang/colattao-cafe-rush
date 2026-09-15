@@ -259,3 +259,15 @@
 - state: Ready for the authorized live merge. Menu route/data/artwork are byte-identical to existing production; source changes are limited to the isolated autumn system and its tests/docs.
 - next: Commit, push, inspect preview checks, open and merge the PR, then verify the production alias and real live motion.
 - blocked: None for deployment. Physical Safari hardware was not available; Chromium verification and the remaining limitation are documented.
+
+## 2026-09-15 MERGED — Fluid autumn motion
+- did: Vercel preview dpl_C69mKDJD9KYAUSvkQZiqj8jrG4DK is Ready and GitHub checks passed. Merged PR #12 at verified head ba4ef730e32526e534840970130a1dcf8a153008 under Anthony's explicit live authorization.
+- state: Main merge commit d7bda06e281c00406b65d166f7f78360dbc1ce24. Preview retains existing Vercel login protection; production-mode behavior was verified locally.
+- next: Confirm the automatic production deployment and test public /menu motion before checking OUT.
+- blocked: None.
+
+## 2026-09-15 OUT — Fluid autumn motion live
+- did: Merged PR #12 as d7bda06e281c00406b65d166f7f78360dbc1ce24. Verified Vercel production dpl_3s7Qd9QWbXrLD7mMVjKmCu8an9xE is Ready and owns the public alias.
+- state: LIVE https://colattao-cafe-rush.vercel.app/menu. Public 390px browser check observed the same leaf identity from loosen through full-opacity bottom landing, twelve pool slots, four fall items, valid Menu JSON-LD, every anchor target and zero horizontal overflow or browser errors. Both transparent WebP assets returned HTTP 200.
+- next: Anthony can review the live feel. Optional physical Safari check remains the only device-specific follow-up; no required implementation or publishing work remains.
+- blocked: None. Video capture was policy-blocked; frame measurements and screenshots provided verification instead.

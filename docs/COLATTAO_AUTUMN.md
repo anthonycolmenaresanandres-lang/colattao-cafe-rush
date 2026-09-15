@@ -166,3 +166,13 @@ Chromium emulation does not reproduce every Safari browser-chrome behavior.
   autumn-fluid-pile.png, autumn-fluid-320.png and autumn-fluid-desktop.png.
   Video recording was blocked by automatic approval review; frame traces and screenshots
   supplied the visual/motion evidence. Mobile checks use Chromium, not physical Safari.
+
+## Fluid motion live release — 2026-09-15
+
+- Public URL: https://colattao-cafe-rush.vercel.app/menu
+- PR #12: https://github.com/anthonycolmenaresanandres-lang/colattao-cafe-rush/pull/12
+- Merge: d7bda06e281c00406b65d166f7f78360dbc1ce24; implementation head ba4ef73.
+- Production: dpl_3s7Qd9QWbXrLD7mMVjKmCu8an9xE, Ready, public alias verified.
+- Live browser: full-opacity same-identity descent and bottom landing; twelve pool slots,
+  four fall entries, valid Menu JSON-LD, valid anchors, no horizontal overflow or page errors.
+  Both realistic leaf assets return HTTP 200. Screenshot: ../autumn-fluid-live.png.
