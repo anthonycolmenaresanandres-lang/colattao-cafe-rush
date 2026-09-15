@@ -20,6 +20,33 @@ export interface MenuCategory {
 
 export const menuCategories: MenuCategory[] = [
   {
+    id: "fall-drinks",
+    title: "Fall Drinks",
+    note: "Seasonal favorites · Ask us for prices",
+    items: [
+      {
+        name: "Pumpkin Pie Latte",
+        price: "Ask",
+        description: "Pumpkin sauce, shortbread syrup, spiced cold foam.",
+      },
+      {
+        name: "Caramel Apple Latte",
+        price: "Ask",
+        description: "Caramel sauce, apple syrup, cinnamon powder.",
+      },
+      {
+        name: "Campfire Cappuccino or Matcha",
+        price: "Ask",
+        description: "Marshmallow syrup, dark chocolate, roasted marshmallow topping.",
+      },
+      {
+        name: "Maple Pecan Latte",
+        price: "Ask",
+        description: "Salted maple syrup, butter pecan sauce, cold foam.",
+      },
+    ],
+  },
+  {
     id: "espresso",
     title: "Espresso & Coffee",
     items: [

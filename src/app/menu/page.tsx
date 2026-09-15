@@ -3,7 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import appTheme from "@/config/theme";
-import ColattaoButterflyLogoMotion from "@/components/ColattaoButterflyLogoMotion";
+import AutumnAtmosphere from "@/components/autumn/AutumnAtmosphere";
+import FallPromo from "@/components/autumn/FallPromo";
+import autumnStyles from "@/components/autumn/autumn.module.css";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
 import ChurroAffogatoBanner from "@/components/ChurroAffogatoBanner";
 import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
@@ -296,7 +298,7 @@ function BottomSignature() {
 
 export default function MenuPage() {
   return (
-    <main className="relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]">
+    <main className={`${autumnStyles.page} relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]`}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildMenuJsonLd()) }}
@@ -332,7 +334,7 @@ export default function MenuPage() {
           </Link>
         </nav>
       </header>
-      <ChurroAffogatoBanner />
+      <FallPromo />
       <div className="pointer-events-none absolute inset-0 z-0">
         <Image
           src="/assets/colattao/menu/menu-eldorado-04.png"
@@ -344,16 +346,6 @@ export default function MenuPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1b0e08]/25 via-transparent to-[#1b0e08]/30" />
       </div>
-
-      <section
-        className="relative z-10"
-        aria-label="Colattao Coffee House logo transforming into the menu"
-      >
-        <ColattaoButterflyLogoMotion
-          motionSource="scroll"
-          showReplay={false}
-        />
-      </section>
 
       <div className="relative z-10 flex-1 space-y-4 px-4 py-2">
         {/* Deep-link target so /menu#menu (e.g. from the R&D lab) lands on the categories. */}
@@ -402,10 +394,13 @@ export default function MenuPage() {
           const accent = CATEGORY_ACCENTS[category.id];
           const texture = CATEGORY_TEXTURES[category.id] ?? DEFAULT_CATEGORY_TEXTURE;
           return (
+            <div key={category.id} className={autumnStyles.cardWrap} data-fall-card={category.id === "fall-drinks" ? "" : undefined}>
+              {category.id === "tea" ? <ChurroAffogatoBanner /> : null}
+              <div className={autumnStyles.cardSurface}>
+              {category.id === "fall-drinks" ? <AutumnAtmosphere /> : null}
             <section
-              key={category.id}
               id={category.id}
-              className="menu-card relative scroll-mt-32 overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 pb-5 pt-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35"
+              className={`${category.id === "fall-drinks" ? autumnStyles.fallCard : ""} menu-card relative scroll-mt-32 overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 pb-5 pt-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35`}
             >
               {/* El Dorado board image is now clearly visible as the card surface. */}
               <div className="pointer-events-none absolute inset-0 z-0">
@@ -551,6 +546,8 @@ export default function MenuPage() {
                 })}
               </ul>
             </section>
+              </div>
+            </div>
           );
         })}
 
