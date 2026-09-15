@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { fallDuration, landingPose, pathVelocity, samplePath } from "../src/components/autumn/leafMotion.ts";
+import { fallDuration, landingPose, pathVelocity, releaseDelay, samplePath, POOL_SIZE } from "../src/components/autumn/leafMotion.ts";
 
 const makePath = (distance, velocity = 30) => ({
   from: { x: 10, y: 100, angle: -70, scale: 1 },
@@ -8,6 +8,14 @@ const makePath = (distance, velocity = 30) => ({
   velocity: { x: 0, y: velocity, angle: 0 },
   endVelocity: { x: 0, y: 90, angle: 0 },
   duration: fallDuration(distance), sway: 4, rock: 19, direction: -1,
+});
+
+test("the finite cascade releases every leaf in under two seconds", () => {
+  assert.equal(POOL_SIZE, 10);
+  const delays = Array.from({ length: POOL_SIZE }, (_, index) => releaseDelay(index));
+  assert.equal(delays[0], 0);
+  assert.ok(delays.at(-1) < 2000);
+  assert.ok(delays.every((value, index) => index === 0 || value > delays[index - 1]));
 });
 
 test("descent never reverses, including short paths after viewport changes", () => {

@@ -7,6 +7,7 @@ import AutumnAtmosphere from "@/components/autumn/AutumnAtmosphere";
 import FallPromo from "@/components/autumn/FallPromo";
 import autumnStyles from "@/components/autumn/autumn.module.css";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
+import FallDrinkItem from "@/components/autumn/FallDrinkItem";
 import ChurroAffogatoBanner from "@/components/ChurroAffogatoBanner";
 import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
 
@@ -402,7 +403,8 @@ export default function MenuPage() {
               id={category.id}
               className={`${category.id === "fall-drinks" ? autumnStyles.fallCard : ""} menu-card relative scroll-mt-32 overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 pb-5 pt-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35`}
             >
-              {/* El Dorado board image is now clearly visible as the card surface. */}
+              {/* Keep the original textures on the other categories. */}
+              {category.id !== "fall-drinks" && (
               <div className="pointer-events-none absolute inset-0 z-0">
                 <Image
                   src={texture}
@@ -415,8 +417,9 @@ export default function MenuPage() {
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,237,215,0.55)_0%,rgba(248,237,215,0.38)_100%)]" />
                 <div className="absolute inset-0 ring-1 ring-inset ring-[#4b2412]/16" />
               </div>
+              )}
 
-              <div className="relative z-10 text-center">
+              <div className={`relative z-10 text-center ${category.id === "fall-drinks" ? autumnStyles.fallHeading : ""}`}>
                 <p
                   className="text-[10px] uppercase text-[var(--col-gold-deep)]"
                   style={{ letterSpacing: "0.32em" }}
@@ -447,8 +450,9 @@ export default function MenuPage() {
                 )}
               </div>
 
-              <ul className="relative z-10 mt-4 space-y-3">
+              <ul className={`relative mt-4 space-y-3 ${category.id === "fall-drinks" ? "" : "z-10"}`}>
                 {category.items.map((item) => {
+                  if (category.id === "fall-drinks") return <FallDrinkItem key={item.name} item={item} />;
                   const itemDetail = ITEM_DETAILS[item.name];
                   const hasCombinedDetails =
                     Boolean(itemDetail) ||

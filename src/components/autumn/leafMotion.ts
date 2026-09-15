@@ -5,9 +5,11 @@ export type Path = {
   from: Pose; to: Pose; velocity: Velocity; duration: number;
   endVelocity?: Velocity; sway: number; rock: number; direction: number;
 };
-export const MAX_AIRBORNE = 2;
+// One finite ten-leaf cascade, never an emitter. A replay clears the same pool.
+export const MAX_AIRBORNE = 10;
 export const MAX_LANDED = 10;
-export const POOL_SIZE = MAX_LANDED + MAX_AIRBORNE;
+export const POOL_SIZE = MAX_AIRBORNE;
+export const releaseDelay = (index: number) => index * 150 + index * index * 4;
 export const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
 export const fallDuration = (distance: number) => clamp(distance / 120 * 1000 + 850, 2800, 6800);
 
