@@ -399,3 +399,21 @@ customer header.
 - state: LIVE https://colattao-cafe-rush.vercel.app/menu. A fresh public browser trace observed all ten unique leaves detach on normal scrolling, zero backward movement and zero remaining on the rim, eight corner landings and a completed cascade. All four realistic drink images and the owner's original poster return HTTP 200; four exact names, valid anchors, no horizontal overflow and no application page errors.
 - next: Anthony can scroll or tap Let leaves fall, then Replay leaves, to review. Physical Safari remains an optional device-specific review; no required implementation or publishing work remains.
 - blocked: None. Artwork provenance, final prompts, source paths and verification are in docs/COLATTAO_OWNER_FALL.md.
+
+## 2026-09-15 IN — Remove retired seasonal menu and affogato promo
+- did: Anthony requested removal of Seasonal Drinks and the affogato box. Inspected the menu data, server rendering, category navigation, JSON-LD and banner mount; synchronized the scoped worktree with the verified owner-fall production release.
+- state: Removing the older Seasonal Drinks category and Churro Affogato promotional banner. The new Fall Drinks collection and the actual Tea & More menu entries remain. No CODEX_QUEUE.md exists here; the direct request is the active queue.
+- next: Make two targeted source edits, verify build/mobile navigation/data, then publish under the existing live-merge authorization.
+- blocked: None.
+
+## 2026-09-15 PROGRESS — Menu removal and linked promo
+- did: Removed the retired category, its special flavor renderer and the Churro Affogato banner mount. Targeted lint and the initial production build passed.
+- state: Dependency search found the game-page promo still linked to /menu#seasonal-drinks. Updated only that promo's destination, copy and images to the current Fall Drinks collection in src/app/page.tsx; game and reward functions are unchanged.
+- next: Repeat final lint/build for the additional linked edit, then browser and deployment verification.
+- blocked: None.
+
+## 2026-09-15 VERIFIED — Retired menu cleanup ready to release
+- did: Final production build/TypeScript passed; targeted ESLint has zero errors and the pre-existing game-promo img warning. Browser checks at 320px and 390px confirm seven categories, four exact Fall Drinks, no retired category/banner, valid anchors and matching Menu JSON-LD, guest-note/footer links and no horizontal overflow.
+- state: Tea & More follows Matcha directly, verified visually. Actual affogato items remain. The game promo's three images load and its link reaches /menu#fall-drinks; no browser page errors. Game/reward functions and autumn motion are unchanged.
+- next: Commit, inspect preview checks, merge and confirm the public menu under Anthony's existing live authorization.
+- blocked: None. Local screenshot: ../menu-cleanup-tea.png.
