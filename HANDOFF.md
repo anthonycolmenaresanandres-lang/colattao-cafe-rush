@@ -259,3 +259,28 @@
 - **Canvas Scaling:** The Phaser game canvas dynamically resizes using `calc(100dvh - 56px)` to compensate for the unified customer header.
  unified customer header.
 customer header.
+
+## 2026-09-15 IN — Colattao autumn menu
+- did: Inspected current main d2dbac4 and compared the stale working checkout; confirmed the handoff identifies Colattao Rush /menu as the customer source of truth.
+- state: Isolated branch codex/colattao-autumn-menu from current origin/main. Original checkouts and their unrelated changes remain intact.
+- next: Add four exact fall drinks with Ask pricing, a compact seasonal promo, and an isolated SVG leaf ledge controller. Preserve game, rewards, note flow, footer, metadata and data-driven anchors.
+- blocked: None for implementation; production publish/merge requires Anthony's explicit approval.
+
+## 2026-09-15 PROGRESS — Colattao autumn menu
+- did: Added fall-drinks data, replaced the menu butterfly mount with a static compact FallPromo, retained the Churro Affogato promo beside Tea & More, and added the isolated SVG atmosphere/controller.
+- state: No new packages. Existing menu items, category ids, pricing, JSON-LD generation, game link, guest notes, and footer are preserved. Original butterfly component remains available outside this route.
+- next: Verify mobile rendering, exact detachment, reverse scroll, two-leaf cap, pause/reduced motion, cleanup, anchors and final build.
+- blocked: None.
+
+## 2026-09-15 VERIFIED — Colattao autumn menu
+- did: Passed targeted lint, production build/TypeScript, mobile width checks (320/390/430 plus desktop), static data preservation, native fall anchor, one/two-leaf detachment, DOM identity, reverse scroll, pause, reduced motion, and zero idle/offscreen frame checks.
+- state: /menu remains statically rendered. Existing game route loads. Documentation added in docs/COLATTAO_AUTUMN.md. Preview deployment initiated at https://colattao-cafe-rush-cvdq11d4w.vercel.app; production unchanged.
+- next: Verify preview readiness and deployed /menu, then check out with final scope.
+- blocked: None; physical iOS device verification is not available in this session.
+
+## 2026-09-15 OUT — Colattao autumn menu
+- did: Completed the isolated autumn implementation and documentation. Preview is Ready: https://colattao-cafe-rush-cvdq11d4w.vercel.app/menu (existing Vercel sign-in protection retained).
+- state: Branch codex/colattao-autumn-menu contains only scoped menu/data, new autumn components/SVG, and documentation/log changes. Original Colattao checkout is unchanged; remote production main remains d2dbac4. No production deployment or merge, no backend changes, and no new dependencies.
+- verification: Final targeted lint and production build/TypeScript passed. Local production /menu shows four fall drinks, ten leaves, no butterfly canvas, no overflow or browser page errors. Chromium checks cover 320/390/430/768px, anchors, JSON-LD, data preservation, one/two-leaf cap, pause, reverse scrolling, reduced motion, and idle/offscreen suspension.
+- next: Anthony reviews the protected preview. Swap the one placeholder SVG after final art is approved; publish to production only on explicit instruction. Full map, removal steps and next prompt are in docs/COLATTAO_AUTUMN.md.
+- blocked: None for requested implementation. Physical iOS verification was not available; deployed browser review requires the existing Vercel sign-in.
