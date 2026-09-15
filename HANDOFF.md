@@ -314,3 +314,46 @@ customer header.
 - state: LIVE https://colattao-cafe-rush.vercel.app/menu. Public browser verification shows four fall drinks, ten realistic leaves, zero butterfly canvases, no horizontal overflow and no page errors. Both transparent WebP assets return HTTP 200 with image/webp (13,584 and 12,406 bytes).
 - next: Optional physical iPhone visual review; maintain the existing motion/data behavior when adjusting future art. Artifact paths and generation prompts are in docs/COLATTAO_AUTUMN.md.
 - blocked: None. Anthony's realistic-leaf correction and live merge request are complete.
+
+## 2026-09-15 IN — Smooth leaf motion planning
+- did: Anthony requested a better motion plan resembling the previous butterfly movement. Inspected the current leaf controller and butterfly easing/curves; confirmed live main remains 3836421.
+- state: Planning only. Current application source matches production; no runtime edits or deployment requested for this pass.
+- findings: 140ms loosen, 1900ms fall, approximately half opacity by 418ms, lateral drift derivative discontinuity at 456ms, all active leaves hidden on resize, and only three edge leaves available per visit. Live synthetic resize probe confirmed two falling leaves become spent immediately.
+- next: Save a concrete smooth-motion plan with lifecycle fixes, timing, scoped files and perceptual acceptance checks.
+- blocked: None.
+
+## 2026-09-15 OUT — Smooth leaf motion plan
+- did: Saved docs/COLATTAO_LEAF_MOTION_PLAN.md with code-grounded causes, butterfly motion reference, 3.6–4.8s descent, continuous curves, late fade, filtered wind, resize handling and hidden-only repeat-visit recovery.
+- state: Planning deliverable complete. Only the plan and handoff logs changed; application source and production are unchanged.
+- next: Implement the scoped controller/math changes when Anthony directs; verify a recorded Vercel preview with particular attention to native mobile viewport changes and visual continuity.
+- blocked: None for planning. Physical mobile testing remains an implementation verification item.
+
+## 2026-09-15 IN — Full-screen descent and bottom accumulation plan
+- did: Anthony requested that leaves fall completely to/beyond the screen edge and accumulate at the bottom if feasible.
+- state: Extending the existing motion plan only. Interpreting bottom as the visible screen edge, consistent with the request; no application or production changes.
+- next: Replace the mid-flight fade with full-distance travel, a shallow bottom-corner landing pile, bounded retention and offscreen overflow behavior.
+- blocked: None for planning.
+
+## 2026-09-15 OUT — Full-screen fall and bottom-pile plan
+- did: Updated docs/COLATTAO_LEAF_MOTION_PLAN.md: visible full-distance descent, bottom-corner landing, shallow accumulation capped at ten retained leaves, two airborne maximum, complete offscreen overflow, safe-area/keyboard handling and bounded lifecycle.
+- state: Plan now replaces the previous end-of-flight fade with landing or complete viewport exit. Existing application and production are unchanged.
+- next: Implement the five scoped motion files when directed, then verify a Vercel preview covering landing, overflow, mobile viewport changes, controls and reverse scrolling.
+- blocked: None for planning.
+
+## 2026-09-15 IN — Implement fluid descent and publish live
+- did: Anthony approved implementation and live publication: "Make it happen improve fluid y and falling realism and make it life". Reviewed the five scoped motion files, approved plan, current main and existing live release.
+- state: Replacing the short fading fall with continuous viewport travel, soft corner landings and a bounded pool. No CODEX_QUEUE.md exists in this customer repository; the direct request and existing Colattao handoff define the work.
+- next: Implement, verify mobile motion/resize/pause/overflow and menu regressions, then merge and confirm production.
+- blocked: None. Existing realistic artwork, menu data and unrelated functionality remain in scope only for regression checks.
+
+## 2026-09-15 PROGRESS — Fluid motion implemented
+- did: Implemented pure continuous curves, a 12-slot portal pool, exact visual handoff, 280ms release, distance-scaled descent, 420ms soft landing, ten retained corner leaves and complete offscreen overflow. Added hidden-rim replenishment, keyboard suspension and continuous resize retargeting.
+- state: Targeted lint passed. First browser trace: 536 frames, two maximum airborne, zero backward steps or early fades, same identities through landing; height resize, pause/resume and reverse scrolling passed. Source data/routes/assets unchanged.
+- next: Finish repeated pile/overflow, reduced-motion, idle/unmount and responsive checks, then production build and approved merge.
+- blocked: Video capture was rejected by automatic approval review with only "blocked by policy". Using frame measurements and screenshots for motion evidence.
+
+## 2026-09-15 VERIFIED — Fluid descent ready for approved release
+- did: Passed five motion tests, targeted ESLint and production build/TypeScript. Verified continuous descent, actual resize, pause, reverse scroll, 11.17s hidden-tab freeze, ten retained leaves, four complete overflow exits, zero idle RAF, reduced motion, editable focus, responsive layout and client-navigation cleanup.
+- state: Ready for the authorized live merge. Menu route/data/artwork are byte-identical to existing production; source changes are limited to the isolated autumn system and its tests/docs.
+- next: Commit, push, inspect preview checks, open and merge the PR, then verify the production alias and real live motion.
+- blocked: None for deployment. Physical Safari hardware was not available; Chromium verification and the remaining limitation are documented.

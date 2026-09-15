@@ -1,79 +1,162 @@
-/** Frame work touches only transforms/opacity; React never renders on scroll. */
+import {
+  clamp, fallDuration, landingPose, MAX_AIRBORNE, MAX_LANDED, pathVelocity, samplePath,
+  type Path, type Pose, type Velocity,
+} from "./leafMotion";
+
 export type MotionController = { setPaused: (paused: boolean) => void; destroy: () => void };
-type Leaf = {
-  node: HTMLElement; visual: HTMLElement; kind: string; angle: number;
-  phase: "rest" | "loosen" | "falling" | "spent"; age: number;
-  x: number; y: number; width: number; direction: number; startWind: number;
-  gust: number; nodeStyle: string; visualStyle: string;
+type Source = {
+  node: HTMLElement; visual: HTMLElement; kind: string; angle: number; gust: number;
+  spent: boolean; nodeStyle: string; visualStyle: string;
+};
+type Flight = {
+  node: HTMLElement; visual: HTMLElement; source: Source | null;
+  phase: "available" | "loosen" | "falling" | "settling" | "landed";
+  path: Path | null; pose: Pose; age: number; size: number; direction: number;
+  landing: number | null;
+};
+const STILL: Velocity = { x: 0, y: 0, angle: 0 };
+const editable = () => {
+  const element = document.activeElement;
+  return element instanceof HTMLElement && (element.matches("input, textarea, select") || element.isContentEditable);
 };
 
-const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
-const MAX_AIRBORNE = 2;
-const LOOSEN_MS = 140;
-const FALL_MS = 1900;
-
-export function createMotionController(root: HTMLElement): MotionController {
-  const ledge = root.parentElement!;
+/** One sleeping RAF loop. React never re-renders in response to scrolling. */
+export function createMotionController(root: HTMLElement, layer: HTMLElement): MotionController {
+  const ledge = root.querySelector<HTMLElement>("[data-leaf-ledge]")!;
   const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const leaves: Leaf[] = Array.from(root.querySelectorAll<HTMLElement>("[data-leaf-id]"))
-    .map((node) => ({
-      node, visual: node.firstElementChild as HTMLElement, kind: node.dataset.kind!,
-      angle: Number(node.dataset.angle), phase: "rest", age: 0,
-      x: 0, y: 0, width: 0, direction: 1, startWind: 0,
-      gust: 0, nodeStyle: node.style.cssText, visualStyle: (node.firstElementChild as HTMLElement).style.cssText,
-    }));
-  let frame = 0, lastFrame = 0, lastScroll = performance.now(), scrollY = window.scrollY;
-  let wind = 0, targetWind = 0, lastInput = -Infinity, lastDetach = -Infinity;
-  let visible = false, paused = false, destroyed = false;
+  const sources: Source[] = Array.from(root.querySelectorAll<HTMLElement>("[data-leaf-id]")).map((node) => ({
+    node, visual: node.firstElementChild as HTMLElement, kind: node.dataset.kind!,
+    angle: Number(node.dataset.angle), gust: 0, spent: false,
+    nodeStyle: node.style.cssText, visualStyle: (node.firstElementChild as HTMLElement).style.cssText,
+  }));
+  const flights: Flight[] = Array.from(layer.querySelectorAll<HTMLElement>("[data-flight-slot]")).map((node) => ({
+    node, visual: node.firstElementChild as HTMLElement, source: null, phase: "available",
+    path: null, pose: { x: 0, y: 0, angle: 0, scale: 1 }, age: 0, size: 0, direction: 1, landing: null,
+  }));
+  const readViewport = () => ({
+    width: innerWidth,
+    height: (window.visualViewport?.height ?? innerHeight) + (window.visualViewport?.offsetTop ?? 0),
+  });
+  let viewport = readViewport();
+  let frame = 0, lastFrame = 0, scrollY = window.scrollY, lastScroll = performance.now();
+  let wind = 0, targetWind = 0, lastInput = -Infinity, lastRelease = -Infinity, serial = 0;
+  let rim = ledge.getBoundingClientRect().top, visible = false, paused = false, destroyed = false;
 
-  const airborne = () => leaves.filter((leaf) => leaf.phase === "loosen" || leaf.phase === "falling");
-  const canRun = () => !destroyed && !paused && !media.matches && !document.hidden;
-  const stop = () => {
-    cancelAnimationFrame(frame);
-    frame = 0;
-    lastFrame = 0;
-  };
+  const active = () => flights.filter((flight) => flight.phase !== "available" && flight.phase !== "landed");
+  const canRun = () => !destroyed && !paused && !media.matches && !document.hidden && !editable();
+  const stop = () => { cancelAnimationFrame(frame); frame = 0; lastFrame = 0; };
   const wake = () => {
-    if (canRun() && !frame && (visible || airborne().length)) frame = requestAnimationFrame(tick);
+    if (canRun() && !frame && (visible || active().length)) frame = requestAnimationFrame(tick);
   };
-  const setPhase = (leaf: Leaf, phase: Leaf["phase"]) => {
-    leaf.phase = phase;
-    leaf.node.dataset.state = phase;
+  const setPhase = (flight: Flight, phase: Flight["phase"]) => {
+    flight.phase = phase;
+    flight.node.dataset.state = phase;
+    flight.node.style.willChange = phase === "available" || phase === "landed" ? "" : "transform";
+    flight.visual.style.willChange = flight.node.style.willChange;
   };
-  const settle = () => {
-    wind = 0;
-    targetWind = 0;
-    for (const leaf of leaves) {
-      if (leaf.phase === "rest") leaf.visual.style.transform = `rotate(${leaf.angle}deg)`;
+  const paint = (flight: Flight) => {
+    const pose = flight.pose;
+    flight.node.style.transform = `translate3d(${pose.x}px, ${pose.y}px, 0)`;
+    flight.visual.style.transform = `rotate(${pose.angle}deg) scaleX(${pose.scale})`;
+  };
+  const rest = () => {
+    wind = targetWind = 0;
+    for (const source of sources) {
+      if (!source.spent) {
+        source.gust = 0;
+        source.visual.style.transform = `rotate(${source.angle}deg)`;
+      }
     }
   };
-  const spend = (leaf: Leaf) => {
-    setPhase(leaf, "spent");
-    leaf.node.style.visibility = "hidden";
-    leaf.visual.style.willChange = "";
+  const recycle = (flight: Flight) => {
+    setPhase(flight, "available");
+    flight.source = null;
+    flight.path = null;
+    flight.landing = null;
+    delete flight.node.dataset.leafId;
   };
-
-  // Freeze the SAME positioner in viewport coordinates. Its untransformed box
-  // and the child's current transform are preserved: no clone, gap or visual jump.
-  const detach = (leaf: Leaf) => {
-    const box = leaf.node.getBoundingClientRect();
-    leaf.startWind = leaf.gust;
-    leaf.x = box.left;
-    leaf.y = box.top;
-    leaf.width = box.width;
-    leaf.direction = box.left + box.width / 2 < innerWidth / 2 ? -1 : 1;
-    leaf.node.style.position = "fixed";
-    leaf.node.style.left = `${box.left}px`;
-    leaf.node.style.top = `${box.top}px`;
-    leaf.node.style.zIndex = "40";
-    setPhase(leaf, "falling");
-    leaf.age = 0;
+  const rearmOffscreen = () => {
+    // New identities can occupy the vacated rim only while it is entirely offscreen.
+    if (active().length || (rim >= -50 && rim <= viewport.height + 50)) return;
+    for (const source of sources) {
+      if (source.spent) {
+        source.spent = false;
+        source.gust = 0;
+        source.node.style.cssText = source.nodeStyle;
+        source.visual.style.cssText = source.visualStyle;
+        source.node.dataset.state = "rest";
+      }
+    }
   };
-
-  const rustle = (leaf: Leaf, gust: number) => {
-    leaf.gust = gust;
-    const strength = leaf.kind === "loose" ? 0.65 : 1;
-    leaf.visual.style.transform = `translate3d(${gust * 2 * strength}px, ${-Math.abs(gust) * 0.8 * strength}px, 0) rotate(${leaf.angle + gust * 4 * strength}deg)`;
+  const destination = (flight: Flight) => flight.landing === null
+    ? { x: flight.direction < 0 ? 3 : viewport.width - flight.size - 3,
+      y: viewport.height + Math.hypot(flight.size, flight.size * 1.2) + 8,
+      angle: flight.pose.angle + flight.direction * 45, scale: 1 }
+    : landingPose(viewport.width, viewport.height, flight.size, flight.landing);
+  const beginFall = (flight: Flight, velocity: Velocity) => {
+    let end = destination(flight);
+    if (end.y - 24 <= flight.pose.y) {
+      flight.landing = null;
+      end = destination(flight);
+    }
+    if (flight.landing !== null) end.y -= 24;
+    end.y = Math.max(end.y, flight.pose.y + 24);
+    flight.path = {
+      from: { ...flight.pose }, to: end, velocity,
+      endVelocity: { x: 0, y: flight.landing === null ? 125 : 90, angle: 0 },
+      duration: fallDuration(end.y - flight.pose.y), sway: 4, rock: 19, direction: flight.direction,
+    };
+    flight.age = 0;
+    setPhase(flight, "falling");
+  };
+  const release = (source: Source, now: number) => {
+    const flight = flights.find((candidate) => candidate.phase === "available");
+    if (!flight) return;
+    const box = source.node.getBoundingClientRect();
+    const direction = box.left + box.width / 2 < viewport.width / 2 ? -1 : 1;
+    const occupied = new Set(flights.filter((candidate) => candidate.phase !== "available").map((candidate) => candidate.landing));
+    const landing = Array.from({ length: MAX_LANDED }, (_, index) => index)
+      .find((index) => index % 2 === (direction < 0 ? 0 : 1) && !occupied.has(index)) ?? null;
+    flight.source = source;
+    flight.size = box.width;
+    flight.direction = direction;
+    flight.landing = landing;
+    flight.pose = {
+      x: box.left + source.gust * 2, y: box.top - Math.abs(source.gust) * 0.8,
+      angle: source.angle + source.gust * 4, scale: 1,
+    };
+    flight.node.style.width = `${box.width}px`;
+    flight.node.style.height = `${box.height}px`;
+    flight.visual.style.backgroundImage = source.visual.style.backgroundImage;
+    flight.node.dataset.leafId = `${source.node.dataset.leafId}-flight-${++serial}`;
+    flight.path = {
+      from: { ...flight.pose },
+      to: { ...flight.pose, x: clamp(flight.pose.x + direction * 16, 2, viewport.width - box.width - 2),
+        y: flight.pose.y + 4, angle: flight.pose.angle + direction * 6 },
+      velocity: STILL, endVelocity: { x: 0, y: 30, angle: 0 },
+      duration: 280, sway: 0, rock: 0, direction,
+    };
+    flight.age = 0;
+    // Exact same-frame handoff: artwork, size, transform origin and current pose
+    // match. Hide the source first. This slot stays the same through landing.
+    paint(flight);
+    source.spent = true;
+    source.node.dataset.state = "spent";
+    source.node.style.visibility = "hidden";
+    setPhase(flight, "loosen");
+    lastRelease = now;
+  };
+  const tryRelease = (now: number) => {
+    if (!visible || rim < 95 || rim > viewport.height - 28 || now - lastInput > 1000) return;
+    const count = active().length;
+    const strength = Math.abs(wind);
+    const strongSecond = count === 1 && strength > 2.1 && now - lastRelease > 190;
+    if (count >= MAX_AIRBORNE || strength < 1.05 || (!strongSecond && now - lastRelease < 1150)) return;
+    const candidates = sources.filter((source) => source.kind === "edge" && !source.spent);
+    const previousSide = active()[0]?.direction;
+    const source = candidates.find((candidate) => previousSide !== undefined &&
+      (Number.parseFloat(candidate.node.style.left) < 50 ? -1 : 1) !== previousSide) ?? candidates[0];
+    if (source) release(source, now);
   };
 
   function tick(now: number) {
@@ -81,102 +164,137 @@ export function createMotionController(root: HTMLElement): MotionController {
     if (!canRun()) return;
     const dt = lastFrame ? Math.min(now - lastFrame, 40) : 16;
     lastFrame = now;
-    targetWind *= Math.exp(-dt / 125);
-    wind += (targetWind - wind) * (1 - Math.exp(-dt / 90));
-
-    for (const leaf of leaves) {
-      if (leaf.kind === "anchor" || leaf.phase === "spent") continue;
-      if (leaf.phase === "rest") {
-        if (visible) rustle(leaf, wind);
-      } else if (leaf.phase === "loosen") {
-        leaf.age += dt;
-        rustle(leaf, leaf.startWind + Math.sin(leaf.age / 28) * 0.3);
-        if (leaf.age >= LOOSEN_MS) {
-          // Still visible? Never launch a leaf from behind the sticky header.
-          if (leaf.node.getBoundingClientRect().top > 78) detach(leaf);
-          else spend(leaf);
-        }
+    targetWind *= Math.exp(-dt / 200);
+    wind += (targetWind - wind) * (1 - Math.exp(-dt / 120));
+    for (const source of sources) {
+      if (source.spent || source.kind === "anchor" || !visible) continue;
+      const strength = source.kind === "loose" ? 0.65 : 1;
+      source.gust = wind * strength;
+      source.visual.style.transform = `translate3d(${source.gust * 2}px, ${-Math.abs(source.gust) * 0.8}px, 0) rotate(${source.angle + source.gust * 4}deg)`;
+    }
+    tryRelease(now);
+    for (const flight of active()) {
+      if (!flight.path) continue;
+      flight.age = Math.min(flight.path.duration, flight.age + dt);
+      flight.pose = samplePath(flight.path, flight.age);
+      paint(flight);
+      if (flight.age < flight.path.duration) continue;
+      const velocity = pathVelocity(flight.path, flight.age);
+      if (flight.phase === "loosen") beginFall(flight, velocity);
+      else if (flight.phase === "falling" && flight.landing !== null) {
+        flight.path = {
+          from: { ...flight.pose }, to: destination(flight), velocity, duration: 420,
+          sway: 0, rock: 0, direction: flight.direction,
+        };
+        flight.age = 0;
+        setPhase(flight, "settling");
+      } else if (flight.phase === "settling") {
+        setPhase(flight, "landed");
+        flight.path = null;
+        flight.source = null;
       } else {
-        leaf.age += dt;
-        const p = Math.min(leaf.age / FALL_MS, 1);
-        const easeOut = 1 - Math.pow(1 - p, 3);
-        // Drift into the side gutter before descending alongside the text.
-        const targetX = leaf.direction < 0
-          ? 9 + (innerWidth - Math.min(innerWidth, 470)) / 2
-          : (innerWidth + Math.min(innerWidth, 470)) / 2 - leaf.width - 9;
-        const drift = (targetX - leaf.x) * Math.min(p / 0.24, 1);
-        const flutter = Math.sin(p * Math.PI * 5) * 3 * Math.sin(p * Math.PI);
-        const dy = (28 + Math.min(innerHeight * 0.48, 330) * p) * p;
-        const startX = leaf.startWind * 2;
-        const startY = -Math.abs(leaf.startWind) * 0.8;
-        leaf.visual.style.transform = `translate3d(${startX * (1 - easeOut) + drift + flutter}px, ${startY * (1 - easeOut) + dy}px, 0) rotate(${leaf.angle + leaf.startWind * 4 + leaf.direction * 195 * p + Math.sin(p * 15) * 15}deg) scaleX(${1 - Math.sin(p * Math.PI * 4) ** 2 * 0.55})`;
-        leaf.visual.style.opacity = String(p < 0.22 ? 1 - p * 2.2 : Math.max(0, (1 - p) * 0.66));
-        if (p === 1 || leaf.y + dy > innerHeight + 50) spend(leaf);
+        // The entire rotated leaf has passed below the viewport. No early fade.
+        recycle(flight);
       }
     }
-    if (airborne().length || (visible && Math.abs(wind) + Math.abs(targetWind) > 0.015)) wake();
-    else { settle(); lastFrame = 0; }
+    rearmOffscreen();
+    if (active().length || (visible && Math.abs(wind) + Math.abs(targetWind) > 0.015)) wake();
+    else { rest(); lastFrame = 0; }
   }
 
-  const markInput = () => { lastInput = performance.now(); };
+  const markInput = () => {
+    const now = performance.now();
+    if (now - lastInput > 150) lastScroll = now - 16;
+    lastInput = now;
+  };
   const onKey = (event: KeyboardEvent) => {
-    if (["ArrowDown", "ArrowUp", "PageDown", "PageUp", " "].includes(event.key)) markInput();
+    if (!editable() && ["ArrowDown", "ArrowUp", "PageDown", "PageUp", " "].includes(event.key)) markInput();
+  };
+  const onNavigation = (event: MouseEvent) => {
+    if (event.target instanceof Element && event.target.closest("a[href*='#']")) {
+      lastInput = -Infinity;
+      targetWind = 0;
+    }
   };
   const onScroll = () => {
     const now = performance.now();
-    const delta = window.scrollY - scrollY;
-    const velocity = clamp(delta / clamp(now - lastScroll, 16, 64), -5, 5);
+    const velocity = clamp((window.scrollY - scrollY) / clamp(now - lastScroll, 16, 80), -5, 5);
     scrollY = window.scrollY;
     lastScroll = now;
-    if (!canRun() || !visible) return;
-    targetWind = velocity;
-    const rim = ledge.getBoundingClientRect().top;
-    const gestureUpgrade = Math.abs(velocity) > 3 && airborne().length === 1 && now - lastDetach < 220;
-    // Input gate prevents category links, history restoration and layout changes
-    // from being mistaken for a flick. Native touch and wheel are never canceled.
-    if (now - lastInput < 300 && Math.abs(velocity) > 1.25 &&
-        (now - lastDetach > 900 || gestureUpgrade) && rim > 100 && rim < innerHeight - 20) {
-      const limit = Math.abs(velocity) > 3 ? MAX_AIRBORNE : 1;
-      const slots = Math.max(0, limit - airborne().length);
-      const candidates = leaves.filter((leaf) => leaf.kind === "edge" && leaf.phase === "rest");
-      for (const leaf of candidates.slice(0, slots)) {
-        setPhase(leaf, "loosen");
-        leaf.age = 0;
-        leaf.startWind = wind;
-        leaf.visual.style.willChange = "transform, opacity";
+    rim = ledge.getBoundingClientRect().top;
+    visible = rim > 70 && rim < viewport.height + 40;
+    rearmOffscreen();
+    if (!canRun()) return;
+    // Native momentum is accepted; category links/history/layout do not supply wind.
+    if (now - lastInput < 1000) targetWind = velocity;
+    if (!visible) rest();
+    wake();
+  };
+  const onResize = () => {
+    const next = readViewport();
+    if (next.width === viewport.width && Math.abs(next.height - viewport.height) < 0.5) return;
+    viewport = next;
+    rim = ledge.getBoundingClientRect().top;
+    visible = rim > 70 && rim < viewport.height + 40;
+    for (const flight of flights) {
+      if (flight.phase === "landed") {
+        flight.pose = destination(flight);
+        paint(flight);
+      } else if (flight.path && flight.phase !== "loosen") {
+        const velocity = pathVelocity(flight.path, flight.age);
+        let end = destination(flight);
+        if (end.y <= flight.pose.y + (flight.phase === "falling" ? 24 : 0)) {
+          // If the new floor is above this leaf, continue DOWN and offscreen.
+          flight.landing = null;
+          end = destination(flight);
+          setPhase(flight, "falling");
+        } else if (flight.phase === "falling" && flight.landing !== null) end.y -= 24;
+        end.y = Math.max(end.y, flight.pose.y + 24);
+        const remaining = flight.path.duration - flight.age;
+        const addedDistance = end.y - flight.path.to.y;
+        flight.path = {
+          ...flight.path, from: { ...flight.pose }, to: end, velocity,
+          duration: clamp(remaining + addedDistance / 120 * 1000, 420, 7000),
+        };
+        flight.age = 0;
       }
-      if (slots && candidates.length) lastDetach = now;
     }
     wake();
   };
   const sync = () => {
+    if (destroyed) return;
     stop();
     scrollY = window.scrollY;
     lastScroll = performance.now();
-    if (media.matches) {
-      airborne().forEach(spend);
-      settle();
-    }
-    root.dataset.motion = media.matches ? "reduced" : paused ? "paused" : document.hidden ? "hidden" : "ready";
+    lastInput = -Infinity;
+    layer.dataset.suspended = String(editable());
+    if (media.matches) { active().forEach(recycle); rest(); }
+    root.dataset.motion = media.matches ? "reduced" : paused ? "paused" : document.hidden ? "hidden" : editable() ? "keyboard" : "ready";
+    onResize();
     wake();
   };
-  const observer = new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
-    if (!visible) settle();
-    if (!visible && !airborne().length) stop();
+  const onFocus = () => queueMicrotask(sync);
+  const observer = new IntersectionObserver(() => {
+    rim = ledge.getBoundingClientRect().top;
+    visible = rim > 70 && rim < viewport.height + 40;
+    rearmOffscreen();
+    if (!visible) rest();
+    if (!visible && !active().length) stop();
     else wake();
-  });
+  }, { rootMargin: "50px 0px" });
   observer.observe(ledge);
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("wheel", markInput, { passive: true });
   window.addEventListener("touchmove", markInput, { passive: true });
   window.addEventListener("keydown", onKey);
-  document.addEventListener("visibilitychange", sync);
-  media.addEventListener("change", sync);
-  // A resized viewport invalidates fixed coordinates; retire airborne leaves
-  // instead of teleporting them back onto the ledge.
-  const onResize = () => { airborne().forEach(spend); sync(); };
+  window.addEventListener("click", onNavigation, true);
   window.addEventListener("resize", onResize, { passive: true });
+  window.visualViewport?.addEventListener("resize", onResize);
+  window.visualViewport?.addEventListener("scroll", onResize);
+  document.addEventListener("visibilitychange", sync);
+  document.addEventListener("focusin", onFocus);
+  document.addEventListener("focusout", onFocus);
+  media.addEventListener("change", sync);
   sync();
 
   return {
@@ -189,15 +307,26 @@ export function createMotionController(root: HTMLElement): MotionController {
       window.removeEventListener("wheel", markInput);
       window.removeEventListener("touchmove", markInput);
       window.removeEventListener("keydown", onKey);
+      window.removeEventListener("click", onNavigation, true);
       window.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("resize", onResize);
+      window.visualViewport?.removeEventListener("scroll", onResize);
       document.removeEventListener("visibilitychange", sync);
+      document.removeEventListener("focusin", onFocus);
+      document.removeEventListener("focusout", onFocus);
       media.removeEventListener("change", sync);
-      // Restore the deterministic starting DOM for Strict Mode's effect replay.
-      leaves.forEach((leaf) => {
-        leaf.node.style.cssText = leaf.nodeStyle;
-        leaf.visual.style.cssText = leaf.visualStyle;
-        leaf.node.dataset.state = "rest";
+      sources.forEach((source) => {
+        source.node.style.cssText = source.nodeStyle;
+        source.visual.style.cssText = source.visualStyle;
+        source.node.dataset.state = "rest";
       });
+      flights.forEach((flight) => {
+        recycle(flight);
+        flight.node.style.cssText = "";
+        flight.visual.style.cssText = "";
+      });
+      delete layer.dataset.suspended;
+      delete root.dataset.motion;
     },
   };
 }

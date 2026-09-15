@@ -26,28 +26,40 @@ The banner uses live text for readability rather than embedding the reference po
   four anchor leaves, three loose leaves, three edge leaves. Includes a 44px pause control.
 - `MotionController.ts`: passive scroll/wheel/touch listeners, input-gated wind, one
   requestAnimationFrame loop that sleeps when calm, and observer/visibility cleanup.
+- `leafMotion.ts`: pure descent, rocking, resize handoff and corner-placement curves.
+- `FallingLeafLayer.tsx`: body portal with twelve reusable slots, outside card clipping.
 - `autumn.module.css`: scoped autumn styling, including route-scoped reduced-motion scrolling.
 
 ## Motion contract
 
-Anchor leaves never move. Loose leaves rustle and remain attached. Only edge leaves
-can enter `rest -> loosen -> falling -> spent`. Speeds above 1.25 px/ms may loosen
-one leaf; above 3 px/ms may loosen a second, with a hard cap of two active leaves.
-A 900ms cooldown prevents repeated bursts; an escalating flick can add its second
-leaf during the first 220ms. There is no idle fall, automatic replenishment or rain.
+Anchor leaves remain static. Loose leaves rustle and stay attached. Only edge leaves
+release. Native scroll velocity is filtered over 120ms and wind decays over 200ms.
+Filtered wind above 1.05 can release one leaf; above 2.1 can add a second after
+190ms. Normal releases have a 1150ms cooldown. Two airborne leaves is the hard limit.
+Category-link navigation does not supply wind; native inertia remains eligible.
 
-The positioner switches from absolute to fixed at its exact current viewport box.
-Its child retains the current transform; the same DOM node leaves the pile.
-Falling uses elapsed active time, with a 140ms loosen and 1900ms tumble/fade.
-Reverse scrolling only changes resting rustle; airborne progression never rewinds.
-Leaves drift toward the narrow outside gutters as they descend.
+An exact visual handoff copies the source's artwork, size, transform origin and
+current pose into one viewport slot, hiding the original in the same frame.
+That slot retains its identity through `loosen -> falling -> settling -> landed`.
+Release takes 280ms, descent scales with actual distance (usually 4–6 seconds),
+and settling takes 420ms. Vertical travel is monotonic; drift and rocking use
+continuous curves with matched endpoint velocities. No mid-flight opacity fade.
 
-Only transform and opacity change per frame. Position is assigned once at detachment.
-Decorations cannot receive pointer events; only the pause control can.
-Hidden documents and manual pause freeze progression. An offscreen ledge stops
-rustling; already visible airborne leaves finish their short fall. Reduced motion
-keeps the pile static and retires airborne leaves. Resize retires them rather than
-teleporting them. All listeners, observers and frames are cleaned up on unmount.
+The corner pile starts empty. It retains up to five arrivals per side, ten total,
+mostly cropped below the screen edge. When a side is full, its new leaves travel
+completely below the viewport, including their rotated bounds, before being retired.
+Twelve slots bound memory: ten landed plus two airborne. Vacated rim positions
+refill with new identities only while fully offscreen and after all flights finish.
+Landed leaves are never taken back. Reverse scrolling never rewinds a flight.
+
+Only transforms change per frame. Decorative layers cannot receive pointer events.
+Hidden tabs and manual pause freeze active time. Focusing an editable control hides
+the viewport decoration and suspends flight until focus clears, keeping the guest
+note/keyboard area clear. Reduced motion leaves static foliage and retires flights.
+An offscreen rim stops rustling; flights continue to their destination. Resizing
+rebases the remaining path from its current pose/velocity. If the new floor is
+above a leaf, it continues downward offscreen. Landed leaves remain bottom-pinned.
+Listeners, observer, portal and frame loop are cleaned up on unmount.
 
 ## Asset replacement and removal
 
@@ -59,7 +71,7 @@ removed and replaced with two realistic individual photographic cutouts:
 Both are 160x192 transparent WebP files, generated with actual alpha so no
 chroma-key background needs to reach the browser. Together they total 25,990 bytes.
 Change `LEAF_ASSETS` in `AutumnAtmosphere.tsx` to replace them; preserve the tip-up,
-stem-down orientation and aspect ratio. Placement and movement are unchanged.
+stem-down orientation and aspect ratio. The controller does not depend on the artwork.
 No particle, physics or animation package was added.
 
 ### Artwork provenance
@@ -84,7 +96,7 @@ presentation, remove the fall group, restore the previous page promo/morph mount
 from this branch's base, and remove the autumn imports/wrappers. Do not touch game,
 reward, note, auth, API, payments or backend files.
 
-## Verification
+## Original release verification
 
 Initial placeholder-art preview (superseded by the realistic foliage correction): https://colattao-cafe-rush-cvdq11d4w.vercel.app/menu
 Vercel reports Ready, target Preview. The existing Vercel sign-in protection
@@ -111,13 +123,14 @@ Original production base: `d2dbac4`. Anthony explicitly approved the realistic-f
   The 320px/390px checks showed both transparent assets, four fall items,
   two simultaneous falling leaves maximum, unchanged DOM identity and no overflow.
 
-## Next implementation prompt
+## Motion regression checks
 
-In this Colattao worktree, inspect the live autumn menu on a physical mobile device
-and adjust foliage size or spacing only if needed. Preserve geometry, motion states, menu
-data, game/reward logic, guest notes, auth and backend. Run targeted lint and
-`npm.cmd run build`, recheck mobile motion, and provide a Vercel preview URL.
-Do not publish or merge to production without Anthony's explicit approval.
+Run `node --test scripts/autumn-motion.test.mjs` with Node 22.18+ (native TypeScript
+stripping), then targeted ESLint and the final production build. Check real scroll
+input, reversed scrolling, resize during flight, pause/resume, reduced motion,
+editable focus, hidden tabs, offscreen refill, the ten-leaf cap and complete overflow.
+Use 320px, 390px, 430px and desktop viewports. Physical iOS review remains useful;
+Chromium emulation does not reproduce every Safari browser-chrome behavior.
 
 ## Live release — 2026-09-15
 
@@ -128,3 +141,28 @@ Do not publish or merge to production without Anthony's explicit approval.
 - Public 390px browser verification: four fall items, ten realistic leaves, both
   transparent WebP assets HTTP 200, zero butterfly canvases, no horizontal overflow
   and no page errors. Existing sign-in-free production access is preserved.
+
+## Fluid motion verification — 2026-09-15
+
+- Pure motion tests: 5 passed (monotonic descent, continuous handoffs, no landing bounce,
+  bounded corner placement, complete overflow exit). Targeted ESLint and production
+  Next build/TypeScript passed. `/menu` remains statically rendered.
+- Browser trace: 536 frames; two airborne maximum, no backward Y steps, no early fade,
+  all four states observed and the same two leaf identities retained after landing.
+- Actual 844px-to-760px resize during flight preserved both leaves. Pause froze transforms;
+  resume and reverse scrolling continued downward. An actual 11.17-second hidden-tab
+  interval preserved both Y coordinates exactly at the visibility event boundaries.
+- Repeated visits reached ten landed leaves and stayed capped over three more cycles.
+  Four overflow leaves passed completely below the viewport before recycling; zero
+  premature removals. Twelve pool slots throughout; zero idle RAF requests.
+- Editable focus hid decoration and restored the same retained pile on blur. Reduced
+  motion disabled falls and kept the ten landed leaves static.
+- 320, 390, 430 and 1440px checks: no horizontal overflow; all native hash targets exist,
+  four fall entries remain, no butterfly canvas, guest form present. Source comparison
+  confirms menu route, data and leaf artwork exactly match the existing production release.
+- Production-mode client navigation through the game link reached `/`, removed the portal
+  and removed all six window listeners. No application page errors observed.
+- Screenshots are in the task directory above this checkout: autumn-fluid-landed.png,
+  autumn-fluid-pile.png, autumn-fluid-320.png and autumn-fluid-desktop.png.
+  Video recording was blocked by automatic approval review; frame traces and screenshots
+  supplied the visual/motion evidence. Mobile checks use Chromium, not physical Safari.
