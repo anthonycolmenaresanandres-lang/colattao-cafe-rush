@@ -289,3 +289,15 @@
 - state: Production-mode menu has all four exact drink names and Menu JSON-LD; existing game link reaches / and removes the portal. Owner poster lazy-loads only when opened. No application page errors; physical Safari remains unverified. Final asset provenance and screenshots are documented in docs/COLATTAO_OWNER_FALL.md.
 - next: Commit the scoped changes, inspect Vercel preview checks, merge under Anthony's explicit instruction and verify the public deployment.
 - blocked: None.
+
+## 2026-09-15 MERGED — Owner fall collection
+- did: Vercel preview dpl_71DYbAmZRpTKPJv46kXSG1vHewqH is Ready; GitHub checks passed. Merged PR #13 at verified head 717b27724387872e7316eed2b55bb353334dea6f under Anthony's explicit merge instruction.
+- state: Main merge 9381acf5a3bed862c1a162260ee7c9c3594d0a3a. Production auto-deployment is pending public verification.
+- next: Confirm production Ready and verify all ten leaves, the four drink images, original poster and menu anchors on the public alias.
+- blocked: None.
+
+## 2026-09-15 OUT — Owner fall collection live
+- did: Merged PR #13 as 9381acf5a3bed862c1a162260ee7c9c3594d0a3a and verified production deployment dpl_FrAaBdVwRRbLJHmNnBGg7MJhRGG2 is Ready with the public alias.
+- state: LIVE https://colattao-cafe-rush.vercel.app/menu. A fresh public browser trace observed all ten unique leaves detach on normal scrolling, zero backward movement and zero remaining on the rim, eight corner landings and a completed cascade. All four realistic drink images and the owner's original poster return HTTP 200; four exact names, valid anchors, no horizontal overflow and no application page errors.
+- next: Anthony can scroll or tap Let leaves fall, then Replay leaves, to review. Physical Safari remains an optional device-specific review; no required implementation or publishing work remains.
+- blocked: None. Artwork provenance, final prompts, source paths and verification are in docs/COLATTAO_OWNER_FALL.md.

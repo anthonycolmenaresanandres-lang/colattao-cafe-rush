@@ -70,3 +70,15 @@ Two initial ceramic images and their extraction retries baked a checkerboard int
 - Screenshots in the parent task directory: owner-fall-top.png,
   owner-fall-blended.png, owner-fall-cleared.png, owner-fall-drinks-320.png,
   owner-fall-430.png and owner-fall-desktop.png.
+
+## Live release — 2026-09-15
+
+- Live: https://colattao-cafe-rush.vercel.app/menu
+- PR: https://github.com/anthonycolmenaresanandres-lang/colattao-cafe-rush/pull/13
+- Merge: 9381acf5a3bed862c1a162260ee7c9c3594d0a3a; verified source head 717b277.
+- Production dpl_FrAaBdVwRRbLJHmNnBGg7MJhRGG2: Ready, public alias confirmed.
+- Live normal-scroll trace: ten unique released leaves, zero remaining on the rim,
+  eight landings, no backward movement and a completed finite cascade. All five new
+  assets return HTTP 200. Exact drink names and all hash targets are present; no
+  horizontal overflow or application page errors. Menu JSON-LD retained.
+- Live screenshots: ../owner-fall-live-top.png and ../owner-fall-live-drinks.png.
