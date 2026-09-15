@@ -284,3 +284,21 @@ customer header.
 - verification: Final targeted lint and production build/TypeScript passed. Local production /menu shows four fall drinks, ten leaves, no butterfly canvas, no overflow or browser page errors. Chromium checks cover 320/390/430/768px, anchors, JSON-LD, data preservation, one/two-leaf cap, pause, reverse scrolling, reduced motion, and idle/offscreen suspension.
 - next: Anthony reviews the protected preview. Swap the one placeholder SVG after final art is approved; publish to production only on explicit instruction. Full map, removal steps and next prompt are in docs/COLATTAO_AUTUMN.md.
 - blocked: None for requested implementation. Physical iOS verification was not available; deployed browser review requires the existing Vercel sign-in.
+
+## 2026-09-15 IN — Realistic foliage and approved live merge
+- did: Anthony clarified that magenta is for the removable background, not the leaf color; requested realistic leaves and explicitly approved merging live.
+- state: Autumn implementation is committed locally as 5af1dd0. Correcting only foliage artwork/references before production release.
+- next: Generate realistic transparent cutouts, preserve alpha and optimize, verify the existing motion/mobile layout, build, merge the scoped branch to main, and confirm live deployment.
+- blocked: None. Production merge authorization: Anthony's message "No I meant magenta background for blending I need the leafs to look as real as possible and merge live".
+
+## 2026-09-15 PROGRESS — Realistic foliage
+- did: Generated realistic copper maple and russet oak cutouts with built-in imagegen. Preserved actual alpha while encoding 160x192 WebP assets (25,990 bytes combined); verified no visible magenta pixels.
+- state: Removed the solid-magenta SVG and updated only the asset references and unused magenta CSS token. Leaf geometry and controller are unchanged. Generation prompts and asset provenance are documented.
+- next: Complete mobile visual check and final build, then merge the scoped autumn branch to main under Anthony's explicit live-publish approval.
+- blocked: None.
+
+## 2026-09-15 VERIFIED — Approved autumn release
+- did: Passed final production build/TypeScript and targeted lint after replacing the leaves. Checked 390px rendered appearance, 320px overflow, both alpha assets, same-node detachment and two-leaf cap.
+- state: Ready to merge the scoped autumn branch under Anthony's explicit approval; original checkouts remain unchanged.
+- next: Open and merge the PR, then confirm the production deployment and public assets before checking out.
+- blocked: None.

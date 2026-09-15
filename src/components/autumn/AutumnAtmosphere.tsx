@@ -4,8 +4,11 @@ import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties }
 import { createMotionController, type MotionController } from "./MotionController";
 import styles from "./autumn.module.css";
 
-// Single replacement point for final illustrated art. No image sheet or new dependency.
-const LEAF_SRC = "/assets/colattao/menu/autumn/leaf-placeholder.svg";
+// Individual photographic cutouts with real alpha; no chroma-key background reaches the UI.
+const LEAF_ASSETS = [
+  "/assets/colattao/menu/autumn/maple-copper.webp",
+  "/assets/colattao/menu/autumn/oak-russet.webp",
+] as const;
 const LEAVES = [
   { id: "anchor-1", kind: "anchor", x: 7, y: -20, size: 35, angle: -62 },
   { id: "anchor-2", kind: "anchor", x: 15, y: -16, size: 31, angle: 39 },
@@ -46,12 +49,12 @@ export default function AutumnAtmosphere() {
   return (
     <div ref={rootRef} className={styles.atmosphere} data-autumn-atmosphere="">
       <div aria-hidden="true" className={styles.leafLedge}>
-        {LEAVES.map((leaf) => (
+        {LEAVES.map((leaf, index) => (
           <span key={leaf.id} data-leaf-id={leaf.id} data-kind={leaf.kind}
             data-angle={leaf.angle} data-state="rest" className={styles.leaf}
             style={{ left: `${leaf.x}%`, top: leaf.y, width: leaf.size, height: leaf.size * 1.2,
               "--leaf-angle": `${leaf.angle}deg` } as CSSProperties}>
-            <span className={styles.leafVisual} style={{ backgroundImage: `url("${LEAF_SRC}")` }} />
+            <span className={styles.leafVisual} style={{ backgroundImage: `url("${LEAF_ASSETS[index % LEAF_ASSETS.length]}")` }} />
           </span>
         ))}
       </div>

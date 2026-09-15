@@ -14,7 +14,7 @@
 The single visual signature is the asymmetric pile on the first menu card's rim.
 The compact chalkboard promo uses the existing Colattao logo, Playfair display
 type and Inter utility type. Palette: chalk #f5e9d0, green board #182522,
-copper #c78b53, ceramic blue #87adbc, ink #34241b, placeholder magenta #d60083.
+copper #c78b53, ceramic blue #87adbc and ink #34241b.
 Pumpkin, apple, cinnamon and twig line art is static, decorative and outside copy.
 The banner uses live text for readability rather than embedding the reference poster.
 
@@ -51,12 +51,32 @@ teleporting them. All listeners, observers and frames are cleaned up on unmount.
 
 ## Asset replacement and removal
 
-The supplied image sheet is **not used**. The one 80x96 transparent SVG is a solid
-magenta implementation placeholder at:
-`public/assets/colattao/menu/autumn/leaf-placeholder.svg`.
-Replace this file with final transparent art keeping its viewBox and stem orientation,
-or change `LEAF_SRC` in `AutumnAtmosphere.tsx`. The layout and motion stay independent.
+The supplied image sheet is **not used**. Anthony clarified that magenta was intended
+as a removable source background, never the leaf color. The placeholder SVG was
+removed and replaced with two realistic individual photographic cutouts:
+`public/assets/colattao/menu/autumn/maple-copper.webp` and
+`public/assets/colattao/menu/autumn/oak-russet.webp`.
+Both are 160x192 transparent WebP files, generated with actual alpha so no
+chroma-key background needs to reach the browser. Together they total 25,990 bytes.
+Change `LEAF_ASSETS` in `AutumnAtmosphere.tsx` to replace them; preserve the tip-up,
+stem-down orientation and aspect ratio. Placement and movement are unchanged.
 No particle, physics or animation package was added.
+
+### Artwork provenance
+
+Generated with the built-in imagegen tool, then resized and encoded to WebP with
+Sharp, preserving alpha. Original output filenames:
+`exec-6fab68a7-138d-4252-ad84-db24a6ab4642.png` (maple) and
+`exec-ca385292-df7d-4834-977f-66d7bac92b71.png` (oak).
+Both were verified to contain transparent pixels and zero visible magenta pixels.
+
+Maple generation prompt:
+
+> Use case: product-mockup. Production web asset: one photorealistic fallen sugar maple leaf cutout for a premium autumn café menu, NOT a picture of a website. A single beautiful naturally asymmetric maple leaf, warm burnt-orange copper with russet tips, amber veins, intricate small serrations and authentic tiny weathered imperfections, subtly curled edges and dimensional dry papery texture. Top-down macro botanical product photography, soft neutral light revealing fine veins; realistic, tactile, understated. Entire leaf and short slender stem fully visible, tip pointing up, stem down; roughly 80:96 silhouette ratio, centered, tight framing with just 5% transparent breathing room. Genuine transparent alpha background; no floor, no scenery, no cast shadow, no text, no border, no extra objects. Important correction: magenta was intended ONLY as a removable chroma-key BACKGROUND, never as the leaf color. Output the leaf already extracted on true transparent alpha so it blends directly into our web menu with zero magenta fringe. Real copper/orange natural leaf colors only. Single individual leaf, not an image sheet, not illustration, not vector, not an icon, no artificial gloss.
+
+Oak generation prompt:
+
+> Production web cutout: ONE photorealistic fallen red oak leaf, warm muted russet and reddish chestnut with ochre highlights and golden fine veins. Top-down macro botanical photography, natural dry papery texture, irregular rounded/slightly pointed lobes, subtle curled edges and authentic imperfections. Fully visible single leaf, tip up and short slender stem down; broad leaf silhouette about 4:5, centered, 5% margin. Soft neutral natural lighting, no cast shadow. Genuine transparent alpha background so the asset blends into a café web menu. Important: magenta means ONLY a removable chroma-key BACKGROUND, not the leaf color; output the final cutout already on transparent alpha, zero magenta fringe. No text, watermark, frame, scenery, hand, floor or other leaf. Realistic photography, not vector/icon/illustration. Independent individual asset, not an image sheet.
 
 To remove motion only, remove the `AutumnAtmosphere` import and mount; all menu
 content and the promo continue to render on the server. To reverse the autumn
@@ -66,10 +86,10 @@ reward, note, auth, API, payments or backend files.
 
 ## Verification
 
-Review preview: https://colattao-cafe-rush-cvdq11d4w.vercel.app/menu
+Initial placeholder-art preview (superseded by the realistic foliage correction): https://colattao-cafe-rush-cvdq11d4w.vercel.app/menu
 Vercel reports Ready, target Preview. The existing Vercel sign-in protection
 is retained; the unauthenticated browser reaches the sign-in page.
-Production main remains `d2dbac4`.
+Original production base: `d2dbac4`. Anthony explicitly approved the realistic-foliage correction and live merge on 2026-09-15.
 
 - Targeted ESLint: passed.
 - Production Next.js build and TypeScript: passed; `/menu` remains statically rendered.
@@ -87,11 +107,14 @@ Production main remains `d2dbac4`.
 - No browser page errors observed. Device checks use Chromium emulation, not physical iOS hardware.
 - Local production server: four fall entries, ten leaves, zero canvases on /menu,
   no horizontal overflow and no browser page errors.
+- Realistic-foliage correction: build/TypeScript and targeted lint passed again.
+  The 320px/390px checks showed both transparent assets, four fall items,
+  two simultaneous falling leaves maximum, unchanged DOM identity and no overflow.
 
 ## Next implementation prompt
 
-In this Colattao worktree, replace only the placeholder leaf art with Anthony's
-approved transparent illustrated leaves. Preserve geometry, motion states, menu
+In this Colattao worktree, inspect the live autumn menu on a physical mobile device
+and adjust foliage size or spacing only if needed. Preserve geometry, motion states, menu
 data, game/reward logic, guest notes, auth and backend. Run targeted lint and
 `npm.cmd run build`, recheck mobile motion, and provide a Vercel preview URL.
 Do not publish or merge to production without Anthony's explicit approval.
