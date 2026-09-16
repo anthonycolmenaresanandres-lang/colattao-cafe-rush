@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import FallExperience from "@/components/FallExperience";
 
 export const metadata: Metadata = {
-  title: { absolute: "The Fall Collection & Fall Rush | Colattao Coffee House" },
-  description: "Explore Colattao's Pumpkin Pie, Caramel Apple, Campfire and Maple Pecan drinks, then play Fall Rush. Coffee and fall flavors in Virginia Beach.",
+  title: { absolute: "Play Fall Rush | Colattao Coffee House" },
+  description: "Play Colattao Fall Rush: tap the falling drinks and explore Pumpkin Pie, Caramel Apple, Campfire and Maple Pecan. Your fall favorites in Virginia Beach.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "The Fall Collection — Colattao Coffee House",
-    description: "Four fall favorites. Explore the flavors and play Fall Rush at Colattao Coffee House, Virginia Beach.",
+    title: "Fall Rush — Colattao Coffee House",
+    description: "Four fall drinks. One delicious challenge. Tap the falling drinks and play Fall Rush at Colattao Coffee House, Virginia Beach.",
     url: "/",
   },
 };

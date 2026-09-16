@@ -555,3 +555,37 @@ customer header.
 - state: All four full flavor names/images and menu destination verified. Native larger-edge pointer scored 10; active item/input sizes stay aligned at 136px on 320px and 160px on 430px. Return to flavors removes canvas and restores Play focus. Screenshots: ../premium-final-390.png, ../premium-final-desktop.png, ../premium-final-mobile-flavors.png; staged size comparison ../premium-final-game-390.png. No browser errors. Main remains 9119168, matching the release log.
 - next: Commit the scoped implementation, open PR and verify its Ready preview. Production release requires Anthony's approval of the completed revision.
 - blocked: None technically. Physical mobile devices remain unverified.
+
+## 2026-09-15 OUT — Premium Colattao preview ready
+- did: Committed and pushed 4d7cdc70a9663c7821e1b6cd22489a37a03715fa; opened PR17 https://github.com/anthonycolmenaresanandres-lang/colattao-cafe-rush/pull/17. Vercel preview dpl_27QrFv5YizvR3Fy3Caww3uYpW9aB is Ready at https://colattao-cafe-rush-hc9tm65gp.vercel.app. PR is CLEAN with successful Vercel status. Opened mobile screenshot and preview in Codex.
+- state: Authenticated deployed HTML confirms headline, full branded title, hero path, four flavor controls, fall-menu link and no initial canvas. Optimized 828px hero request returned HTTP200 and valid image bytes. Interactive verification used the matching local production build; existing preview sign-in protection remains enabled. Vercel error scan returned no application logs. Task browser closed and local production server stopped.
+- next: On Anthony's explicit production approval, recheck PR17 reviewed head 4d7cdc70a9663c7821e1b6cd22489a37a03715fa, checks and main 91191682f68999d6ef7f2e4371485c81cf803af4; merge that reviewed head and verify public deployment, flavors, game sizing and menu navigation. Prior production dpl_FKfapJwLRBvk6tHWg6u4EDUHaW6t is the rollback reference.
+- blocked: Production release awaits Anthony's approval under his AGENTS instructions; no technical blocker. Physical Safari/Android hardware remains unverified. This final handoff entry is local only to preserve the verified preview commit.
+
+## 2026-09-15 IN — Approved premium Colattao release
+- did: Anthony replied "Mery" to the explicit PR17 merge question; treated the typo as approval to merge and stated that interpretation. Rechecked OPEN/CLEAN PR17, reviewed head 4d7cdc70a9663c7821e1b6cd22489a37a03715fa and successful Vercel checks. Main remains 91191682f68999d6ef7f2e4371485c81cf803af4, consistent with handoff.
+- state: Ready to merge the reviewed source. Local 9950662 contains only preview handoff documentation and remains outside the PR. Prior production dpl_FKfapJwLRBvk6tHWg6u4EDUHaW6t is the rollback reference.
+- next: Merge the exact reviewed head, verify Ready production and the public landing/flavors/game/menu, then check OUT.
+- blocked: None; release approval received.
+
+## 2026-09-15 MERGED — Premium Colattao collection
+- did: Merged PR17 at approved head 4d7cdc70a9663c7821e1b6cd22489a37a03715fa as main fc1d9d5bdc89e75d68dfd9fe0781ab78583f1e46 at 22:15:06Z.
+- state: Production deployment https://colattao-cafe-rush-445coastz.vercel.app is building.
+- next: Verify Ready deployment and public landing/flavors/game/menu.
+- blocked: None.
+
+## 2026-09-15 OUT — Premium Colattao collection live
+- did: Merged approved PR17 as fc1d9d5bdc89e75d68dfd9fe0781ab78583f1e46. Production dpl_DZMUCGmeVMJV78KZ3ZRicnxLHPsN is Ready at https://colattao-cafe-rush-445coastz.vercel.app and owns public alias https://colattao-cafe-rush.vercel.app. GitHub Vercel commit status is successful.
+- state: Fresh public 390x844 browser verified the new headline/title, logo and all four loaded hero images/full menu names, no initial canvas and no horizontal overflow. Play loads all four game textures; natural playing spawns measure 148.98px good drinks and 140.0412px bad items with equal hit areas. Return removes the canvas and restores Play focus. Native menu-link click reaches /menu#fall-drinks, with the category and all four flavors present. No browser page errors or Vercel error logs. Screenshots ../premium-live-390.png and ../premium-live-game.png. Task browser closed.
+- next: Release complete; no required work remains. Physical Safari/Android hardware remains unverified. Rollback reference: prior main 91191682f68999d6ef7f2e4371485c81cf803af4 / deployment dpl_FKfapJwLRBvk6tHWg6u4EDUHaW6t.
+- blocked: None. Release documentation remains local to avoid a redundant documentation deployment.
+
+## 2026-09-16 IN - Colattao game-start landing strategy
+Anthony requests plan first. Current collection headline dominates game identity; other flavor choices fall below the initial390px mobile view. Planning a more noticeable game title, featured drink stage, visible drink selectors, and immediate Play action. Source review and live desktop/mobile inspection complete; no application changes.
+
+OUT: Game-start plan complete in docs/COLATTAO_GAME_START_PLAN.md. Recommend visible Fall Rush title, featured drink stage, four illustrated selectors and clear Play with responsive spacing. Live mobile and desktop inspected. Planning/logbook changes only; implementation is the next stage.
+
+## 2026-09-16 IN - Execute and release game-start plan
+Anthony authorized Merge. Implementation starts from fc1d9d5 in isolated codex/colattao-game-start. Plan committed scope: landing composition, flavor controls and metadata. Verify locally and preview before approved production merge.
+
+PROGRESS: Implemented game-start plan. Scoped lint/build/types pass. Mobile/desktop layout, all four flavors, fallback, reduced motion,600point completion/replay and return cleanup/focus verified. Prior automated completion delay was browser background throttling, resolved by foregrounding. Preparing approved preview/release.
