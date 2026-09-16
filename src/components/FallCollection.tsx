@@ -27,65 +27,68 @@ export default function FallCollection({ onPlay, selected, onSelect, focusPlay }
     <main className={styles.collection}>
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Colattao Coffee House home">
-          <Image src="/assets/colattao/collection/colattao-wordmark.webp" alt="Colattao Coffee House" width={341} height={180} priority />
+          <Image src="/assets/colattao/collection/colattao-wordmark.webp" alt="Colattao Coffee House" width={341} height={180} loading="eager" />
         </Link>
         <span className={styles.location}>Coffee House<span>Virginia Beach</span></span>
         <a className={styles.menuLink} href="/menu">The menu <span aria-hidden="true">↗</span></a>
       </header>
 
-      <div className={styles.heading}>
-        <p className={styles.eyebrow}>The autumn collection</p>
-        <h1>A season worth savoring.</h1>
-        <p>Pumpkin, apple, marshmallow &amp; maple.<br />Find your fall favorite.</p>
-      </div>
+      <section className={styles.gameStart} aria-labelledby="fall-rush-title">
+        <div className={styles.heading}>
+          <p className={styles.eyebrow}>The fall drinks game</p>
+          <h1 id="fall-rush-title"><span>FALL</span>{" "}<span>RUSH</span></h1>
+          <p className={styles.instructions}>Tap the falling drinks.<br />Avoid the chain coffee.</p>
+        </div>
 
-      <section className={styles.showcase} aria-label="Explore the fall drinks">
-        <div className={styles.portrait}>
-          <span className={styles.portraitLabel} aria-hidden="true">COLATTAO / FALL</span>
+        <div className={styles.portrait} aria-label="Featured fall drink">
+          <div className={styles.spotlight} aria-hidden="true" />
           <div key={drink.slug} className={styles.imageWrap}>
             {failed.includes(drink.slug) ? (
               <div className={styles.imageFallback}><span aria-hidden="true">☕</span><p>{drink.label}</p></div>
             ) : (
               <Image src={`/assets/colattao/collection/${drink.slug}.webp`} alt={drink.alt}
-                width={960} height={960} priority={selected === 0}
-                sizes="(min-width: 900px) 520px, (min-width: 600px) 380px, 84vw"
+                width={960} height={960} loading="eager" fetchPriority={selected === 0 ? "high" : "auto"}
+                sizes="(min-width: 900px) 420px, (min-width: 600px) 340px, (max-width: 359px) 260px, 300px"
                 className={styles.drinkImage}
                 onError={() => setFailed((previous) => [...new Set([...previous, drink.slug])])} />
             )}
           </div>
-          <span className={styles.portraitNote}>{drink.note}</span>
+          <div className={styles.drinkCopy} aria-live="polite" aria-atomic="true">
+            <h2>{item.name}</h2>
+          </div>
         </div>
 
-        <div className={styles.details}>
-          <div className={styles.drinkCopy} aria-live="polite" aria-atomic="true">
-            <p className={styles.eyebrow}>Your fall favorite</p>
-            <h2>{item.name}</h2>
-            <p className={styles.ingredients}>{item.description}</p>
-          </div>
-          <fieldset className={styles.flavors}>
-            <legend>Explore the flavors</legend>
+        <fieldset className={styles.flavors}>
+            <legend>Meet the drinks</legend>
             <div className={styles.flavorGrid}>
               {ART.map((choice, index) => (
                 <label key={choice.slug} className={styles.flavor}>
-                  <input type="radio" name="fall-flavor" value={choice.slug} checked={selected === index} onChange={() => onSelect(index)}
-                    onFocus={(event) => {
-                      const label = event.currentTarget.parentElement;
-                      const actions = playRef.current?.parentElement;
-                      if (label && actions && window.matchMedia("(max-width: 599px)").matches
-                        && label.getBoundingClientRect().bottom > actions.getBoundingClientRect().top) {
-                        label.scrollIntoView({ block: "center", behavior: "instant" });
-                      }
-                    }} />
-                  <span><span className={styles.flavorDot} aria-hidden="true" />{choice.label}</span>
+                  <input type="radio" name="fall-flavor" value={choice.slug} aria-label={choice.name}
+                    checked={selected === index} onChange={() => onSelect(index)} />
+                  <span className={styles.flavorOption}>
+                    <span className={styles.thumbnail} aria-hidden="true">
+                      {failed.includes(choice.slug) ? <span className={styles.thumbnailFallback}>☕</span> : (
+                        <Image src={`/assets/colattao/collection/${choice.slug}.webp`} alt="" width={96} height={96} sizes="72px"
+                          onError={() => setFailed((previous) => [...new Set([...previous, choice.slug])])} />
+                      )}
+                    </span>
+                    <span className={styles.flavorLabel}>{choice.label}</span>
+                    <span className={styles.selectionMark} aria-hidden="true">{selected === index ? "✓" : ""}</span>
+                  </span>
                 </label>
               ))}
             </div>
-          </fieldset>
-          <div className={styles.actions}>
-            <button ref={playRef} type="button" onClick={onPlay} className={styles.play}>Play Fall Rush <span aria-hidden="true">→</span></button>
+        </fieldset>
+
+        <div className={styles.actions}>
+            <button ref={playRef} type="button" onClick={onPlay} className={styles.play}><span className={styles.playIcon} aria-hidden="true">▶</span> Play Fall Rush <span aria-hidden="true">→</span></button>
             <a href="/menu#fall-drinks" className={styles.flavorMenu}>View fall menu <span aria-hidden="true">↗</span></a>
-          </div>
-          <p className={styles.gameNote}>A little play with your coffee.<br /><span>Tap the falling drinks. Avoid the chain coffee.</span></p>
+        </div>
+
+        <div className={styles.details}>
+          <p className={styles.eyebrow}>In your cup</p>
+          <p className={styles.ingredients}>{item.description}</p>
+          <p className={styles.flavorNote}>{drink.note}</p>
         </div>
       </section>
       <footer className={styles.footer}><span>Colattao Coffee House</span><span>Virginia Beach, Virginia</span><a href="https://finacalleos.com" target="_blank" rel="noopener noreferrer">Experience by Fina Calle <span aria-hidden="true">↗</span></a></footer>
