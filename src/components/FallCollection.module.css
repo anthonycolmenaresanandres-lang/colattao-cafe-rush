@@ -28,8 +28,14 @@
 .heading { grid-area: heading; align-self: end; padding-top: 8px; }
 .eyebrow { color: var(--gold); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .19em; }
 .heading h1 { margin: 23px 0; font: 400 clamp(38px, 4.3vw, 56px)/1.42 var(--font-pixel), monospace; letter-spacing: -.04em; text-shadow: 0 5px 0 #2e5a7c; }
-.heading h1 span { display: block; }
-.heading h1 span:last-child { color: #edcf95; }
+.titlePlay { display: inline-flex; flex-direction: column; align-items: flex-start; padding: 0; border: 0; color: inherit; background: transparent; font: inherit; letter-spacing: inherit; text-align: inherit; text-shadow: inherit; cursor: pointer; }
+.titleWords { transition: transform 150ms ease-out; }
+.titleWords > span { display: block; }
+.titleWords > span:last-child { color: #edcf95; }
+.titleHint { margin-top: 8px; color: var(--gold); font: 800 10px/1.2 var(--font-inter), sans-serif; letter-spacing: .14em; text-shadow: none; text-transform: uppercase; transition: color 150ms ease-out; }
+.titlePlay:hover .titleWords { transform: translateY(-2px); }
+.titlePlay:hover .titleHint { color: var(--paper); }
+.titlePlay:active .titleWords { transform: translateY(2px); }
 .instructions { color: var(--paper); font-size: 17px; line-height: 1.65; }
 .portrait { grid-area: portrait; position: relative; min-width: 0; display: flex; flex-direction: column; align-items: center; isolation: isolate; }
 .spotlight { position: absolute; z-index: -1; top: 3%; width: 96%; max-width: 420px; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(ellipse at 50% 46%, #5887ab40, #2e5a7c26 47%, transparent 71%); pointer-events: none; }
@@ -77,7 +83,9 @@
   .gameStart { grid-template-columns: minmax(0, 1fr); grid-template-areas: "heading" "portrait" "flavors" "actions" "details"; row-gap: 14px; padding: 24px 0 28px; }
   .heading { padding: 0; text-align: center; }
   .heading h1 { font-size: clamp(26px, 5.8vw, 40px); line-height: 1.45; margin: 12px 0 10px; }
-  .heading h1 span { display: inline; }
+  .titlePlay { align-items: center; }
+  .titleWords > span { display: inline; }
+  .titleHint { margin-top: 5px; }
   .instructions { font-size: 14px; line-height: 1.5; }
   .portrait, .flavors { width: 100%; max-width: 420px; justify-self: center; }
   .imageWrap { max-width: 340px; }
@@ -123,6 +131,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .imageWrap { animation: none; }
-  .play, .flavorOption, .thumbnail { transition: none; }
-  .play:hover, .play:active, .flavor:hover .thumbnail { transform: none; }
+  .play, .flavorOption, .thumbnail, .titleWords, .titleHint { transition: none; }
+  .play:hover, .play:active, .flavor:hover .thumbnail, .titlePlay:hover .titleWords, .titlePlay:active .titleWords { transform: none; }
 }

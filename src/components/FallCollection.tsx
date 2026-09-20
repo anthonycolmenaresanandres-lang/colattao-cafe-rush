@@ -36,7 +36,12 @@ export default function FallCollection({ onPlay, selected, onSelect, focusPlay }
       <section className={styles.gameStart} aria-labelledby="fall-rush-title">
         <div className={styles.heading}>
           <p className={styles.eyebrow}>The fall drinks game</p>
-          <h1 id="fall-rush-title"><span>FALL</span>{" "}<span>RUSH</span></h1>
+          <h1 id="fall-rush-title">
+            <button type="button" onClick={onPlay} className={styles.titlePlay} aria-label="Play Fall Rush">
+              <span className={styles.titleWords}><span>FALL</span>{" "}<span>RUSH</span></span>
+              <span className={styles.titleHint} aria-hidden="true">▶ Tap to play</span>
+            </button>
+          </h1>
           <p className={styles.instructions}>Tap the falling drinks.<br />Avoid the chain coffee.</p>
         </div>
 
