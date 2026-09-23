@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { isReadOnlyPreview } from "./preview-safety";
 
 /**
  * Server-only Supabase client (Phase 1 — owner request save).
@@ -14,6 +15,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 let cached: SupabaseClient | null = null;
 
 export function getSupabaseAdmin(): SupabaseClient | null {
+  if (isReadOnlyPreview()) return null;
   if (cached) return cached;
 
   const url = process.env.SUPABASE_URL;
@@ -36,6 +38,7 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 /** Whether the persisted request flow is enabled (env-flag + configured). */
 export function isRequestsDbEnabled(): boolean {
   return (
+    !isReadOnlyPreview() &&
     process.env.REQUESTS_DB_ENABLED === "true" &&
     Boolean(process.env.SUPABASE_URL) &&
     Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY)

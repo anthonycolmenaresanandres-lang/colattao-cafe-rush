@@ -3,6 +3,9 @@
 // Items marked with `needsConfirmation: true` should be verified with staff.
 
 export interface MenuItem {
+  /** Stable identity and artwork mapping for owner-managed snapshots. */
+  id?: string;
+  sourceName?: string;
   name: string;
   /** null = "ask staff" / market price */
   price: string | null;

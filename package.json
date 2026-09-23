@@ -7,26 +7,33 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:demo": "node --import tsx --test scripts/starter-demo.test.ts",
+    "test:preview": "node --import tsx --test scripts/preview-safety.test.ts",
+    "test:owner": "node --import tsx --test scripts/owner-menu.test.ts scripts/owner-draft.test.ts scripts/owner-recovery.test.ts scripts/owner-request.test.ts scripts/owner-access.test.ts",
     "new-client": "node scripts/new-client.ts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.106.2",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.4.0",
-    "next": "16.2.6",
+    "next": "16.3.5",
     "phaser": "^4.1.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "resend": "^6.12.4"
+    "resend": "^6.12.4",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

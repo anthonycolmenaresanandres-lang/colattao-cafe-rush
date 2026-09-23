@@ -1,7 +1,8 @@
-﻿import { put } from "@vercel/blob";
+import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { insertRequest } from "@/lib/supabaseServer";
+import { isReadOnlyPreview, PREVIEW_SUBMISSION_MESSAGE } from "@/lib/preview-safety";
 
 export const dynamic = "force-dynamic";
 
@@ -156,6 +157,7 @@ async function uploadFiles(files: File[]) {
 }
 
 export async function POST(request: Request) {
+  if (isReadOnlyPreview()) return NextResponse.json({ ok: false, reason: "read_only_preview", detail: PREVIEW_SUBMISSION_MESSAGE }, { status: 403 });
   const missing = missingEnvVars();
   if (missing.length > 0) {
     console.warn("[owner-requests] Missing environment variables", {

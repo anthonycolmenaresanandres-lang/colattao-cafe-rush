@@ -1,0 +1,21 @@
+# Deploy the application, not local credentials, research or synthetic test fixtures.
+.git
+.env*
+_local_secrets
+.claude
+.codex
+.agents
+.codex-remote-attachments
+node_modules
+.next
+coverage
+outputs
+docs
+scripts
+supabase
+PROMPTS
+PRODUCT_MODULES
+*.md
+*.log
+*.pem
+*.tsbuildinfo

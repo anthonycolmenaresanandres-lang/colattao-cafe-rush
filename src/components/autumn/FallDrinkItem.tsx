@@ -11,7 +11,7 @@ const DRINK_ART: Record<string, string> = {
 
 /** Presentation only: names, descriptions and prices still come from menu data. */
 export default function FallDrinkItem({ item }: { item: MenuItem }) {
-  const art = DRINK_ART[item.name];
+  const art = DRINK_ART[item.sourceName ?? item.name];
   return (
     <li className={styles.drinkItem}>
       {art && (
