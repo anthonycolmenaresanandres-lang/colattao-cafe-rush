@@ -514,3 +514,7 @@
 - state: Production-build direct Play, single canvas,600point completion/native replay and return focus/selection verified. A background-throttled browser delayed the initial automated completion; Page.bringToFront resolved it. No gameplay changes needed. Verification detail in docs/COLATTAO_GAME_START_IMPLEMENTATION.md.
 - next: Push scoped commit, open PR, require Ready exact-head Vercel preview then execute already-approved merge and live checks.
 - blocked: None.
+
+## 2026-10-05 IN - Focused menu/game flow audit
+
+Anthony authorized reproduced defects only, from parent task 01a0fe62-9a92-753c-abfd-f14c4ca470de. Isolated branch codex/menu-flow-audit-20261005 from origin/main e7d6185. Bounded menu and Fall Rush/mobile interaction review; no external submissions/payments/reward claims, secrets, installs, push, merge or deploy. Existing canonical source remains untouched.

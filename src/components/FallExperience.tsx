@@ -38,7 +38,7 @@ export default function Home() {
   if (!playing) return <FallCollection onPlay={start} selected={selected} onSelect={setSelected} focusPlay={hasPlayed} />;
 
   return (
-    <main className="mx-auto flex h-[100svh] min-h-[560px] w-full max-w-[470px] flex-col bg-colattao-page text-parchment">
+    <main className="mx-auto flex h-[100svh] min-h-0 w-full max-w-[470px] flex-col bg-colattao-page text-parchment">
       <h1 className="sr-only">Colattao Fall Rush</h1>
       <nav className="flex h-14 shrink-0 items-center justify-between border-b border-parchment/15 px-5 text-xs" aria-label="Game navigation">
         <button type="button" onClick={back} className="min-h-11 cursor-pointer px-2 focus-visible:outline-2 focus-visible:outline-gold">← The flavors</button>
