@@ -518,3 +518,7 @@
 ## 2026-10-05 IN - Focused menu/game flow audit
 
 Anthony authorized reproduced defects only, from parent task 01a0fe62-9a92-753c-abfd-f14c4ca470de. Isolated branch codex/menu-flow-audit-20261005 from origin/main e7d6185. Bounded menu and Fall Rush/mobile interaction review; no external submissions/payments/reward claims, secrets, installs, push, merge or deploy. Existing canonical source remains untouched.
+
+## 2026-10-05 OUT - Landscape control fix prepared; verification blocked
+
+Source commit a604ebc9b13ef6437845cb3a9e90151a2383e202 replaces only the forced 560px minimum height. Live 844x390 reproduction places Pause at y512..556; bounded menu section/detail and game-entry checks are recorded in docs/MENU_GAME_FLOW_AUDIT_20261005.md. Browser repeated timeouts/reset block after-fix captures, gameplay and responsive verification; lint/build attempts are not confirmed passed. Existing minimal-menu source work remains untouched. Local only, no push/merge/deploy, submissions, claims/payments, secrets, installs, traffic/email or game-rule/asset edits.
