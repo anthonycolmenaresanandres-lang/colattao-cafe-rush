@@ -1,30 +1,33 @@
-# Colattao menu/game flow audit — 2026-10-05
+# Colattao menu/game flow audit - 2026-10-06
 
-Authority: Anthony approved focused improvements to the existing menu/game product. Delegated from task 01a0fe62-9a92-753c-abfd-f14c4ca470de. Local preparation only; no push, merge, deploy, submissions, client messages, payments, claims, secrets, service installs, or new dependencies.
+Authority: Anthony approved focused improvements and, after checks pass, scoped push, PR, merge and Git-integrated Vercel release (Sentinel_fd0104db99b081918b012d97ceb5e47e). Delegated from task 01a0fe62-9a92-753c-abfd-f14c4ca470de. No application submissions, client messages, payments, claims, secrets, service installs or new dependencies.
 
-Source: anthonycolmenaresanandres-lang/colattao-cafe-rush, isolated C:\dev\amma\worktrees\colattao-flow-audit-20261005, branch codex/menu-flow-audit-20261005, base origin/main e7d6185. Public deployment: https://colattao-cafe-rush.vercel.app/menu and / (Fall Rush). The live menu matches main's existing textured menu, not the unmerged minimal-menu branch 22f403d; that unrelated work remains untouched. Exact production deployment SHA was not queried.
+Source: anthonycolmenaresanandres-lang/colattao-cafe-rush; isolated C:\dev\amma\worktrees\colattao-flow-audit-20261005; branch codex/menu-flow-audit-20261005; fresh remote main e7d618535b7b2d7e106ec120aea253dcef1a9507. Public https://colattao-cafe-rush.vercel.app/menu and / match main, not the untouched unmerged minimal-menu branch 22f403d. Source fix a604ebc9b13ef6437845cb3a9e90151a2383e202.
 
-## Reproduced defect and prepared fix
+## Reproduced defect and focused fix
 
-At 844x390, start Fall Rush from the live landing title. The game's main element is 560px tall despite a 390px viewport; the canvas spans y=64..512 and Pause spans y=512..556. The fixed minimum height requires scrolling during timed play to reach Pause. Live browser geometry and screenshot confirm the overflow.
+Live 844x390 game: main height 560px; canvas y64..512; Pause y512..556, below the viewport during timed play. Browser geometry and before screenshot confirm the forced overflow.
 
-src/components/FallExperience.tsx:41: replace min-h-[560px] with min-h-0. Preserve h-[100svh], navigation/control sizes, existing flex sizing and Phaser's resize path. This removes the forced overflow on short screens without changing portrait/desktop heights. Existing palette, fonts, logo, assets, menu layout, scoring and rewards remain intact.
+src/components/FallExperience.tsx:41 replaces min-h-[560px] with min-h-0. Existing h-[100svh], flex sizing, Phaser resize path, 44px controls, focus treatment, logos, assets, menu, scoring and rewards are preserved. No redesign or other application source changes.
 
-## Bounded read-only live checks
+## Verification passed on exact source candidate
 
-- 390x844 menu: no horizontal overflow; image inspection found no failed loaded images.
-- Browse menu expands and exposes all seven section links; Kitchen resolves to /menu#cocina.
-- California Sandwich Details opens by keyboard and exposes its description/photo.
-- Menu's game link resolves to /; the Fall Rush title starts the game and a single canvas loads.
-- Landscape defect measurements: main height 560; Pause top 512, bottom 556; viewport height 390.
-- No guest notes, reward claims, payment flows or application API mutations submitted.
+- Targeted ESLint (system Node, eslint src/components/FallExperience.tsx): exit 0.
+- Production next build --webpack: exit 0; compiled, TypeScript passed, all 20 static pages generated. Production build ID h4ttJQnz433kUIPrbeiEy; local next start HTTP 200.
+- 844x390: document 844x390, main 390px, canvas y64..342, Pause y342..386. Before/after screenshots inspected at the same viewport/game state; controls fit after the fix.
+- 568x320: document 568x320, canvas height 208px, Pause y272..316.
+- 390x844: document 390x844, canvas height 732px, Pause y796..840.
+- 320x568: document 320x568, main 568px, canvas height 456px, Pause y520..564.
+- 1440x900: document 1440x900, main 900px/max-width 470px, canvas height 788px, Pause y852..896.
+- Pause click shows Rush paused and Resume aria-pressed=true; Enter resumes. Natural timed loss disables Pause; existing game-region Enter restarts, returns TAP DRINKS +10 and enables Pause. Replay screenshot inspected.
+- The flavors removes game and restores lower Play focus; keyboard Space selects Caramel Apple and updates image/description.
+- View fall menu resolves /menu#fall-drinks; mobile menu has no horizontal overflow or failed loaded images. Menu game link returns landing. No captured console errors.
+- Earlier read-only live checks: Browse menu exposes seven links; Kitchen resolves /menu#cocina; California Sandwich Details opens by keyboard with description/photo. No actionable Bodega defect confirmed in the bounded earlier audit; no Bodega code changed.
 
-## Verification status
+Guidelines audit: only the existing height class changes; layout/focus/control patterns remain established. git diff --check passes. No guest notes, reward claims, payments, requests/email/traffic, game rules, dependencies or settings changed.
 
-The isolated dev server compiled / and returned HTTP 200. After-fix responsive and interaction checks remain pending: the browser runner timed out repeatedly and reset its session. Before/after screenshots could not be saved in the restricted data-center directory; the live before capture was inspected in the tool output. Targeted lint and production build were attempted; final results will be appended when available. Do not treat this as release-ready until those checks and after-fix landscape/pause/resume/retry checks pass.
+## Limits and release handoff
 
-Guidelines review: the one touched height class uses existing flex layout and keeps 44px controls/focus treatment; no new accessibility pattern, visual redesign or dependency.
+Desktop Pause was disabled after the natural timeout; this is expected result feedback, not a defect. Desktop geometry passed; pause/resume behavior passed at 844x390. Physical Safari/Android hardware and a complete winning reward flow remain unverified. Browser captures were inspected in tool output; saving PNG files in the data-center directory was denied by the browser filesystem sandbox. No permissions were broadened. The local application server will be stopped at handoff.
 
-## Next Codex prompt
-
-In C:\dev\amma\worktrees\colattao-flow-audit-20261005 on codex/menu-flow-audit-20261005, verify only the short-screen height fix in src/components/FallExperience.tsx. Protect all menu redesign work, requests/email/traffic, rewards, game rules/assets, configuration and dependencies. Run targeted ESLint and npm.cmd run build -- --webpack. Compare unchanged live and local fixed gameplay at 844x390, 568x320, 320x568, 390x844 and desktop; verify visible Pause/Resume, retry and return-to-menu. No submissions/payments/claims or push/deploy/merge. Report the existing public production URL and local evidence without representing localhost as Anthony's review link.
+Release proceeds only through the scoped GitHub PR with exact-head checks; no direct push to main. Hosted preview, merge and production verification results will be recorded in the final handoff.
