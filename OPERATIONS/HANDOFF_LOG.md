@@ -530,3 +530,11 @@ Remote main verified read-only as e7d618535b7b2d7e106ec120aea253dcef1a9507; isol
 ## 2026-10-06 VERIFIED - Exact landscape candidate
 
 Source a604ebc passed targeted ESLint, production Webpack build/TypeScript and all 20 pages. Local production build h4ttJQnz433kUIPrbeiEy passed 844x390, 568x320, 390x844, 320x568 and desktop bounds; pause/resume feedback, timed-loss replay, return focus, native flavor selection and menu return passed. Only existing min-height class changed. No console errors captured, submissions, claims or protected-surface changes. Scoped release now authorized; require successful exact-head GitHub/Vercel checks before guarded PR merge. Full measurements and remaining hardware/capture limits in docs/MENU_GAME_FLOW_AUDIT_20261005.md.
+
+## 2026-10-06 IN - Review follow-up: short landscape catch window
+
+Investigate PR21 review4195732615 from production23c621f in local branch codex/colattao-landscape-playfield-20261006. Preserve Pause visibility and existing scoring/levels/rewards. Local-only QA route/scene probes mock GAME_WON delivery without mounting reward UI or sending anything. Remove instrumentation before build/commit. No push/merge/deploy authorized for this follow-up; report exact corrective evidence first. One heavy process at a time.
+
+## 2026-10-06 OUT - Short-landscape catch correction prepared locally
+
+Confirmed PR21 catch geometry regression and prepared compact64px HUD/height-bounded drinks. Only DemoScene, fallLayout helper and scoped tests alter code; original level/scoring/reward rules preserved. Four tests, targeted lint and clean production build/TypeScript20 pages pass. Real local pointer catches using controlled clocks complete all three levels and mocked600-point5% win at568x320; larger landscape level progression, portrait catch/resize/pause and primitive fallback catch verified. QA instrumentation/route removed; local fixture archives remain untracked verification/*.txt. Source branch codex/colattao-landscape-playfield-20261006 from production23c621f; no push/merge/deploy. Physical touch and realtime full win remain unverified; parent must review evidence before any release. All owned heavy processes stopped; slot free. See docs/COLATTAO_LANDSCAPE_CATCH_CORRECTION_20261006.md.

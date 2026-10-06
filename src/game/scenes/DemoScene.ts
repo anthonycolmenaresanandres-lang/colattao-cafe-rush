@@ -1,6 +1,7 @@
 ﻿import Phaser from "phaser";
 import { EventBus } from "@/game/events/EventBus";
 import appTheme from "@/config/theme";
+import { getFallLayout } from "./fallLayout";
 import { FALL_UI, FALL_ACTION, type FallPhase } from "@/game/events/fallUi";
 
 type FallingKind = "good" | "bad";
@@ -283,13 +284,14 @@ export class DemoScene extends Phaser.Scene {
   // HUD â€” slim parchment chips + level name
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   private buildHud() {
-    const { width } = this.scale;
+    const { width, height } = this.scale;
+    const { compact, hudHeight } = getFallLayout(width, height);
     this.hudGroup = this.add.container(0, 0).setDepth(10);
-    this.hudGroup.add(this.add.rectangle(width / 2, 64, width, 132, 0x16130f, 0.94));
+    this.hudGroup.add(this.add.rectangle(width / 2, hudHeight / 2, width, hudHeight, 0x16130f, 0.94));
 
     const chipWidth = 110;
     const chipHeight = 30;
-    const chipY = 36;
+    const chipY = compact ? 20 : 36;
     const chipLeftX = 78;
     const chipRightX = width - 78;
 
@@ -325,9 +327,9 @@ export class DemoScene extends Phaser.Scene {
 
     // Level name (serif) + target
     this.levelNameText = this.add
-      .text(width / 2, 76, this.level.name, {
+      .text(width / 2, compact ? 49 : 76, compact ? `${this.level.name} · Target ${this.level.targetScore}` : this.level.name, {
         fontFamily: FONT_SERIF,
-        fontSize: "16px",
+        fontSize: compact ? "12px" : "16px",
         color: "#FFF6E2",
         align: "center",
       })
@@ -342,6 +344,7 @@ export class DemoScene extends Phaser.Scene {
       })
       .setOrigin(0.5);
     this.targetText.setLetterSpacing(2);
+    this.targetText.setVisible(!compact);
     this.hudGroup.add(this.targetText);
 
     // Status line under HUD
@@ -355,17 +358,19 @@ export class DemoScene extends Phaser.Scene {
       .setOrigin(0.5)
       .setAlpha(0.85);
     this.statusText.setLetterSpacing(1.2);
+    this.statusText.setVisible(!compact);
     this.hudGroup.add(this.statusText);
 
     // Ceramic-blue hairline under status
-    const ceramic = this.add.rectangle(width / 2, 124, 120, 1, COLOR_CERAMIC, 0.55);
+    const ceramic = this.add.rectangle(width / 2, compact ? 62 : 124, 120, 1, COLOR_CERAMIC, 0.55);
     this.hudGroup.add(ceramic);
   }
 
   private refreshHudForLevel() {
     this.scoreText?.setText(String(this.score));
     this.timerText?.setText(String(this.timeLeft));
-    this.levelNameText?.setText(this.level.name);
+    const { compact } = getFallLayout(this.scale.width, this.scale.height);
+    this.levelNameText?.setText(compact ? `${this.level.name} · Target ${this.level.targetScore}` : this.level.name);
     this.targetText?.setText(`Target ${this.level.targetScore}`);
   }
 
@@ -492,7 +497,7 @@ export class DemoScene extends Phaser.Scene {
     const kind: FallingKind = Math.random() < cfg.badRate ? "bad" : "good";
     const drink = Phaser.Utils.Array.GetRandom(GOOD_ITEMS) ?? { key: "missing-drink", label: "Coffee" };
     const key = kind === "bad" ? ASSET_KEYS.bad : drink.key;
-    const currentSize = () => Phaser.Math.Clamp(this.scale.width * 0.39, 136, 160) * (kind === "bad" ? 0.94 : 1);
+    const currentSize = () => getFallLayout(this.scale.width, this.scale.height).itemSize * (kind === "bad" ? 0.94 : 1);
     const itemSize = currentSize();
     const item = this.add.container(0, -50).setDepth(2).setSize(itemSize, itemSize);
     item.setData({ kind, textureKey: key });
@@ -510,7 +515,7 @@ export class DemoScene extends Phaser.Scene {
       const edgePadding = size * 0.58 + 8;
       item.x = edgePadding + horizontal * Math.max(0, this.scale.width - edgePadding * 2);
       item.y = -edgePadding + progress.value * (this.scale.height + edgePadding * 2);
-      if (item.input) item.input.enabled = item.y > 132 + size / 2 && !this.gameEnded;
+      if (item.input) item.input.enabled = item.y > getFallLayout(this.scale.width, this.scale.height).hudHeight + size / 2 && !this.gameEnded;
     };
     position();
     item.setData("reflow", position);
@@ -677,7 +682,7 @@ export class DemoScene extends Phaser.Scene {
     this.resetLevelState();
     this.refreshHudForLevel();
     this.statusText?.setText("Fall favorites. Colattao only.");
-    this.statusText?.setVisible(true);
+    this.statusText?.setVisible(!getFallLayout(this.scale.width, this.scale.height).compact);
     this.startRound();
   }
 
