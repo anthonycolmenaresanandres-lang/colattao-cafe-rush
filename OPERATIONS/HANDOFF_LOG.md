@@ -514,3 +514,19 @@
 - state: Production-build direct Play, single canvas,600point completion/native replay and return focus/selection verified. A background-throttled browser delayed the initial automated completion; Page.bringToFront resolved it. No gameplay changes needed. Verification detail in docs/COLATTAO_GAME_START_IMPLEMENTATION.md.
 - next: Push scoped commit, open PR, require Ready exact-head Vercel preview then execute already-approved merge and live checks.
 - blocked: None.
+
+## 2026-10-05 IN - Focused menu/game flow audit
+
+Anthony authorized reproduced defects only, from parent task 01a0fe62-9a92-753c-abfd-f14c4ca470de. Isolated branch codex/menu-flow-audit-20261005 from origin/main e7d6185. Bounded menu and Fall Rush/mobile interaction review; no external submissions/payments/reward claims, secrets, installs, push, merge or deploy. Existing canonical source remains untouched.
+
+## 2026-10-05 OUT - Landscape control fix prepared; verification blocked
+
+Source commit a604ebc9b13ef6437845cb3a9e90151a2383e202 replaces only the forced 560px minimum height. Live 844x390 reproduction places Pause at y512..556; bounded menu section/detail and game-entry checks are recorded in docs/MENU_GAME_FLOW_AUDIT_20261005.md. Browser repeated timeouts/reset block after-fix captures, gameplay and responsive verification; lint/build attempts are not confirmed passed. Existing minimal-menu source work remains untouched. Local only, no push/merge/deploy, submissions, claims/payments, secrets, installs, traffic/email or game-rule/asset edits.
+
+## 2026-10-06 IN - Resume exact landscape candidate verification
+
+Remote main verified read-only as e7d618535b7b2d7e106ec120aea253dcef1a9507; isolated source candidate a604ebc with documentation head 1ff06fb remains clean. Anthony explicitly approved scoped push/PR/merge and Git-integrated Vercel release only after checks pass (Sentinel_fd0104db99b081918b012d97ceb5e47e). One heavy process/browser slot; no other code, guest-note, seasonal, keyboard-game, settings, secret, data or dependency changes. Verify sequentially and stop owned processes at handoff.
+
+## 2026-10-06 VERIFIED - Exact landscape candidate
+
+Source a604ebc passed targeted ESLint, production Webpack build/TypeScript and all 20 pages. Local production build h4ttJQnz433kUIPrbeiEy passed 844x390, 568x320, 390x844, 320x568 and desktop bounds; pause/resume feedback, timed-loss replay, return focus, native flavor selection and menu return passed. Only existing min-height class changed. No console errors captured, submissions, claims or protected-surface changes. Scoped release now authorized; require successful exact-head GitHub/Vercel checks before guarded PR merge. Full measurements and remaining hardware/capture limits in docs/MENU_GAME_FLOW_AUDIT_20261005.md.
