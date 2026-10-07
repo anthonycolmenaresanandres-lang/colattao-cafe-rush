@@ -1,14 +1,11 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { menuCategories } from "@/data/colattaoMenu";
-import appTheme from "@/config/theme";
-import AutumnAtmosphere from "@/components/autumn/AutumnAtmosphere";
-import FallPromo from "@/components/autumn/FallPromo";
-import autumnStyles from "@/components/autumn/autumn.module.css";
 import ColattaoGuestNoteForm from "@/components/ColattaoGuestNoteForm";
-import FallDrinkItem from "@/components/autumn/FallDrinkItem";
-import { SITE_URL, SITE_NAME, BRAND_LINKS } from "@/config/site";
+import { BRAND_LINKS, SITE_NAME, SITE_URL } from "@/config/site";
+import appTheme from "@/config/theme";
+import { menuCategories } from "@/data/colattaoMenu";
+import styles from "./menu.module.css";
 
 export const metadata: Metadata = {
   title: "Menu — Espresso, Matcha, Lattes & Pastries in Virginia Beach",
@@ -26,8 +23,6 @@ export const metadata: Metadata = {
   },
 };
 
-// schema.org Menu built from the real menu data so Google can read every
-// section and item (improves eligibility for rich "colattao menu" results).
 function parsePrice(price: string | null): string | undefined {
   if (!price) return undefined;
   const match = price.match(/([0-9]+(?:\.[0-9]+)?)/);
@@ -72,43 +67,21 @@ function buildMenuJsonLd() {
   };
 }
 
-// Decorative game-asset accents per category
-const CATEGORY_ACCENTS: Record<string, { src: string; alt: string } | undefined> = {
-  espresso: { src: "/assets/colattao/items/coffee-cup.png", alt: "Coffee cup" },
-  matcha: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced matcha" },
-  tea: { src: "/assets/colattao/items/matcha-iced.png", alt: "Iced drink" },
-  cocina: { src: "/assets/colattao/items/croissant.png", alt: "Pastry" },
-  pastries: { src: "/assets/colattao/items/croissant.png", alt: "Croissant" },
+const SEASONAL_ART: Record<string, string> = {
+  "Pumpkin Pie Latte": "/assets/colattao/collection/pumpkin-pie.webp",
+  "Caramel Apple Latte": "/assets/colattao/collection/caramel-apple.webp",
+  "Campfire Cappuccino or Matcha": "/assets/colattao/collection/campfire.webp",
+  "Maple Pecan Latte": "/assets/colattao/collection/maple-pecan.webp",
 };
 
-// Subtle El Dorado parchment textures layered *inside* each category card
-// (very low opacity) — not standalone banners. Text/prices stay dominant.
-const CATEGORY_TEXTURES: Record<string, string> = {
-  espresso: "/assets/colattao/menu/menu-eldorado-01.png",
-  pastries: "/assets/colattao/menu/menu-eldorado-02.png",
-};
-const DEFAULT_CATEGORY_TEXTURE = "/assets/colattao/menu/menu-eldorado-04.png";
-
-const FOOTER_LINKS = {
-  colattaoSite: "https://colattao.com/",
-  colattaoInstagram: "https://www.instagram.com/colattao/",
-  finaCalle: "https://amma-fina-calle.vercel.app/",
-  finaCalleInstagram: "https://www.instagram.com/fina_calle/",
-};
-
-type ItemDetail = {
-  imageSrc: string;
-  imageAlt: string;
-};
-
-const ITEM_DETAILS: Partial<Record<string, ItemDetail>> = {
+const ITEM_DETAILS: Partial<Record<string, { imageSrc: string; imageAlt: string }>> = {
   "Churro Affogato": {
     imageSrc: "/assets/colattao/menu-items/churro-affogato-photo.jpg",
-    imageAlt: "Churro Affogato — churro ice cream and espresso in a crystal glass",
+    imageAlt: "Churro Affogato with espresso in a crystal glass",
   },
   "Chocolate Croissant": {
     imageSrc: "/assets/colattao/menu-items/chocolate-croissant-photo.jpg",
-    imageAlt: "Chocolate Croissant",
+    imageAlt: "Chocolate croissant",
   },
   "Pan de Bono": {
     imageSrc: "/assets/colattao/menu-items/pan-de-bono-photo.jpg",
@@ -120,7 +93,7 @@ const ITEM_DETAILS: Partial<Record<string, ItemDetail>> = {
   },
   "Spinach & Feta": {
     imageSrc: "/assets/colattao/menu-items/spinach-feta-photo.jpg",
-    imageAlt: "Spinach and Feta pastry",
+    imageAlt: "Spinach and feta pastry",
   },
   Cookies: {
     imageSrc: "/assets/colattao/menu-items/chocolate-chip-cookie-sticker.webp",
@@ -128,15 +101,15 @@ const ITEM_DETAILS: Partial<Record<string, ItemDetail>> = {
   },
   "Empanadas, Chicken / Beef": {
     imageSrc: "/assets/colattao/menu-items/empanada-sticker.webp",
-    imageAlt: "Empanadas, Chicken / Beef",
+    imageAlt: "Chicken and beef empanadas",
   },
   "Almond Croissant": {
     imageSrc: "/assets/colattao/menu-items/almond-croissant-photo.jpg",
-    imageAlt: "Almond Croissant",
+    imageAlt: "Almond croissant",
   },
   "Waffle Breakfast": {
     imageSrc: "/assets/colattao/menu-items/waffle-breakfast-photo.jpg",
-    imageAlt: "Waffle Breakfast",
+    imageAlt: "Waffle breakfast",
   },
   Cubano: {
     imageSrc: "/assets/colattao/menu-items/cubano-photo.jpg",
@@ -144,359 +117,228 @@ const ITEM_DETAILS: Partial<Record<string, ItemDetail>> = {
   },
   "Pesto Mozzarella": {
     imageSrc: "/assets/colattao/menu-items/pesto-mozzarella-photo.jpg",
-    imageAlt: "Pesto Mozzarella",
+    imageAlt: "Pesto mozzarella croissant",
   },
   Montecristo: {
     imageSrc: "/assets/colattao/menu-items/montecristo-photo.jpg",
-    imageAlt: "Montecristo",
+    imageAlt: "Montecristo croissant",
   },
   "California Sandwich": {
     imageSrc: "/assets/colattao/menu-items/california-sandwich-photo.jpg",
-    imageAlt: "California Sandwich",
+    imageAlt: "California breakfast sandwich",
   },
   "Ham & Cheesy": {
     imageSrc: "/assets/colattao/menu-items/ham-cheesy-photo.jpg",
-    imageAlt: "Ham & Cheesy",
+    imageAlt: "Ham and cheese croissant",
   },
 };
 
-const COLLAPSIBLE_DESCRIPTION_ITEMS = new Set([
-  "California Sandwich",
-  "Cubano",
-  "Chicken Apricot",
-  "Montecristo",
-  "Pesto Mozzarella",
-]);
+const FOOTER_LINKS = {
+  colattaoSite: "https://colattao.com/",
+  colattaoInstagram: "https://www.instagram.com/colattao/",
+  finaCalle: "https://finacalleos.com/",
+};
 
-function InstagramGlyph() {
+const seasonalCategory = menuCategories.find((category) => category.id === "fall-drinks");
+const standardCategories = menuCategories.filter((category) => category.id !== "fall-drinks");
+
+export default function MenuPage() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.6}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-      className="h-[18px] w-[18px]"
-    >
-      <rect x="3" y="3" width="18" height="18" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
+    <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildMenuJsonLd()) }}
+      />
 
-function BottomSignature() {
-  return (
-    <section className="mt-10 px-4 pb-12">
-      <p className="sr-only">
-        Colattao. Follow us on Instagram. Powered by Fina Calle.
-      </p>
+      <header className={styles.masthead}>
+        <div className={styles.shell}>
+          <p className={styles.location}>Virginia Beach, Virginia</p>
+          <h1 className="sr-only">Colattao Coffee House menu</h1>
+          <a
+            href={FOOTER_LINKS.colattaoSite}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.logoLink}
+            aria-label="Visit the Colattao Coffee House website"
+          >
+            <Image
+              src={appTheme.brand.logoPath}
+              alt="Colattao Coffee House"
+              width={1024}
+              height={341}
+              className={styles.logo}
+              preload
+            />
+          </a>
+          <p className={styles.intro}>Coffee, culture and community.</p>
+        </div>
+      </header>
 
-      {/* Centered premium vertical footer — original cream-gold Colattao hero, warm accents. */}
-      <div className="mx-auto flex max-w-[260px] items-center gap-3">
-        <span className="h-px flex-1 bg-[linear-gradient(90deg,transparent,rgba(218,174,79,0.45))]" />
-        <span className="h-1.5 w-1.5 rotate-45 border border-[#DAAE4F]/70" />
-        <span className="h-px flex-1 bg-[linear-gradient(90deg,rgba(218,174,79,0.45),transparent)]" />
+      <nav className={styles.categoryNav} aria-label="Menu categories">
+        <div className={styles.navTrack}>
+          {menuCategories.map((category) => (
+            <a key={category.id} href={`#${category.id}`}>
+              {category.title}
+            </a>
+          ))}
+          <a href="#guest-notes">Guest notes</a>
+        </div>
+      </nav>
+
+      <div className={styles.shell}>
+        {seasonalCategory ? (
+          <section id={seasonalCategory.id} className={styles.seasonalSection}>
+            <div className={styles.sectionIntro}>
+              <p className={styles.eyebrow}>The seasonal edit</p>
+              <h2>{seasonalCategory.title}</h2>
+              <p>{seasonalCategory.note}</p>
+            </div>
+
+            <div className={styles.seasonalGrid}>
+              {seasonalCategory.items.map((item) => (
+                <article key={item.name} className={styles.seasonalItem}>
+                  <Image
+                    src={SEASONAL_ART[item.name]}
+                    alt={item.name}
+                    width={960}
+                    height={960}
+                    sizes="(max-width: 700px) 44vw, 250px"
+                    className={styles.seasonalImage}
+                    loading={item.name === seasonalCategory.items[0]?.name ? "eager" : "lazy"}
+                  />
+                  <div>
+                    <div className={styles.itemHeading}>
+                      <h3>{item.name}</h3>
+                      <span>{item.price ?? "Ask"}</span>
+                    </div>
+                    {item.description ? <p>{item.description}</p> : null}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        <section className={styles.originStory} aria-labelledby="origin-title">
+          <Image
+            src="/assets/colattao/website-concept/origin-coffee-hills.png"
+            alt="Coffee trees across green mountain hills at sunrise"
+            fill
+            sizes="(max-width: 720px) 100vw, 1120px"
+            className={styles.originImage}
+          />
+          <div className={styles.originShade} />
+          <div className={styles.originCopy}>
+            <p className={styles.eyebrow}>Colombian spirit</p>
+            <h2 id="origin-title">Café, cultura y comunidad.</h2>
+          </div>
+        </section>
+
+        <section id="menu" className={styles.menuCollection} aria-labelledby="menu-title">
+          <div className={styles.menuHeading}>
+            <p className={styles.eyebrow}>Made for your ritual</p>
+            <h2 id="menu-title">The menu</h2>
+          </div>
+
+          <div className={styles.categoryGrid}>
+            {standardCategories.map((category) => (
+              <section key={category.id} id={category.id} className={styles.menuCategory}>
+                <div className={styles.categoryHeading}>
+                  <h3>{category.title}</h3>
+                  {category.note ? <p>{category.note}</p> : null}
+                </div>
+
+                <div className={styles.itemList}>
+                  {category.items.map((item) => {
+                    const detail = ITEM_DETAILS[item.name];
+                    return (
+                      <article key={item.name} className={styles.menuItem}>
+                        <div className={styles.itemHeading}>
+                          <h4>{item.name}</h4>
+                          <span>{item.price ?? "Ask"}</span>
+                        </div>
+                        {item.description ? <p>{item.description}</p> : null}
+                        {detail ? (
+                          <details className={styles.detail}>
+                            <summary>View item</summary>
+                            <Image
+                              src={detail.imageSrc}
+                              alt={detail.imageAlt}
+                              width={720}
+                              height={540}
+                              sizes="(max-width: 720px) 88vw, 480px"
+                              className={styles.detailImage}
+                            />
+                          </details>
+                        ) : null}
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.gameInvitation} aria-labelledby="game-title">
+          <div>
+            <p className={styles.eyebrow}>A little competition with your coffee</p>
+            <h2 id="game-title">Think you know the Colattao vibe?</h2>
+            <p>Catch the good stuff, dodge the bad vibes and finish the rush.</p>
+          </div>
+          <Link href="/" className={styles.playButton}>
+            Play Fall Rush
+          </Link>
+        </section>
+
+        <section id="guest-notes" className={styles.guestSection}>
+          <div className={styles.guestImageWrap}>
+            <Image
+              src="/assets/colattao/real-go/heritage-ceramics.webp"
+              alt="Blue and white Colombian ceramics displayed at Colattao"
+              fill
+              sizes="(max-width: 720px) 100vw, 44vw"
+              className={styles.guestImage}
+            />
+          </div>
+          <ColattaoGuestNoteForm />
+        </section>
       </div>
 
-      <div className="mt-8 flex flex-col items-center text-center">
-        {/* Colattao logo — ORIGINAL cream-gold, hero, largest */}
-        <a
-          href={FOOTER_LINKS.colattaoSite}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit Colattao Coffee House website"
-          className="rounded-2xl transition hover:opacity-90 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F8EDD7]"
-        >
+      <footer className={styles.footer}>
+        <div className={styles.footerInner}>
           <Image
             src={appTheme.brand.logoPath}
             alt="Colattao Coffee House"
             width={1024}
             height={341}
-            className="h-auto w-[290px] max-w-full select-none drop-shadow-[0_0_28px_rgba(218,174,79,0.3)]"
+            className={styles.footerLogo}
           />
-        </a>
-
-        {/* Colattao Instagram CTA — warm gold, centered */}
-        <a
-          href={FOOTER_LINKS.colattaoInstagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Follow Colattao Coffee House on Instagram"
-          className="group mt-7 inline-flex items-center gap-2.5 rounded-full border border-[#DAAE4F]/55 bg-[#2a150d]/50 px-5 py-2.5 text-[#F8EDD7] shadow-[inset_0_1px_0_rgba(248,237,215,0.1)] transition duration-200 hover:-translate-y-0.5 hover:border-[#DAAE4F]/85 hover:bg-[#3a1d12]/60 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
-        >
-          <span className="text-[#DAAE4F] transition-colors group-hover:text-[#F8EDD7]">
-            <InstagramGlyph />
-          </span>
-          <span className="text-[11px] font-black uppercase tracking-[0.16em]">
-            Follow us on Instagram
-          </span>
-        </a>
-        <p className="mt-3 text-[11px] font-semibold tracking-[0.18em] text-[#F8EDD7]/60">
-          @colattao
-        </p>
-
-        {/* Powered by Fina Calle — secondary, smaller, cream */}
-        <a
-          href={FOOTER_LINKS.finaCalle}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Powered by Fina Calle"
-          className="group mt-10 flex flex-col items-center gap-2 rounded-2xl px-3 py-1.5 transition hover:opacity-90 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
-        >
-          <span className="text-[8px] font-semibold uppercase tracking-[0.32em] text-[#DAAE4F]/70">
-            Powered by
-          </span>
-          <Image
-            src="/assets/colattao/ui/fina-calle-os-emblem.webp"
-            alt="Fina Calle OS"
-            width={460}
-            height={488}
-            className="h-auto w-[112px] max-w-full select-none opacity-80 drop-shadow-[0_0_14px_rgba(218,174,79,0.16)] transition-opacity group-hover:opacity-100"
-          />
-        </a>
-
-        {/* Fina Calle — subtle warm line below, routes to the Fina Calle landing page */}
-        <a
-          href={FOOTER_LINKS.finaCalle}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Visit Fina Calle"
-          className="group mt-4 inline-flex items-center gap-1.5 text-[#DAAE4F]/55 transition hover:text-[#DAAE4F]/85 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
-        >
-          <InstagramGlyph />
-          <span className="text-[9px] font-semibold uppercase tracking-[0.18em]">Fina Calle</span>
-          <span className="text-[9px] font-medium tracking-[0.06em]">@fina_calle</span>
-        </a>
-      </div>
-    </section>
-  );
-}
-
-export default function MenuPage() {
-  return (
-    <main className={`${autumnStyles.page} relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]`}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildMenuJsonLd()) }}
-      />
-      <h1 className="sr-only">
-        Colattao Coffee House Menu — Espresso, Matcha, Lattes &amp; Pastries in Virginia Beach, VA
-      </h1>
-      <header className="sticky top-0 z-50 border-b border-[#DAAE4F]/25 bg-[linear-gradient(180deg,#211107_0%,#1D1108_72%,#140A02_100%)] px-3 py-2 shadow-[0_12px_28px_-18px_rgba(0,0,0,0.9)]">
-        <nav className="mx-auto w-full max-w-[360px]">
-          <Link
-            href="/"
-            className="group relative flex min-h-[52px] w-full items-center justify-center overflow-hidden rounded-2xl border border-[#DAAE4F]/75 bg-[linear-gradient(135deg,rgba(218,174,79,0.98)_0%,rgba(248,237,215,0.94)_48%,rgba(218,174,79,0.96)_100%)] px-4 py-2 text-center shadow-[0_10px_26px_-16px_rgba(218,174,79,0.95),inset_0_1px_0_rgba(255,255,255,0.5),inset_0_-2px_0_rgba(29,17,8,0.22)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_32px_-15px_rgba(218,174,79,1)] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F8EDD7]"
-            aria-label="Play Colattao Fall Rush"
+          <div className={styles.footerLinks}>
+            <a href={FOOTER_LINKS.colattaoSite} target="_blank" rel="noopener noreferrer">
+              Website
+            </a>
+            <a href={FOOTER_LINKS.colattaoInstagram} target="_blank" rel="noopener noreferrer">
+              Instagram
+            </a>
+            <a href="#menu">Back to menu</a>
+          </div>
+          <a
+            href={FOOTER_LINKS.finaCalle}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.poweredBy}
           >
-            {/* Golden-ticket side notches */}
-            <span className="pointer-events-none absolute -left-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08]" />
-            <span className="pointer-events-none absolute -right-1.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#1b0e08]" />
-
-            {/* White shine */}
-            <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_25%_15%,rgba(255,255,255,0.55),transparent_45%)] opacity-80" />
-
-            {/* Inner dark hairline */}
-            <span className="pointer-events-none absolute inset-[3px] rounded-xl ring-1 ring-inset ring-[#1D1108]/18" />
-
-            <span className="relative flex flex-col items-center leading-none">
-              <span className="text-[8px] font-bold uppercase tracking-[0.22em] text-[#5a330e]/80">
-                Tap to play
-              </span>
-              <span className="mt-1 text-[13px] font-black uppercase tracking-[0.16em] text-[#1D1108]">
-                PLAY COLATTAO FALL RUSH
-              </span>
-            </span>
-          </Link>
-        </nav>
-      </header>
-      <FallPromo />
-      <div className="pointer-events-none absolute inset-0 z-0">
-        <Image
-          src="/assets/colattao/menu/menu-eldorado-04.png"
-          alt=""
-          aria-hidden="true"
-          fill
-          sizes="470px"
-          className="object-cover opacity-[0.06]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1b0e08]/25 via-transparent to-[#1b0e08]/30" />
-      </div>
-
-      <div className="relative z-10 flex-1 space-y-4 px-4 py-2">
-        {/* Deep-link target so /menu#menu (e.g. from the R&D lab) lands on the categories. */}
-        <div id="menu" aria-hidden="true" className="scroll-mt-32" />
-        <section className="mx-1 -mt-1 pb-1">
-          <div className="pointer-events-none h-4 bg-gradient-to-b from-[#1b0e08]/0 to-[#1b0e08]/28" />
-          <details className="group mt-1 overflow-hidden rounded-[22px] border border-[#d2b27a]/60 bg-[linear-gradient(180deg,rgba(42,21,13,0.88),rgba(24,11,6,0.92))] shadow-[0_16px_30px_-22px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,231,184,0.12)]">
-            <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-[#ffe7b8] transition duration-200 hover:bg-[#3a1d12]/45 focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f8edd7]">
-              <span className="flex flex-col">
-                <span className="text-[8px] font-bold uppercase tracking-[0.26em] text-[#daae4f]/78">
-                  Browse menu
-                </span>
-                <span className="mt-0.5 text-[13px] font-black uppercase tracking-[0.12em]">
-                  Jump to section
-                </span>
-              </span>
-              <span
-                aria-hidden="true"
-                className="grid h-8 w-8 place-items-center rounded-full border border-[#daae4f]/45 bg-[#f8edd7]/8 text-[13px] text-[#daae4f] transition duration-300 group-open:rotate-180 group-hover:border-[#daae4f]/75"
-              >
-                ▾
-              </span>
-            </summary>
-            <nav
-              aria-label="Menu categories"
-              className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-300 ease-out group-open:grid-rows-[1fr]"
-            >
-              <div className="min-h-0 overflow-hidden">
-                <div className="grid gap-2 border-t border-[#d2b27a]/18 px-3 pb-3 pt-2">
-                  {menuCategories.map((c) => (
-                    <a
-                      key={c.id}
-                      href={`#${c.id}`}
-                      className="rounded-2xl border border-[#d2b27a]/32 bg-[#f8edd7]/7 px-3.5 py-2.5 text-[11px] font-bold uppercase tracking-[0.16em] text-[#f8edd7]/90 transition duration-200 hover:border-[#daae4f]/68 hover:bg-[#daae4f]/12 hover:text-[#fff6df] focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f8edd7]"
-                    >
-                      {c.title}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </nav>
-          </details>
-        </section>
-
-        {menuCategories.map((category) => {
-          const accent = CATEGORY_ACCENTS[category.id];
-          const texture = CATEGORY_TEXTURES[category.id] ?? DEFAULT_CATEGORY_TEXTURE;
-          return (
-            <div key={category.id} className={autumnStyles.cardWrap} data-fall-card={category.id === "fall-drinks" ? "" : undefined}>
-              <div className={autumnStyles.cardSurface}>
-              {category.id === "fall-drinks" ? <AutumnAtmosphere /> : null}
-            <section
-              id={category.id}
-              className={`${category.id === "fall-drinks" ? autumnStyles.fallCard : ""} menu-card relative scroll-mt-32 overflow-hidden rounded-3xl border border-[#d2b27a]/55 px-5 pb-5 pt-5 shadow-[0_14px_30px_-18px_rgba(27,14,8,0.55)] ring-1 ring-[#fff3d6]/35`}
-            >
-              {/* Keep the original textures on the other categories. */}
-              {category.id !== "fall-drinks" && (
-              <div className="pointer-events-none absolute inset-0 z-0">
-                <Image
-                  src={texture}
-                  alt=""
-                  aria-hidden="true"
-                  fill
-                  sizes="(max-width: 470px) 100vw, 430px"
-                  className="object-cover opacity-[0.32]"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(248,237,215,0.55)_0%,rgba(248,237,215,0.38)_100%)]" />
-                <div className="absolute inset-0 ring-1 ring-inset ring-[#4b2412]/16" />
-              </div>
-              )}
-
-              <div className={`relative z-10 text-center ${category.id === "fall-drinks" ? autumnStyles.fallHeading : ""}`}>
-                <p
-                  className="text-[10px] uppercase text-[var(--col-gold-deep)]"
-                  style={{ letterSpacing: "0.32em" }}
-                >
-                  Menu
-                </p>
-                {accent && (
-                  <Image
-                    src={accent.src}
-                    alt={accent.alt}
-                    width={44}
-                    height={44}
-                    className="mx-auto mt-1 h-11 w-11 select-none object-contain drop-shadow"
-                    priority={false}
-                  />
-                )}
-                <h2
-                  className="brand-wordmark mt-1 text-[22px] text-[var(--col-espresso)]"
-                  style={{ letterSpacing: "0.04em" }}
-                >
-                  {category.title}
-                </h2>
-                <div className="ceramic-rule mx-auto mt-2 w-2/3" />
-                {category.note && (
-                  <p className="mt-2 text-[11px] italic text-[var(--col-espresso-3)]/75">
-                    {category.note}
-                  </p>
-                )}
-              </div>
-
-              <ul className={`relative mt-4 space-y-3 ${category.id === "fall-drinks" ? "" : "z-10"}`}>
-                {category.items.map((item) => {
-                  if (category.id === "fall-drinks") return <FallDrinkItem key={item.name} item={item} />;
-                  const itemDetail = ITEM_DETAILS[item.name];
-                  const hasCombinedDetails =
-                    Boolean(itemDetail) ||
-                    Boolean(item.description && COLLAPSIBLE_DESCRIPTION_ITEMS.has(item.name));
-
-                  return (
-                    <li key={item.name} className="flex items-start gap-2 text-[var(--col-espresso)]">
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-baseline">
-                          <span
-                            className="font-semibold leading-tight"
-                            style={{ textShadow: "0 1px 1px rgba(255,245,224,0.28)" }}
-                          >
-                            {item.name}
-                          </span>
-                          <span className="dotted-rule" />
-                        </div>
-                        {hasCombinedDetails ? (
-                          <details className="group mt-1.5">
-                            <summary className="inline-flex cursor-pointer list-none items-center gap-1 rounded-full border border-[#d2b27a]/45 bg-[#f8edd7]/45 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--col-espresso-3)]/80 transition-colors hover:bg-[#f8edd7]/65 hover:text-[var(--col-espresso-2)]">
-                              Details
-                              <span className="text-[9px] transition-transform group-open:rotate-180">▾</span>
-                            </summary>
-                            <div className="mt-1.5 max-w-[220px] rounded-xl border border-[#d2b27a]/35 bg-[#f8edd7]/45 p-2 shadow-[0_8px_16px_-14px_rgba(27,14,8,0.45)]">
-                              {item.description && (
-                                <p className="px-1 pb-2 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
-                                  {item.description}
-                                </p>
-                              )}
-                              {itemDetail && (
-                                <Image
-                                  src={itemDetail.imageSrc}
-                                  alt={itemDetail.imageAlt}
-                                  width={900}
-                                  height={900}
-                                  className="h-auto w-full rounded-lg object-contain"
-                                />
-                              )}
-                            </div>
-                          </details>
-                        ) : item.description ? (
-                          <p className="mt-0.5 text-[12px] font-medium leading-snug text-[var(--col-espresso-3)]/90">
-                            {item.description}
-                          </p>
-                        ) : null}
-                      </div>
-                      <span
-                        className="shrink-0 pt-[1px] font-mono text-sm font-bold tracking-tight text-[var(--col-gold-deep)]"
-                        style={{ textShadow: "0 1px 1px rgba(255,245,224,0.25)" }}
-                      >
-                        {item.price ?? "ask"}
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-              </div>
-            </div>
-          );
-        })}
-
-        <ColattaoGuestNoteForm />
-      </div>
-
-      <BottomSignature />
+            <span>Powered by</span>
+            <Image
+              src="/assets/colattao/ui/fina-calle-os-emblem.webp"
+              alt="Fina Calle OS"
+              width={460}
+              height={488}
+            />
+          </a>
+        </div>
+      </footer>
     </main>
   );
 }
-
