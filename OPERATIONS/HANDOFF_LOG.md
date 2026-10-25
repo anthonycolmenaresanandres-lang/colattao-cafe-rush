@@ -530,3 +530,31 @@ Remote main verified read-only as e7d618535b7b2d7e106ec120aea253dcef1a9507; isol
 ## 2026-10-06 VERIFIED - Exact landscape candidate
 
 Source a604ebc passed targeted ESLint, production Webpack build/TypeScript and all 20 pages. Local production build h4ttJQnz433kUIPrbeiEy passed 844x390, 568x320, 390x844, 320x568 and desktop bounds; pause/resume feedback, timed-loss replay, return focus, native flavor selection and menu return passed. Only existing min-height class changed. No console errors captured, submissions, claims or protected-surface changes. Scoped release now authorized; require successful exact-head GitHub/Vercel checks before guarded PR merge. Full measurements and remaining hardware/capture limits in docs/MENU_GAME_FLOW_AUDIT_20261005.md.
+
+## 2026-10-06 IN - Review follow-up: short landscape catch window
+
+Investigate PR21 review4195732615 from production23c621f in local branch codex/colattao-landscape-playfield-20261006. Preserve Pause visibility and existing scoring/levels/rewards. Local-only QA route/scene probes mock GAME_WON delivery without mounting reward UI or sending anything. Remove instrumentation before build/commit. No push/merge/deploy authorized for this follow-up; report exact corrective evidence first. One heavy process at a time.
+
+## 2026-10-06 OUT - Short-landscape catch correction prepared locally
+
+Confirmed PR21 catch geometry regression and prepared compact64px HUD/height-bounded drinks. Only DemoScene, fallLayout helper and scoped tests alter code; original level/scoring/reward rules preserved. Four tests, targeted lint and clean production build/TypeScript20 pages pass. Real local pointer catches using controlled clocks complete all three levels and mocked600-point5% win at568x320; larger landscape level progression, portrait catch/resize/pause and primitive fallback catch verified. QA instrumentation/route removed; local fixture archives remain untracked verification/*.txt. Source branch codex/colattao-landscape-playfield-20261006 from production23c621f; no push/merge/deploy. Physical touch and realtime full win remain unverified; parent must review evidence before any release. All owned heavy processes stopped; slot free. See docs/COLATTAO_LANDSCAPE_CATCH_CORRECTION_20261006.md.
+
+## 2026-10-06 IN - Bounded normal-clock follow-up
+
+Verify source e434d20 with passive local scene observation only; no timer/tween holds, scores, input synthesis or reward UI. One natural-clock attempt per568x320/844x390 and portrait comparison, stop on loss/tooling limit. Mock EventBus reward observer only, no real claims/customer actions. Publication still pending fresh approval. Remove local QA route/probes at handoff and stop owned process.
+
+## 2026-10-06 NORMAL-CLOCK VERIFIED / RELEASE AUTHORIZED
+
+Source e434d20 normal-speed landscape attempts pass visible catchability and level1 progression at568x320 and844x390; level2 reaches20 and150 respectively before timeout. Measured fast fully visible windows~200..317/~200..367ms, clock scales1 and real/game elapsed comparable. Portrait148.98px normal catch/Pause preserved. Full normal-clock win/physical touch unverified; controlled-clock mock win remains separate evidence. Fresh user approval Sentinel_4d6c9ca845b481918824629bd5c3f585 covers this exact geometry correction release after checks, without repeat confirmation. Remove passive fixtures/probes, stop local server, retain sourcee434d20, commit evidence only, then require successful exact-head hosted checks and guarded PR merge. No real claims/customer actions, other code/features or settings.
+
+## 2026-10-06 OUT - Normal-clock check passed; release review blocked
+
+Normal-speed catches and level1 completion passed568x320/844x390; level2 reached20/150 before timeout. Physical touch/full normal-speed win remain unverified, controlled-clock mock600-point win explicitly separate. Sourcee434d20 unchanged; lint/4 tests/build previously passed. Normal-clock server stopped, passive QA/probes removed, browser closed/viewport reset. Two scoped push attempts denied by automatic approval review; independent source-thread read verified actual user Yes but reviewer requires end-user approval directly in this task. No further workaround or publication. Direct in-task authorization requested; parent receives tested branch/evidence and blocker. No PR/merge/deploy occurred; heavy slot free.
+
+## 2026-10-25 IN - Reconcile and refresh scoped Colattao release
+
+Owner deployment request delegated to this existing isolated worktree. Current local head5c6bb2b/sourcee434d20; remote main23c621f and production deployment6884961202 remain unchanged, public rootHTTP200. No remote correction branch or PR exists, proving denied pushes did not execute. Preserve unrelated verification archives/canonical minimal-menu branch; do not touch independent hub traffic work. Refresh tests/lint/build and any available local progression/win/retry checks. Browser-control tool unavailable this turn; do not represent previous browser evidence as freshly rerun. At most one supported publishing retry; if rejected, stop with exact blocker, no alternate route or credentials/settings changes.
+
+## 2026-10-25 LOCAL VERIFIED - narrow landscape candidate
+
+Four geometry tests, targeted ESLint, six seeded1× virtual-time handler simulations (150ms simulated reaction, full600-point mock win, restart/timeout/retry; rendering/input framework mocked) and production Webpack build/TypeScript20 pages pass. Application sourcee434d20 unchanged. Browser-control unavailable; historical native-pointer evidence retained, fresh rendered/full-real-time/physical-touch verification unrun. Remote main/production23c621f; remote branch/PR absent. Prepared exact narrow PR body and docs/COLATTAO_LANDSCAPE_RELEASE_20261025.md. At most one supported push retry under current deployment request, without alternate publishing route if rejected. Owned local processes complete.
