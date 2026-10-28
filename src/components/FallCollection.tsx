@@ -26,7 +26,7 @@ export default function FallCollection({ onPlay, selected, onSelect, focusPlay }
 
   return (
     <main className={styles.collection}>
-      <HalloweenSkin brand="colattao" />
+      <HalloweenSkin brand="colattao" collection />
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Colattao Coffee House home">
           <Image src="/assets/colattao/collection/colattao-wordmark.webp" alt="Colattao Coffee House" width={341} height={180} loading="eager" />
