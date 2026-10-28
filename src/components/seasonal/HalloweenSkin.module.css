@@ -20,3 +20,6 @@
 @media(min-width:700px) { .pumpkin { width:92px; } .resident { width:86px; } .ghost { width:96px;height:144px; } .bodega .pumpkin { width:88px; } .bodega .resident { width:84px; } }
 @media(prefers-reduced-motion:reduce) { .flight { display:none; } }
 @media(min-width:900px) { .collection .pumpkin { top:96px;width:68px; } }
+
+.colattao .web,.colattao .webRight { top:68px;opacity:1;filter:drop-shadow(0 1px 2px #0009); }
+.collection .web,.collection .webRight { top:0; }
