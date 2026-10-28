@@ -1,5 +1,6 @@
 ﻿import type { Metadata } from "next";
 import Image from "next/image";
+import HalloweenSkin from "@/components/seasonal/HalloweenSkin";
 import Link from "next/link";
 import { menuCategories } from "@/data/colattaoMenu";
 import appTheme from "@/config/theme";
@@ -278,6 +279,7 @@ function BottomSignature() {
 export default function MenuPage() {
   return (
     <main className={`${autumnStyles.page} relative isolate mx-auto flex min-h-dvh w-full max-w-[470px] flex-col bg-colattao-page text-[var(--col-parchment)]`}>
+      <HalloweenSkin brand="colattao" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(buildMenuJsonLd()) }}
